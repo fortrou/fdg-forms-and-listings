@@ -6,17 +6,15 @@ import GridStyles from './tabs/gridStyles';
 import DynamicComponent from './components/dynamicCompontent';
 import {
     availableFields as defaultAvailableFields,
-    availableImageContainerFields as defaultAvailableImageContainerFields,
-    availableContentContainerFields as defaultAvailableContentContainerFields,
-    styles as defaultStyles, availableImageContainerFields
+    assignedFields as defaultAssignedFields,
+    styles as defaultStyles, assignedFields
 } from './exportableconstants';
 
 
 export default function PreviewApp() {
 
     const [availableFields, setAvailableFields] = useState(defaultAvailableFields);
-    const [availableImageContainerFields, setAvailableImageContainerFields] = useState(defaultAvailableImageContainerFields);
-    const [availableContentContainerFields, setAvailableContentContainerFields] = useState(defaultAvailableContentContainerFields);
+    const [assignedFields, setAssignedFields] = useState(defaultAssignedFields);
     const [styles, setStyles] = useState(defaultStyles);
 
     const stylesString = `
@@ -87,21 +85,16 @@ export default function PreviewApp() {
         }
     }
 
-    const addOptionToImageArea = (param) => {
-        if (param == 'top') {
-            const field = availableFields.find(field => field.key === styles.currentSelectedImageField);
-            setAvailableImageContainerFields(current => [
-                ...current,
-                field
-            ])
-        } else {
-            const field = availableFields.find(field => field.key === styles.currentSelectedContentField);
-            setAvailableContentContainerFields(current => [
-                ...current,
-                field
-            ])
-        }
-    }
+    const addOptionToImageArea = (param, section = 'fsection') => {
+        const field = availableFields.find(field => field.key === param);
+
+        if (!field) return;
+
+        setAssignedFields(current => ({
+            ...current,
+            [section]: [...current[section], field]
+        }));
+    };
 
     const [posts, setPosts] = useState([]);
     const [postTypes, setPostTypes] = useState([]);
@@ -112,7 +105,10 @@ export default function PreviewApp() {
             .then(data => {
                 setPosts(Object.values(data.data.posts));
                 setAvailableFields(Object.values(data.data.keys));
-                setAvailableImageContainerFields(Object.values(data.data.defaultKeys));
+                setAssignedFields({
+                    fsection: Array.isArray(data.data.defaultKeys.fsection) ? data.data.defaultKeys.fsection : Object.values(data.data.defaultKeys.fsection),
+                    lsection: Array.isArray(data.data.defaultKeys.lsection) ? data.data.defaultKeys.lsection : Object.values(data.data.defaultKeys.lsection)
+                });
             });
     }, []);
 
@@ -143,10 +139,8 @@ export default function PreviewApp() {
                              postTypes={postTypes}
                              availableFields={availableFields}
                              addOptionToImageArea={addOptionToImageArea}
-                             availableImageContainerFields={availableImageContainerFields}
-                             setAvailableImageContainerFields={setAvailableImageContainerFields}
-                             availableContentContainerFields={availableContentContainerFields}
-                             setAvailableContentContainerFields={setAvailableContentContainerFields}
+                             assignedFields={assignedFields}
+                             setAssignedFields={setAssignedFields}
                              updateOption={updateOption} />
 
                 <GridStyles styles={styles} updateStyle={updateStyle} />
@@ -373,10 +367,9 @@ export default function PreviewApp() {
             <div className={`preview-container ${styles.type}`}>
                 {posts.map(post => (
                     <div key={post.ID} className="post-item">
-
                         {styles.itemsShowImages && (
                             <div className="left-side">
-                                {availableImageContainerFields.map(field => {
+                                {assignedFields.fsection.map(field => {
                                         let fieldData = post[field.key] ? post[field.key] : '';
                                         return (
                                             <DynamicComponent field={field} data={fieldData} />

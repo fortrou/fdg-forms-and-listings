@@ -1,4 +1,5 @@
 import UsedFormFields from "../components/usedFormFields";
+import ListingConfigurator from '../components/ListingsConfigurator'
 import TabButton from "../tabbutton";
 
 export default function ListingData({
@@ -8,10 +9,8 @@ export default function ListingData({
                                     postTypes,
                                     availableFields,
                                     addOptionToImageArea,
-                                    availableImageContainerFields,
-                                    setAvailableImageContainerFields,
-                                    availableContentContainerFields,
-                                    setAvailableContentContainerFields,
+                                    assignedFields,
+                                    setAssignedFields,
                                     updateOption
     }) {
     return (
@@ -37,30 +36,16 @@ export default function ListingData({
                     <div className="setting-title">
                         Fields selected
                     </div>
-                    <div className="setting-content">
-                        <div className="grid grid-2">
-                            <select value={styles.currentSelectedImageField}
-                                    onChange={(e) => updateStyle('currentSelectedImageField', e.target.value)}>
-                                <option key="" value="">Choose field</option>
-                                {availableFields.map(field => (
-                                    <option key={field.key} value={field.key}>{field.name}</option>
-                                ))}
-                            </select>
 
-                            <button onClick={(e) => {
-                                addOptionToImageArea('top')
-                            }}>add field
-                            </button>
-                        </div>
+                    <ListingConfigurator assignedFields={assignedFields}
+                                         setAssignedFields={setAssignedFields}
+                                         updateOption={updateOption}
+                                         styles={styles}
+                                         updateStyle={updateStyle}
+                                         availableFields={availableFields}
+                                         addOptionToImageArea={addOptionToImageArea}
+                    />
 
-                        <UsedFormFields fields={availableImageContainerFields}
-                                        setFields={setAvailableImageContainerFields} updateOption={updateOption}/>
-
-                    </div>
-                    <div className="setting-content">
-                        <UsedFormFields fields={availableContentContainerFields}
-                                        setFields={setAvailableContentContainerFields} updateOption={updateOption}/>
-                    </div>
                 </div>
 
                 <div className="setting-holder">

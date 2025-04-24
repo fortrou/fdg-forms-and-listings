@@ -12,14 +12,11 @@ export const availableFields = [
         name: 'post excerpt'
     }
 ];
-export const availableImageContainerFields = [
-    {
-        key: 'thumbnail',
-        name: 'thumbnail'
-    }
-];
-export const availableContentContainerFields = [
-];
+export const assignedFields = {
+    fsection: [],
+    lsection: []
+};
+
 
 export const styles = {
     type: 'grid',

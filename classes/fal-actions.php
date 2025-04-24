@@ -36,6 +36,7 @@ class Fal_Actions
             'post_type'      => $_REQUEST['post_type'],
         ]);
 
+
         $returnList = [];
 
         foreach ($posts as $post) {
@@ -127,7 +128,7 @@ class Fal_Actions
         wp_send_json_success([
             'posts' => apply_filters('demonstration_posts_listing', $returnList),
             'keys'  => $resortedKeys,
-            'defaultKeys' => $defaultKeys,
+            'defaultKeys' => apply_filters('fdg_fil_default_keys_editor', ['fsection' => $defaultKeys, 'lsection' => []]),
         ]);
     }
     public function add_listing_post()

@@ -136,6 +136,10 @@
             }
 
             .draggable-fields {
+              min-height: 100px;
+              padding: 10px;
+              background: #0d99d533;
+              margin-top: 12px;
               .field-item {
                 font-size: 12px;
                 font-weight: 600;

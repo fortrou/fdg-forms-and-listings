@@ -4,7 +4,8 @@ import {
     closestCenter,
     useSensor,
     useSensors,
-    PointerSensor
+    PointerSensor,
+    useDroppable
 } from '@dnd-kit/core';
 
 import {
@@ -81,36 +82,19 @@ const DraggableItem = ({ id, field, updateOption }) => {
     );
 };
 
-
-export default function UsedFormFields({fields, setFields, updateOption}) {
+export default function UsedFormFields({fields, setFields, updateOption, sectionId}) {
     const sensors = useSensors(
         useSensor(PointerSensor)
     );
+    const { setNodeRef } = useDroppable({
+        id: sectionId
+    });
 
     return (
-        <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={({active, over}) => {
-                if (active.id !== over?.id) {
-                    const oldIndex = fields.findIndex(f => f.key === active.id);
-                    const newIndex = fields.findIndex(f => f.key === over.id);
-                    setFields(items =>
-                        arrayMove(items, oldIndex, newIndex)
-                    );
-                }
-            }}
-        >
-            <SortableContext
-                items={fields.map(field => field.key)}
-                strategy={verticalListSortingStrategy}
-            >
-                <div className="draggable-fields">
-                    {fields.map(field => (
-                        <DraggableItem id={field.key} field={field} updateOption={updateOption}/>
-                    ))}
-                </div>
-            </SortableContext>
-        </DndContext>
+            <div ref={setNodeRef} className="draggable-fields">
+                {fields.map(field => (
+                    <DraggableItem key={field.key} id={field.key} field={field} updateOption={updateOption} />
+                ))}
+            </div>
     );
 }

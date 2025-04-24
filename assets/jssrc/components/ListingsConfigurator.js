@@ -15,36 +15,52 @@ export default function ListingConfigurator({
     const sensors = useSensors(useSensor(PointerSensor));
 
     const handleDragEnd = ({ active, over }) => {
-        console.log(123123);
         if (!over) return;
 
         const activeId = active.id;
         const overId = over.id;
-        console.log(activeId)
-        console.log(overId);
+
+        const allSections = Object.keys(assignedFields);
+        const movedField = Object.values(assignedFields).flat().find(f => f.key === activeId);
+        if (!movedField) return;
 
         let sourceSection = null;
-        let targetSection = null;
-
-        for (const section in assignedFields) {
-            if (Array.isArray(assignedFields[section]) &&
-                assignedFields[section].some(field => field.key === activeId)) {
+        for (const section of allSections) {
+            if (assignedFields[section].some(f => f.key === activeId)) {
                 sourceSection = section;
-            }
-            if (Array.isArray(assignedFields[section]) &&
-                assignedFields[section].some(field => field.key === overId)) {
-                targetSection = section;
+                break;
             }
         }
-        console.log(sourceSection)
-        console.log(targetSection)
+
+        // 👇 Случай 1: дропнули на пустую секцию
+        if (allSections.includes(overId)) {
+            const targetSection = overId;
+            if (targetSection === sourceSection) return;
+
+            setAssignedFields(prev => ({
+                ...prev,
+                [sourceSection]: prev[sourceSection].filter(f => f.key !== activeId),
+                [targetSection]: [movedField, ...prev[targetSection]]
+            }));
+            return;
+        }
+
+        // 👇 Случай 2: перемещение внутри секции или между секциями через другой элемент
+        let targetSection = null;
+        for (const section of allSections) {
+            if (assignedFields[section].some(f => f.key === overId)) {
+                targetSection = section;
+                break;
+            }
+        }
 
         if (!sourceSection || !targetSection) return;
-
 
         if (sourceSection === targetSection) {
             const oldIndex = assignedFields[sourceSection].findIndex(f => f.key === activeId);
             const newIndex = assignedFields[targetSection].findIndex(f => f.key === overId);
+
+            if (oldIndex === -1 || newIndex === -1) return;
 
             const reordered = arrayMove(assignedFields[sourceSection], oldIndex, newIndex);
 
@@ -53,8 +69,7 @@ export default function ListingConfigurator({
                 [sourceSection]: reordered
             }));
         } else {
-            const movedField = assignedFields[sourceSection].find(f => f.key === activeId);
-
+            // drag из одной секции в другую (через элемент)
             setAssignedFields(prev => ({
                 ...prev,
                 [sourceSection]: prev[sourceSection].filter(f => f.key !== activeId),
@@ -62,6 +77,8 @@ export default function ListingConfigurator({
             }));
         }
     };
+
+
 
     return (
 

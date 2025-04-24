@@ -59,17 +59,15 @@ const DraggableItem = ({ id, field, updateOption }) => {
             ref={setNodeRef}
             style={style}
             {...attributes}
-            {...listeners}
             className="field-item"
         >
-            <div className="draggable-zone">
+            <div {...listeners} className="draggable-zone">
                 <strong>{field.name}</strong>
             </div>
 
             <div
                 className="draggable-item-settings"
                 onClick={() => setExpanded(prev => !prev)}
-                onMouseDown={(e) => e.stopPropagation()} // 👈 предотвращает drag с кнопки
             >
                 <img src={DefaultIcons.settings} alt="" />
             </div>

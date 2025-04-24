@@ -66,6 +66,7 @@
         width: 100%;
         margin-bottom: 12px;
         height: 36px;
+
       }
     }
 
@@ -177,6 +178,10 @@
                 .field-details {
                   margin-top: 6px;
                   width: 100%;
+                  background: #f0f0f0;
+                  border: .3px solid #0073aa;
+                  padding: 6px;
+                  border-radius: 6px;
                 }
               }
             }
@@ -200,6 +205,24 @@
               height: 24px;
               font-size: 12px;
               min-height: 24px;
+            }
+
+            input {
+              box-shadow: none;
+              border-radius: 0;
+              border: none;
+              border-bottom: 1px solid #8c8f94;
+              background-color: #f9f9f9;
+              color: #2c3338;
+
+              &:focus {
+                background: #fff;
+              }
+
+              &[type="color"] {
+                background: transparent !important;
+                border: 0 !important;
+              }
             }
 
             .grid-2 {

@@ -58,24 +58,8 @@ export default function ListingData({
 
                     </div>
                     <div className="setting-content">
-                        <div className="grid grid-2">
-                            <select value={styles.currentSelectedContentField}
-                                    onChange={(e) => updateStyle('currentSelectedContentField', e.target.value)}>
-                                <option key="" value="">Choose field</option>
-                                {availableFields.map(field => (
-                                    <option key={field.key} value={field.key}>{field.name}</option>
-                                ))}
-                            </select>
-
-                            <button onClick={(e) => {
-                                addOptionToImageArea('bottom')
-                            }}>add field
-                            </button>
-                        </div>
-
                         <UsedFormFields fields={availableContentContainerFields}
                                         setFields={setAvailableContentContainerFields} updateOption={updateOption}/>
-
                     </div>
                 </div>
 

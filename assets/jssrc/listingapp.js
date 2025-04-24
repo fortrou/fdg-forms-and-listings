@@ -386,8 +386,6 @@ export default function PreviewApp() {
                             </div>
                         )}
                         <div className="content-side">
-                            <strong>{post.post_title}</strong>
-                            <p>{post.post_excerpt}</p>
                         </div>
                     </div>
                 ))}

@@ -1,6 +1,6 @@
-export default function DefaultComponent({ data }) {
+export default function DefaultComponent({ field, data }) {
     return (
-        <div>
+        <div className={`${field.key}-proto`}>
             {data}
         </div>
     )

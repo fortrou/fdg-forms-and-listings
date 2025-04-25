@@ -2,6 +2,7 @@ import UsedFormFields from './usedFormFields';
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useState } from 'react';
+import TabSwitcher from "../switcher";
 
 export default function ListingConfigurator({
                                                 assignedFields,
@@ -115,14 +116,24 @@ export default function ListingConfigurator({
                         }
                         updateOption={updateOption}
                     />
-                    <UsedFormFields
-                        sectionId="lsection"
-                        fields={assignedFields.lsection}
-                        setFields={newFields =>
-                            setAssignedFields(prev => ({ ...prev, lsection: newFields }))
-                        }
-                        updateOption={updateOption}
+
+                    <TabSwitcher
+                        value="use_two_sections"
+                        label="Use two sections"
+                        active={styles.useTwoSection === true}
+                        onClick={(val) => updateStyle('useTwoSection', !styles.useTwoSection)}
                     />
+
+                    {styles.useTwoSection && (
+                        <UsedFormFields
+                            sectionId="lsection"
+                            fields={assignedFields.lsection}
+                            setFields={newFields =>
+                                setAssignedFields(prev => ({ ...prev, lsection: newFields }))
+                            }
+                            updateOption={updateOption}
+                        />
+                    )}
                 </SortableContext>
             </DndContext>
         </div>

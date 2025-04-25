@@ -13,6 +13,7 @@ export default function ListingData({
                                     setAssignedFields,
                                     updateOption
     }) {
+    console.log(assignedFields)
     return (
         <div className="tab-item">
             <div className="tab-heading">

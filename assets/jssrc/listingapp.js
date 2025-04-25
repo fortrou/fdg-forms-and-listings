@@ -17,6 +17,54 @@ export default function PreviewApp() {
     const [assignedFields, setAssignedFields] = useState(defaultAssignedFields);
     const [styles, setStyles] = useState(defaultStyles);
 
+    const buildPostBlockStyles = (assignedFields) => {
+        const fields = [...assignedFields.fsection, ...assignedFields.lsection];
+
+        let styles = '';
+
+        fields.forEach(field => {
+            if (!field.options) return;
+            const selector = `.preview-container ${field.key}-proto`;
+
+            let fieldStyles = '';
+
+            if (field.options.fontSize) {
+                const { measure, value } = field.options.fontSize;
+                fieldStyles += `font-size: ${value}${measure};`;
+            }
+
+            if (field.options.fontWeight) {
+                fieldStyles += `font-weight: ${field.options.fontWeight};`;
+            }
+
+            if (field.options.lineHeight) {
+                const { measure, value } = field.options.lineHeight;
+                fieldStyles += `line-height: ${value}${measure};`;
+            }
+
+            if (field.options.margin) {
+                const { top, right, bottom, left } = field.options.margin.value;
+                fieldStyles += `margin: ${top}px ${right}px ${bottom}px ${left}px;`;
+            }
+
+            if (field.options.padding) {
+                const { measure, value } = field.options.padding;
+                fieldStyles += `padding: ${value.top}${measure} ${value.right}${measure} ${value.bottom}${measure} ${value.left}${measure};`;
+            }
+
+            if (fieldStyles) {
+                styles += `
+                ${selector} {
+                    ${fieldStyles}
+                }
+            `;
+            }
+
+        })
+
+        return styles;
+    }
+
     const stylesString = `
         .preview-container {
             box-sizing: border-box;
@@ -54,7 +102,7 @@ export default function PreviewApp() {
             padding: ${styles.contentPaddingTop + 'px ' + styles.contentPaddingRight + 'px ' + styles.contentPaddingBottom + 'px ' + styles.contentPaddingLeft + 'px '};
             ${(styles.itemsShowImages && styles.postDisplay == 'flex' && (styles.flexDirection == 'row' || styles.flexDirection == 'row-reverse')) ? `width: calc(100% - ${parseInt(styles.imageWidth, 10) + styles.imageMarginRight + styles.imageMarginLeft}px)` : ''};
         }
-    `;
+    ` + buildPostBlockStyles(assignedFields);
 
 
     const updateStyle = (key, value) => {
@@ -77,13 +125,76 @@ export default function PreviewApp() {
             });
     }
 
-    const updateOption = (field, property, subproperty, value) => {
-        if (availableImageContainerFields[field].options[property].value[subproperty]) {
-            availableImageContainerFields[field].options[property].value[subproperty] = value;
-        } else {
-            availableImageContainerFields[field].options[property].value = value;
-        }
-    }
+    const updateOption = (section, index, fieldKey, property, value) => {
+        setAssignedFields(prev => {
+            console.log(section)
+            console.log(fieldKey);
+            console.log(property);
+            console.log(value)
+
+            let wrapper = '';
+            for (const [sectionKey, fields] of Object.entries(assignedFields)) {
+                for (const field of fields) {
+                    const isInAvailable = availableFields.find(f => f.key === field.key);
+                    if (isInAvailable) {
+                        wrapper = sectionKey;
+                        break;
+                    }
+                }
+                if (wrapper) break; // остановить второй цикл тоже
+            }
+
+            if (!wrapper) return;
+
+console.log(prev[wrapper][index])
+
+            const updatedSection = Object.entries(prev[wrapper][index].options).map((field) => {
+                if (field[0] !== fieldKey) return field;
+
+                if (typeof field[1] === 'object' && value !== null && !Array.isArray(value)) {
+                    if (typeof field[1].value === 'object' && value !== null && !Array.isArray(value)) {
+
+                    }
+                } else {
+
+                }
+
+                const updatedField = {
+                    ...field
+                };
+
+                if (!updatedField.options[property]) {
+                    updatedField.options[property] = { value: {} };
+                }
+
+                if (subproperty !== null && typeof updatedField.options[property].value === 'object') {
+                    updatedField.options[property] = {
+                        ...updatedField.options[property],
+                        value: {
+                            ...updatedField.options[property].value,
+                            [subproperty]: value
+                        }
+                    };
+                } else {
+                    updatedField.options[property] = {
+                        ...updatedField.options[property],
+                        value: value
+                    };
+                }
+
+                return updatedField;
+            });
+
+            return {
+                ...prev,
+                [wrapper]: {
+                    ...prev[wrapper],
+                    [section]: updatedSection
+                }
+            };
+        });
+    };
+
 
     const addOptionToImageArea = (param, section = 'fsection') => {
         const field = availableFields.find(field => field.key === param);
@@ -378,8 +489,17 @@ export default function PreviewApp() {
                                 )}
                             </div>
                         )}
-                        <div className="content-side">
-                        </div>
+                        {styles.useTwoSection && (
+                            <div className="content-side">
+                                {assignedFields.lsection.map(field => {
+                                        let fieldData = post[field.key] ? post[field.key] : '';
+                                        return (
+                                            <DynamicComponent field={field} data={fieldData} />
+                                        )
+                                    }
+                                )}
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>

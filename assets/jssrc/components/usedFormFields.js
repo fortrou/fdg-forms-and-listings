@@ -19,11 +19,11 @@ import {
 import {CSS} from '@dnd-kit/utilities';
 
 import { DefaultIcons } from './iconsComponent';
-import PaddingComponent from "./optionsComponent";
+import {PaddingComponent, MarginComponent, HeightComponent, WidthComponent, FontSizeComponent, FontWeightComponent} from "./optionsComponent";
 import ImageComponent from "./imageComponent";
 
 
-const DraggableItem = ({ id, field, updateOption }) => {
+const DraggableItem = ({ id, field, updateOption, index }) => {
     const {
         attributes,
         listeners,
@@ -42,15 +42,30 @@ const DraggableItem = ({ id, field, updateOption }) => {
 
     const DetectComponent = {
         padding: ({ field, data }) => (
-            <PaddingComponent field={field} values={data} updateOption={updateOption} />
-        )
+            <PaddingComponent index={index} field={field} values={data} updateOption={updateOption} />
+        ),
+        margin: ({ field, data }) => (
+            <MarginComponent index={index} field={field} values={data} updateOption={updateOption} />
+        ),
+        height: ({ field, data }) => (
+            <HeightComponent index={index} field={field} values={data} updateOption={updateOption} />
+        ),
+        width: ({ field, data }) => (
+            <WidthComponent index={index} field={field} values={data} updateOption={updateOption} />
+        ),
+        fontSize: ({ field, data }) => (
+            <FontSizeComponent index={index} field={field} values={data} updateOption={updateOption} />
+        ),
+        fontWeight: ({ field, data }) => (
+            <FontWeightComponent index={index} field={field} values={data} updateOption={updateOption} />
+        ),
     };
 
-    const scrapeOptions = (field) => {
+    const scrapeOptions = (index, field) => {
         return Object.keys(field.options).map((key) => {
             const Component = DetectComponent[key];
             return Component ? (
-                <Component key={key} field={field.key} data={field.options[key]} />
+                <Component key={key} index={index} field={field.key} data={field.options[key]} />
             ) : null;
         });
     };
@@ -75,7 +90,7 @@ const DraggableItem = ({ id, field, updateOption }) => {
 
             {expanded && (
                 <div className="field-details">
-                    {field.options ? scrapeOptions(field) : null}
+                    {field.options ? scrapeOptions(index, field) : null}
                 </div>
             )}
         </div>
@@ -92,8 +107,8 @@ export default function UsedFormFields({fields, setFields, updateOption, section
 
     return (
             <div ref={setNodeRef} className="draggable-fields">
-                {fields.map(field => (
-                    <DraggableItem key={field.key} id={field.key} field={field} updateOption={updateOption} />
+                {fields.map((field, index) => (
+                    <DraggableItem key={field.key} index={index} id={field.key} field={field} updateOption={updateOption} />
                 ))}
             </div>
     );

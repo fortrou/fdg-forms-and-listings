@@ -107,7 +107,8 @@ export const WidthComponent = ({field, values, updateOption, index}) => {
 }
 
 export const FontSizeComponent = ({field, values, updateOption, index}) => {
-
+console.log(values);
+console.log(field)
     return (
         <div className="setting-holder">
             <div className="setting-title">

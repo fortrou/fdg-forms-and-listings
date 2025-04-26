@@ -24,7 +24,7 @@ export default function PreviewApp() {
 
         fields.forEach(field => {
             if (!field.options) return;
-            const selector = `.preview-container ${field.key}-proto`;
+            const selector = `.preview-container .${field.key}-proto`;
 
             let fieldStyles = '';
 
@@ -68,10 +68,10 @@ export default function PreviewApp() {
     const stylesString = `
         .preview-container {
             box-sizing: border-box;
-            display: ${styles.type == "grid" ? 'grid' : ''};
-            ${styles.type == "grid" ? 'grid-template-columns: repeat(' + styles.gridColumns + ', 1fr)' : ''};
-            ${styles.type == "grid" ? 'column-gap: ' + styles.gridGap + 'px' : ''};
-            ${styles.type == "grid" ? 'row-gap: ' + styles.rowGap + 'px' : ''};
+            display: ${styles.type == "grid" ? 'grid;' : ''}
+            ${styles.type == "grid" ? 'grid-template-columns: repeat(' + styles.gridColumns + ', 1fr);' : ''}
+            ${styles.type == "grid" ? 'column-gap: ' + styles.gridGap + 'px;' : ''}
+            ${styles.type == "grid" ? 'row-gap: ' + styles.rowGap + 'px,' : ''}
         }
         
         .preview-container .post-item {
@@ -80,9 +80,9 @@ export default function PreviewApp() {
             overflow: hidden;
             padding: ${styles.paddingTop + 'px ' + styles.paddingRight + 'px ' + styles.paddingBottom + 'px ' + styles.paddingLeft + 'px '};
             display: ${styles.postDisplay};
-            ${styles.postDisplay == 'flex' ? 'justify-content: ' + styles.justifyContent : ''};
-            ${styles.postDisplay == 'flex' ? 'flex-direction: ' + styles.flexDirection : ''};
-            ${styles.postDisplay == 'flex' ? 'align-items: ' + styles.alignItems : ''};
+            ${styles.postDisplay == 'flex' ? 'justify-content: ' + styles.justifyContent + ';' : ''}
+            ${styles.postDisplay == 'flex' ? 'flex-direction: ' + styles.flexDirection + ';' : ''}
+            ${styles.postDisplay == 'flex' ? 'align-items: ' + styles.alignItems + ';' : ''}
         }
         
         .preview-container .post-item .left-side img {
@@ -100,7 +100,7 @@ export default function PreviewApp() {
         .preview-container .post-item .content-side {
             box-sizing: border-box;
             padding: ${styles.contentPaddingTop + 'px ' + styles.contentPaddingRight + 'px ' + styles.contentPaddingBottom + 'px ' + styles.contentPaddingLeft + 'px '};
-            ${(styles.itemsShowImages && styles.postDisplay == 'flex' && (styles.flexDirection == 'row' || styles.flexDirection == 'row-reverse')) ? `width: calc(100% - ${parseInt(styles.imageWidth, 10) + styles.imageMarginRight + styles.imageMarginLeft}px)` : ''};
+            ${(styles.itemsShowImages && styles.postDisplay == 'flex' && (styles.flexDirection == 'row' || styles.flexDirection == 'row-reverse')) ? `width: calc(100% - ${parseInt(styles.imageWidth, 10) + styles.imageMarginRight + styles.imageMarginLeft}px);` : ''}
         }
     ` + buildPostBlockStyles(assignedFields);
 
@@ -127,16 +127,11 @@ export default function PreviewApp() {
 
     const updateOption = (section, index, fieldKey, property, value) => {
         setAssignedFields(prev => {
-            console.log(section)
-            console.log(fieldKey);
-            console.log(property);
-            console.log(value)
-
             let wrapper = '';
+
             for (const [sectionKey, fields] of Object.entries(assignedFields)) {
                 for (const field of fields) {
-                    const isInAvailable = availableFields.find(f => f.key === field.key);
-                    if (isInAvailable) {
+                    if (field.key == section) {
                         wrapper = sectionKey;
                         break;
                     }
@@ -146,51 +141,47 @@ export default function PreviewApp() {
 
             if (!wrapper) return;
 
-console.log(prev[wrapper][index])
-
             const updatedSection = Object.entries(prev[wrapper][index].options).map((field) => {
-                if (field[0] !== fieldKey) return field;
-
-                if (typeof field[1] === 'object' && value !== null && !Array.isArray(value)) {
-                    if (typeof field[1].value === 'object' && value !== null && !Array.isArray(value)) {
-
-                    }
-                } else {
-
-                }
-
-                const updatedField = {
-                    ...field
+                if (field[0] !== fieldKey) return {
+                    [field[0]] : field[1]
                 };
 
-                if (!updatedField.options[property]) {
-                    updatedField.options[property] = { value: {} };
-                }
+                const updatedField = {
 
-                if (subproperty !== null && typeof updatedField.options[property].value === 'object') {
-                    updatedField.options[property] = {
-                        ...updatedField.options[property],
-                        value: {
-                            ...updatedField.options[property].value,
-                            [subproperty]: value
+                    [field[0]] : field[1]
+                };
+
+                if (typeof updatedField[field[0]] === 'object' && updatedField[field[0]] && !Array.isArray(updatedField[field[0]])) {
+                    if (typeof updatedField[field[0]].value === 'object' && updatedField[field[0]].value !== null && !Array.isArray(updatedField[field[0]].value)) {
+                        updatedField[field[0]].value = {
+                            ...updatedField[field[0]].value,
+                            [property]: value
                         }
-                    };
-                } else {
-                    updatedField.options[property] = {
-                        ...updatedField.options[property],
-                        value: value
-                    };
+                    } else {
+                        updatedField[field[0]] = {
+                            ...updatedField[field[0]],
+                            ['value']: value
+                        };
+                    }
                 }
-
+                console.log(updatedField)
                 return updatedField;
             });
 
+            console.log(updatedSection)
             return {
                 ...prev,
-                [wrapper]: {
-                    ...prev[wrapper],
-                    [section]: updatedSection
-                }
+                [wrapper]: prev[wrapper].map((item, i) =>
+                    i === index
+                        ? {
+                            ...item,
+                            options: {
+                                ...item.options,
+                                [section]: updatedSection
+                            }
+                        }
+                        : item
+                )
             };
         });
     };

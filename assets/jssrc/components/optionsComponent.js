@@ -1,3 +1,5 @@
+import {useState, useRef} from "@wordpress/element";
+
 export const PaddingComponent = ({field, values, updateOption, index}) => {
 
     return (
@@ -106,9 +108,22 @@ export const WidthComponent = ({field, values, updateOption, index}) => {
     )
 }
 
-export const FontSizeComponent = ({field, values, updateOption, index}) => {
-console.log(values);
-console.log(field)
+export const FontSizeComponent = ({ field, values, updateOption, index }) => {
+    const [localValue, setLocalValue] = useState(values.value ?? '');
+    const timeoutRef = useRef(null);
+
+    const handleKeyUp = (e) => {
+        const newValue = e.target.value;
+        setLocalValue(newValue);
+
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
+            updateOption(field, index, 'fontSize', '', newValue);
+        }, 700);
+    };
+
     return (
         <div className="setting-holder">
             <div className="setting-title">
@@ -117,15 +132,20 @@ console.log(field)
             <div className="setting-content">
                 <div className="grid grid-2">
                     <div className="input-container">
-                        <input type="text" min="1" value={values.value}
-                               onChange={(e) => updateOption(field, index, 'fontSize', '', parseInt(e.target.value, 10))}/>
+                        <input
+                            type="text"
+                            min="1"
+                            value={localValue}
+                            onChange={(e) => setLocalValue(e.target.value)}
+                            onKeyUp={handleKeyUp}
+                        />
                     </div>
-
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
+
 
 export const FontWeightComponent = ({field, values, updateOption, index}) => {
 
@@ -137,7 +157,7 @@ export const FontWeightComponent = ({field, values, updateOption, index}) => {
             <div className="setting-content">
                 <div className="grid grid-2">
                     <div className="input-container">
-                        <select value={values.value} onChange={(e) => updateOption(field, index, 'fontSize', '', parseInt(e.target.value, 10))}>
+                        <select value={values.value} onChange={(e) => updateOption(field, index, 'fontWeight', '', parseInt(e.target.value, 10))}>
                             <option value="400">400</option>
                             <option value="500">500</option>
                             <option value="600">600</option>

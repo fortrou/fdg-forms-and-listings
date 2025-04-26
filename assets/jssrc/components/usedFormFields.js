@@ -62,7 +62,6 @@ const DraggableItem = ({ id, field, updateOption, index }) => {
     };
 
     const scrapeOptions = (index, field) => {
-        console.log(field.options)
         return Object.keys(field.options).map((key) => {
             const Component = DetectComponent[key];
             return Component ? (

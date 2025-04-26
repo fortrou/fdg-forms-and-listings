@@ -34,7 +34,7 @@ export default function PreviewApp() {
             }
 
             if (field.options.fontWeight) {
-                fieldStyles += `font-weight: ${field.options.fontWeight};`;
+                fieldStyles += `font-weight: ${field.options.fontWeight.value};`;
             }
 
             if (field.options.lineHeight) {
@@ -71,7 +71,7 @@ export default function PreviewApp() {
             display: ${styles.type == "grid" ? 'grid;' : ''}
             ${styles.type == "grid" ? 'grid-template-columns: repeat(' + styles.gridColumns + ', 1fr);' : ''}
             ${styles.type == "grid" ? 'column-gap: ' + styles.gridGap + 'px;' : ''}
-            ${styles.type == "grid" ? 'row-gap: ' + styles.rowGap + 'px,' : ''}
+            ${styles.type == "grid" ? 'row-gap: ' + styles.rowGap + 'px' : ''}
         }
         
         .preview-container .post-item {
@@ -129,56 +129,56 @@ export default function PreviewApp() {
         setAssignedFields(prev => {
             let wrapper = '';
 
-            for (const [sectionKey, fields] of Object.entries(assignedFields)) {
+            for (const [sectionKey, fields] of Object.entries(prev)) {
                 for (const field of fields) {
-                    if (field.key == section) {
+                    if (field.key === section) {
                         wrapper = sectionKey;
                         break;
                     }
                 }
-                if (wrapper) break; // остановить второй цикл тоже
+                if (wrapper) break;
             }
 
-            if (!wrapper) return;
+            if (!wrapper) return prev;
 
-            const updatedSection = Object.entries(prev[wrapper][index].options).map((field) => {
-                if (field[0] !== fieldKey) return {
-                    [field[0]] : field[1]
-                };
+            const updatedOptions = Object.entries(prev[wrapper][index].options).reduce((acc, [key, val]) => {
+                if (key !== fieldKey) {
+                    acc[key] = val;
+                    return acc;
+                }
 
-                const updatedField = {
-
-                    [field[0]] : field[1]
-                };
-
-                if (typeof updatedField[field[0]] === 'object' && updatedField[field[0]] && !Array.isArray(updatedField[field[0]])) {
-                    if (typeof updatedField[field[0]].value === 'object' && updatedField[field[0]].value !== null && !Array.isArray(updatedField[field[0]].value)) {
-                        updatedField[field[0]].value = {
-                            ...updatedField[field[0]].value,
+                // Обновляем нужное поле
+                if (
+                    typeof val?.value === 'object' &&
+                    val.value !== null &&
+                    !Array.isArray(val.value)
+                ) {
+                    // Сложное поле
+                    acc[key] = {
+                        ...val,
+                        value: {
+                            ...val.value,
                             [property]: value
                         }
-                    } else {
-                        updatedField[field[0]] = {
-                            ...updatedField[field[0]],
-                            ['value']: value
-                        };
-                    }
+                    };
+                } else {
+                    // Простое поле
+                    acc[key] = {
+                        ...val,
+                        value
+                    };
                 }
-                console.log(updatedField)
-                return updatedField;
-            });
 
-            console.log(updatedSection)
+                return acc;
+            }, {});
+
             return {
                 ...prev,
                 [wrapper]: prev[wrapper].map((item, i) =>
                     i === index
                         ? {
                             ...item,
-                            options: {
-                                ...item.options,
-                                [section]: updatedSection
-                            }
+                            options: updatedOptions
                         }
                         : item
                 )

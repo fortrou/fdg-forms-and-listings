@@ -231,6 +231,7 @@ export default function PreviewApp() {
         tag.innerHTML = stylesString;
     }, [stylesString]);
 
+
     return (
         <div className="configurations-container">
             <div className="configurations-side">

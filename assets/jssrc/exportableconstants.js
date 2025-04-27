@@ -50,5 +50,5 @@ export const styles = {
     contentPaddingLeft: 0,
     currentSelectedImageField: '',
     currentSelectedContentField: '',
-    useTwoSection: true,
+    useTwoSection: false,
 };

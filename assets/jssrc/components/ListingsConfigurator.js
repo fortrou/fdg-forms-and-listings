@@ -3,16 +3,26 @@ import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from 
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useState } from 'react';
 import TabSwitcher from "../switcher";
+import {useFieldsContext} from "../useFieldContext";
 
-export default function ListingConfigurator({
-                                                assignedFields,
-                                                setAssignedFields,
-                                                updateOption,
-                                                styles,
-                                                updateStyle,
-                                                availableFields,
-                                                addOptionToImageArea
-                                            }) {
+export default function ListingConfigurator() {
+    const {
+        availableFields,
+        setAvailableFields,
+        styles,
+        setStyles,
+        assignedFields,
+        setAssignedFields,
+        updateStyle,
+        updatePostType,
+        setMeasure,
+        updateOption,
+        addOptionToImageArea,
+        buildPostBlockStyles,
+        posts,
+        postTypes
+    } = useFieldsContext();
+
     const sensors = useSensors(useSensor(PointerSensor));
 
     const handleDragEnd = ({ active, over }) => {
@@ -117,12 +127,14 @@ export default function ListingConfigurator({
                         updateOption={updateOption}
                     />
 
-                    <TabSwitcher
-                        value="use_two_sections"
-                        label="Use two sections"
-                        active={styles.useTwoSection === true}
-                        onClick={(val) => updateStyle('useTwoSection', !styles.useTwoSection)}
-                    />
+                    {styles.postDisplay === 'flex' && (
+                        <TabSwitcher
+                            value="use_two_sections"
+                            label="Use two sections"
+                            active={styles.useTwoSection === true}
+                            onClick={(val) => updateStyle('useTwoSection', !styles.useTwoSection)}
+                        />
+                    )}
 
                     {styles.useTwoSection && (
                         <UsedFormFields
@@ -134,6 +146,7 @@ export default function ListingConfigurator({
                             updateOption={updateOption}
                         />
                     )}
+
                 </SortableContext>
             </DndContext>
         </div>

@@ -130,9 +130,13 @@
           }
 
           .setting-content {
-
+            position: relative;
             &:not(:last-child) {
               margin-bottom: 12px;
+            }
+
+            .input-container {
+              position: relative;
             }
 
             .draggable-fields {
@@ -220,6 +224,10 @@
               background-color: #f9f9f9;
               color: #2c3338;
 
+              &::marker {
+                display: none;
+              }
+
               &:focus {
                 background: #fff;
               }
@@ -247,6 +255,9 @@
             }
             .grid {
               row-gap: 6px;
+              position: relative;
+              padding-right: 50px;
+
               label {
                 font-size: 10px;
                 font-weight: 600;
@@ -299,6 +310,55 @@
 
       &:not(:last-child) {
         margin-bottom: 12px;
+      }
+    }
+  }
+}
+
+.switcher-holder {
+  position: absolute;
+  bottom: 3px;
+  right: 0;
+  cursor: pointer;
+  width: 40px;
+
+  .current-state {
+    position: relative;
+    font-size: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:after {
+      content: '';
+      margin-left: 2px;
+      width: 2px;
+      height: 2px;
+      background: transparent;
+      text-indent: -9999px;
+      border-top: 1px solid #242424;
+      border-left: 1px solid #242424;
+      transition: all 250ms ease-in-out;
+      transform: rotate(-135deg);
+      text-decoration: none;
+      color: transparent;
+    }
+  }
+
+  .possible-states {
+    position: absolute;
+    z-index: 99;
+    width: 100%;
+    top: 100%;
+    left: 0;
+
+    .measuring-item {
+      box-sizing: border-box;
+      padding: 4px 2px;
+      text-align: center;
+      font-size: 8px;
+      background: #fff;
+      &:hover {
+        background: #0d99d555;
       }
     }
   }

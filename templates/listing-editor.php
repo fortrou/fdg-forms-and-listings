@@ -1,3 +1,17 @@
+<style>
+    #wpcontent {
+        background: #fff;
+        min-height: 100vh;
+        margin-left: 0px !important;
+    }
+    #adminmenuback, #adminmenuwrap {
+        display: none;
+    }
+
+    .notice {
+        display: none;
+    }
+</style>
 <style id="fil-listing-styles">
 
 </style>

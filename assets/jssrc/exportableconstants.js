@@ -19,36 +19,57 @@ export const assignedFields = {
 
 
 export const styles = {
-    type: 'grid',
-    gridColumns: 3,
-    gridGap: 20,
-    rowGap: 20,
-    postType: 'post',
-    perPage: 9,
-    itemsBorderColor: '#ffffff',
-    itemsBorderRadius: 0,
-    itemBorderWidth: 0,
-    paddingTop: 0,
-    paddingRight: 0,
-    paddingBottom: 0,
-    paddingLeft: 0,
-    postDisplay: 'block',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    itemsShowImages: true,
-    imageWidth: '100%',
-    imageHeight: 'auto',
-    imageMarginTop: 0,
-    imageMarginRight: 0,
-    imageMarginBottom: 0,
-    imageMarginLeft: 0,
-    imageBorderRadius: 0,
-    contentPaddingTop: 0,
-    contentPaddingRight: 0,
-    contentPaddingBottom: 0,
-    contentPaddingLeft: 0,
-    currentSelectedImageField: '',
-    currentSelectedContentField: '',
-    useTwoSection: false,
+    shared: {
+        type: 'grid',
+        postType: 'post',
+        itemsBorderColor: '#ffffff',
+        itemsBorderRadius: 0,
+        itemBorderWidth: 0,
+        postDisplay: 'block',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        itemsShowImages: true,
+        imageBorderRadius: 0,
+        currentSelectedImageField: '',
+        currentSelectedContentField: '',
+        useTwoSection: false,
+        perPage: 9,
+    },
+
+    responsive: {
+        desktop: {
+            gridColumns: 3,
+
+            gridGap: 24,
+            rowGap: 24,
+
+            padding: { top: 0, right: 0, bottom: 0, left: 0 },
+            imageSize: { width: '100%', height: 'auto' },
+            imageMargin: { top: 0, right: 0, bottom: 0, left: 0 },
+            contentPadding: { top: 0, right: 0, bottom: 0, left: 0 },
+        },
+
+        tablet: {
+            gridColumns: 2,
+            gridGap: 20,
+            rowGap: 20,
+
+            padding: { top: 0, right: 0, bottom: 0, left: 0 },
+            imageSize: { width: '100%', height: 'auto' },
+            imageMargin: { top: 0, right: 0, bottom: 0, left: 0 },
+            contentPadding: { top: 0, right: 0, bottom: 0, left: 0 },
+        },
+
+        mobile: {
+            gridColumns: 1,
+            gridGap: 12,
+            rowGap: 12,
+
+            padding: { top: 0, right: 0, bottom: 0, left: 0 },
+            imageSize: { width: '100%', height: 'auto' },
+            imageMargin: { top: 0, right: 0, bottom: 0, left: 0 },
+            contentPadding: { top: 0, right: 0, bottom: 0, left: 0 },
+        },
+    }
 };

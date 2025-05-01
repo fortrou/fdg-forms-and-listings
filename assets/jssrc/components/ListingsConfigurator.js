@@ -13,7 +13,6 @@ export default function ListingConfigurator() {
         setStyles,
         assignedFields,
         setAssignedFields,
-        updateStyle,
         updatePostType,
         setMeasure,
         updateOption,
@@ -96,8 +95,8 @@ export default function ListingConfigurator() {
         <div className="setting-content">
             <div className="grid grid-2">
                 <select
-                    value={styles.currentSelectedImageField}
-                    onChange={(e) => updateStyle('currentSelectedImageField', e.target.value)}
+                    value={styles.current.shared.currentSelectedImageField}
+                    onChange={(e) => setStyles(`shared.currentSelectedImageField`, e.target.value)}
                 >
                     <option value="">Choose field</option>
                     {availableFields.map(field => (
@@ -105,7 +104,7 @@ export default function ListingConfigurator() {
                     ))}
                 </select>
 
-                <button onClick={() => addOptionToImageArea(styles.currentSelectedImageField)}>
+                <button onClick={() => addOptionToImageArea(styles.current.shared.currentSelectedImageField)}>
                     Add field
                 </button>
             </div>
@@ -127,16 +126,16 @@ export default function ListingConfigurator() {
                         updateOption={updateOption}
                     />
 
-                    {styles.postDisplay === 'flex' && (
+                    {styles.current.shared.postDisplay === 'flex' && (
                         <TabSwitcher
                             value="use_two_sections"
                             label="Use two sections"
-                            active={styles.useTwoSection === true}
-                            onClick={(val) => updateStyle('useTwoSection', !styles.useTwoSection)}
+                            active={styles.current.shared.useTwoSection === true}
+                            onClick={(val) => setStyles(`shared.useTwoSection`, !styles.current.shared.useTwoSection)}
                         />
                     )}
 
-                    {styles.useTwoSection && (
+                    {styles.current.shared.useTwoSection && (
                         <UsedFormFields
                             sectionId="lsection"
                             fields={assignedFields.lsection}

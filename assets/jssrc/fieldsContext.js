@@ -10,11 +10,12 @@ export function FieldsProvider({ children }) {
         availableFields,
         setAvailableFields,
         styles,
+        frame,
         setStyles,
         assignedFields,
         setAssignedFields,
-        updateStyle,
         updatePostType,
+        setFrame,
         setMeasure,
         updateOption,
         addOptionToImageArea,
@@ -24,17 +25,17 @@ export function FieldsProvider({ children }) {
     const stylesString = `
         .preview-container {
             box-sizing: border-box;
-            display: ${styles.type == "grid" ? 'grid;' : ''}
-            ${styles.type == "grid" ? 'grid-template-columns: repeat(' + styles.gridColumns + ', 1fr);' : ''}
-            ${styles.type == "grid" ? 'column-gap: ' + styles.gridGap + 'px;' : ''}
-            ${styles.type == "grid" ? 'row-gap: ' + styles.rowGap + 'px' : ''}
+            display: ${styles.current.shared.type == "grid" ? 'grid;' : ''}
+            ${styles.current.shared.type == "grid" ? 'grid-template-columns: repeat(' + styles.current.responsive.desktop.gridColumns + ', 1fr);' : ''}
+            ${styles.current.shared.type == "grid" ? 'column-gap: ' + styles.current.responsive.desktop.gridGap + 'px;' : ''}
+            ${styles.current.shared.type == "grid" ? 'row-gap: ' + styles.current.responsive.desktop.rowGap + 'px' : ''}
         }
         
         .preview-container .post-item {
-            ${styles.itemBorderWidth > 0 ? 'border: ' + styles.itemBorderWidth + 'px solid ' + styles.itemsBorderColor : ''};
-            border-radius: ${styles.itemsBorderRadius}px;
+            ${styles.current.shared.itemBorderWidth > 0 ? 'border: ' + styles.itemBorderWidth + 'px solid ' + styles.itemsBorderColor : ''};
+            border-radius: ${styles.current.shared.itemsBorderRadius}px;
             overflow: hidden;
-            padding: ${styles.paddingTop + 'px ' + styles.paddingRight + 'px ' + styles.paddingBottom + 'px ' + styles.paddingLeft + 'px '};
+            padding: ${styles.current.responsive.desktop.padding.top + 'px ' + styles.current.responsive.desktop.padding.right + 'px ' + styles.current.responsive.desktop.padding.bottom + 'px ' + styles.current.responsive.desktop.padding.left + 'px '};
             display: ${styles.postDisplay};
             ${styles.postDisplay == 'flex' ? 'justify-content: ' + styles.justifyContent + ';' : ''}
             ${styles.postDisplay == 'flex' ? 'flex-direction: ' + styles.flexDirection + ';' : ''}
@@ -67,7 +68,7 @@ export function FieldsProvider({ children }) {
     const [postTypes, setPostTypes] = useState([]);
 
     useEffect(() => {
-        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${styles.postType}&per_page=${styles.perPage}`)
+        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${styles.current.shared.postType}&per_page=${styles.current.shared.perPage}`)
             .then(res => res.json())
             .then(data => {
                 setPosts(Object.values(data.data.posts));
@@ -101,12 +102,13 @@ export function FieldsProvider({ children }) {
             availableFields,
             setAvailableFields,
             styles,
+            frame,
             setStyles,
             assignedFields,
             setAssignedFields,
             posts,
             postTypes,
-            updateStyle,
+            setFrame,
             updatePostType,
             setMeasure,
             updateOption,

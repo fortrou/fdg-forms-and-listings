@@ -1,4 +1,4 @@
-import {useState} from "@wordpress/element";
+import {useState, useRef, useReducer} from "@wordpress/element";
 import {
     availableFields as defaultAvailableFields,
     assignedFields as defaultAssignedFields,
@@ -6,9 +6,13 @@ import {
 } from './exportableconstants';
 
 export function useFieldsLogic() {
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
+    const [frame, setFrame] = useState('desktop')
+
     const [availableFields, setAvailableFields] = useState(defaultAvailableFields);
     const [assignedFields, setAssignedFields] = useState(defaultAssignedFields);
-    const [styles, setStyles] = useState(defaultStyles);
+    //setStyles
+    const styles = useRef(defaultStyles);
 
     const setMeasure = (field, index, fieldKey, value) => {
         setAssignedFields(prev => {
@@ -66,11 +70,21 @@ export function useFieldsLogic() {
         });
     };
 
-    const updateStyle = (key, value) => {
-        setStyles(current => ({
-            ...current,
-            [key]: value
-        }))
+    const setter = (obj, path, value) => {
+        const keys = path.replace(/\[(\d+)]/g, '.$1').split('.');
+        let current = obj;
+        while (keys.length > 1) {
+            const key = keys.shift();
+            if (!(key in current)) current[key] = {};
+            current = current[key];
+        }
+        current[keys[0]] = value;
+    }
+
+    const setStyles = (path, value) => {
+        setter(styles.current, path, value);
+
+        forceUpdate();
     }
 
     const updatePostType = (value) => {
@@ -78,7 +92,7 @@ export function useFieldsLogic() {
             ...current,
             ['postType']: value
         }))
-        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${value}&per_page=${styles.perPage}`)
+        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${value}&per_page=${styles.current.responsive[frame].perPage}`)
             .then(res => res.json())
             .then(data => {
                 setPosts(data.data.posts);
@@ -224,7 +238,9 @@ export function useFieldsLogic() {
         setStyles,
         assignedFields,
         setAssignedFields,
-        updateStyle,
+        forceUpdate,
+        frame,
+        setFrame,
         updatePostType,
         setMeasure,
         updateOption,

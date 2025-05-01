@@ -12,7 +12,6 @@ export default function ListingData() {
         setStyles,
         assignedFields,
         setAssignedFields,
-        updateStyle,
         updatePostType,
         setMeasure,
         updateOption,
@@ -32,7 +31,7 @@ export default function ListingData() {
                         Query data
                     </div>
                     <div className="setting-content">
-                        <select value={styles.postType} onChange={(e) => updatePostType(e.target.value)}>
+                        <select value={styles.current.shared.postType} onChange={(e) => updatePostType(e.target.value)}>
                             {postTypes.map(postType => (
                                 <option key={postType} value={postType}>{postType}</option>
                             ))}
@@ -49,20 +48,20 @@ export default function ListingData() {
                             <TabButton
                                 value="grid"
                                 label="Grid"
-                                active={styles.type === 'grid'}
-                                onClick={(val) => updateStyle('type', val)}
+                                active={styles.current.shared.type === 'grid'}
+                                onClick={(val) => setStyles('type', val)}
                             />
                             <TabButton
                                 value="masonry"
                                 label="Masonry"
-                                active={styles.type === 'masonry'}
-                                onClick={(val) => updateStyle('type', val)}
+                                active={styles.current.shared.type === 'masonry'}
+                                onClick={(val) => setStyles('type', val)}
                             />
                             <TabButton
                                 value="listing"
                                 label="Listing"
-                                active={styles.type === 'listing'}
-                                onClick={(val) => updateStyle('type', val)}
+                                active={styles.current.shared.type === 'listing'}
+                                onClick={(val) => setStyles('type', val)}
                             />
                         </div>
                     </div>
@@ -75,8 +74,8 @@ export default function ListingData() {
                     <div className="setting-content">
                         <div className="padding-settings">
                             <div className="input-container">
-                                <select id="" value={styles.postDisplay}
-                                        onChange={(e) => updateStyle('postDisplay', e.target.value)}>
+                                <select id="" value={styles.current.shared.postDisplay}
+                                        onChange={(e) => setStyles('postDisplay', e.target.value)}>
                                     <option value="block">Block</option>
                                     <option value="flex">Flex</option>
                                 </select>
@@ -86,13 +85,13 @@ export default function ListingData() {
                 </div>
 
                 <div className="setting-holder"
-                     style={{display: styles.postDisplay === 'flex' ? 'block' : 'none'}}>
+                     style={{display: styles.current.shared.postDisplay === 'flex' ? 'block' : 'none'}}>
                     <div className="setting-content">
                         <div className="grid grid-3">
                             <div className="input-container">
                                 <label>flex direction</label>
-                                <select value={styles.flexDirection}
-                                        onChange={(e) => updateStyle('flexDirection', e.target.value)}>
+                                <select value={styles.current.shared.flexDirection}
+                                        onChange={(e) => setStyles('flexDirection', e.target.value)}>
                                     <option value="row">row</option>
                                     <option value="column">column</option>
                                     <option value="row-reverse">row-reverse</option>
@@ -101,8 +100,8 @@ export default function ListingData() {
                             </div>
                             <div className="input-container">
                                 <label>justify content</label>
-                                <select value={styles.justifyContent}
-                                        onChange={(e) => updateStyle('justifyContent', e.target.value)}>
+                                <select value={styles.current.shared.justifyContent}
+                                        onChange={(e) => setStyles('justifyContent', e.target.value)}>
                                     <option value="space-between">space-between</option>
                                     <option value="flex-start">flex-start</option>
                                     <option value="flex-end">flex-start</option>
@@ -111,8 +110,8 @@ export default function ListingData() {
                             </div>
                             <div className="input-container">
                                 <label>align items</label>
-                                <select value={styles.alignItems}
-                                        onChange={(e) => updateStyle('alignItems', e.target.value)}>
+                                <select value={styles.current.shared.alignItems}
+                                        onChange={(e) => setStyles('alignItems', e.target.value)}>
                                     <option value="flex-start">flex-start</option>
                                     <option value="flex-end">flex-end</option>
                                     <option value="center">center</option>
@@ -128,14 +127,7 @@ export default function ListingData() {
                         Fields selected
                     </div>
 
-                    <ListingConfigurator assignedFields={assignedFields}
-                                         setAssignedFields={setAssignedFields}
-                                         updateOption={updateOption}
-                                         styles={styles}
-                                         updateStyle={updateStyle}
-                                         availableFields={availableFields}
-                                         addOptionToImageArea={addOptionToImageArea}
-                    />
+                    <ListingConfigurator />
 
                 </div>
             </div>

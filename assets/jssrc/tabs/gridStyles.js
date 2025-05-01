@@ -19,7 +19,7 @@ export default function GridStyles() {
         postTypes
     } = useFieldsContext();
     return (
-        <div className="tab-item" style={{display: styles.current.shared.type === 'masonry' ? 'none' : 'block'}}>
+        <div className="tab-item half-height-tab" style={{display: styles.current.shared.type === 'masonry' ? 'none' : 'block'}}>
             <div className="tab-heading">
                 Grid styles
             </div>
@@ -44,6 +44,24 @@ export default function GridStyles() {
                                 <input type="number" name="column-gap"
                                        value={styles.current.responsive[frame].rowGap}
                                        onChange={(e) => setStyles(`responsive.${frame}.rowGap`, parseInt(e.target.value, 10))}/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="setting-content">
+                        <div className="grid grid-2">
+                            <div className="input-container">
+                                <label>Listing width</label>
+                                <input type="text"
+                                       value={styles.current.responsive[frame].listingWidth}
+                                       onChange={(e) => setStyles(`responsive.${frame}.listingWidth`, e.target.value, 10)}/>
+                            </div>
+                            <div className="input-container">
+                                <label>Responsive to:</label>
+                                <select>
+                                    <option value="container">Container</option>
+                                    <option value="screen">Screen</option>
+                                </select>
                             </div>
                         </div>
                     </div>

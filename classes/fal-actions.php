@@ -141,8 +141,8 @@ class Fal_Actions
             FROM {$wpdb->postmeta} pm
             INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
             WHERE p.post_type = %s
-              AND pm.meta_key NOT LIKE '\_%'
-        ", $post_type)
+              AND pm.meta_key NOT LIKE %s
+        ", $post_type, '\_%')
         );
         $meta_keys = array_merge($meta_keys, $db_keys);
 

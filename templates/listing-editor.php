@@ -3,6 +3,7 @@
         background: #fff;
         min-height: 100vh;
         margin-left: 0px !important;
+        padding-right: 20px;
     }
     #adminmenuback, #adminmenuwrap {
         display: none;

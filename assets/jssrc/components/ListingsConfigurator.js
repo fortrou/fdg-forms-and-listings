@@ -91,63 +91,55 @@ export default function ListingConfigurator() {
 
 
     return (
+        <>
+            <div className="setting-content">
+                <div className="grid grid-2">
+                    <select
+                        value={styles.current.shared.currentSelectedImageField}
+                        onChange={(e) => setStyles(`shared.currentSelectedImageField`, e.target.value)}
+                    >
+                        <option value="">Choose field</option>
+                        {availableFields.map(field => (
+                            <option key={field.key} value={field.key}>{field.name}</option>
+                        ))}
+                    </select>
 
-        <div className="setting-content">
-            <div className="grid grid-2">
-                <select
-                    value={styles.current.shared.currentSelectedImageField}
-                    onChange={(e) => setStyles(`shared.currentSelectedImageField`, e.target.value)}
-                >
-                    <option value="">Choose field</option>
-                    {availableFields.map(field => (
-                        <option key={field.key} value={field.key}>{field.name}</option>
-                    ))}
-                </select>
-
-                <button onClick={() => addOptionToImageArea(styles.current.shared.currentSelectedImageField)}>
-                    Add field
-                </button>
-            </div>
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                {/* Секция A */}
-                <SortableContext
-                    items={[
-                        ...assignedFields.fsection.map(f => f.key),
-                        ...assignedFields.lsection.map(f => f.key)
-                    ]}
-                    strategy={verticalListSortingStrategy}
-                >
-                    <UsedFormFields
-                        sectionId="fsection"
-                        fields={assignedFields.fsection}
-                        setFields={newFields =>
-                            setAssignedFields(prev => ({ ...prev, fsection: newFields }))
-                        }
-                        updateOption={updateOption}
-                    />
-
-                    {styles.current.shared.postDisplay === 'flex' && (
-                        <TabSwitcher
-                            value="use_two_sections"
-                            label="Use two sections"
-                            active={styles.current.shared.useTwoSection === true}
-                            onClick={(val) => setStyles(`shared.useTwoSection`, !styles.current.shared.useTwoSection)}
-                        />
-                    )}
-
-                    {styles.current.shared.useTwoSection && (
+                    <button onClick={() => addOptionToImageArea(styles.current.shared.currentSelectedImageField)}>
+                        Add field
+                    </button>
+                </div>
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                    {/* Секция A */}
+                    <SortableContext
+                        items={[
+                            ...assignedFields.fsection.map(f => f.key),
+                            ...assignedFields.lsection.map(f => f.key)
+                        ]}
+                        strategy={verticalListSortingStrategy}
+                    >
                         <UsedFormFields
-                            sectionId="lsection"
-                            fields={assignedFields.lsection}
+                            sectionId="fsection"
+                            fields={assignedFields.fsection}
                             setFields={newFields =>
-                                setAssignedFields(prev => ({ ...prev, lsection: newFields }))
+                                setAssignedFields(prev => ({...prev, fsection: newFields}))
                             }
                             updateOption={updateOption}
                         />
-                    )}
 
-                </SortableContext>
-            </DndContext>
-        </div>
+                        {styles.current.shared.useTwoSection && (
+                            <UsedFormFields
+                                sectionId="lsection"
+                                fields={assignedFields.lsection}
+                                setFields={newFields =>
+                                    setAssignedFields(prev => ({...prev, lsection: newFields}))
+                                }
+                                updateOption={updateOption}
+                            />
+                        )}
+
+                    </SortableContext>
+                </DndContext>
+            </div>
+        </>
     );
 }

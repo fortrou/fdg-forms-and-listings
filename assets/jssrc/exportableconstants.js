@@ -63,7 +63,7 @@ export const styles = {
         itemsBorderColor: '#ffffff',
         itemsBorderRadius: 0,
         itemBorderWidth: 0,
-        postDisplay: 'block',
+        postDisplay: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
@@ -82,6 +82,10 @@ export const styles = {
             gridGap: 24,
             rowGap: 24,
 
+            listingWidth: {
+                measure: '%',
+                value: 100
+            },
             padding: { top: 0, right: 0, bottom: 0, left: 0 },
             imageSize: { width: '100%', height: 'auto' },
             imageMargin: { top: 0, right: 0, bottom: 0, left: 0 },
@@ -90,8 +94,14 @@ export const styles = {
 
         tablet: {
             gridColumns: 2,
+
             gridGap: 20,
             rowGap: 20,
+
+            listingWidth: {
+                measure: '%',
+                value: 100
+            },
 
             padding: { top: 0, right: 0, bottom: 0, left: 0 },
             imageSize: { width: '100%', height: 'auto' },
@@ -101,8 +111,14 @@ export const styles = {
 
         mobile: {
             gridColumns: 1,
+
             gridGap: 12,
             rowGap: 12,
+
+            listingWidth: {
+                measure: '%',
+                value: 100
+            },
 
             padding: { top: 0, right: 0, bottom: 0, left: 0 },
             imageSize: { width: '100%', height: 'auto' },

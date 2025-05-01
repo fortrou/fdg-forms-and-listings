@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { useFieldsLogic } from './functions';
 import {useEffect} from "@wordpress/element";
+import {filters} from "./exportableconstants";
 
 export const FieldsContext = createContext(null);
 
@@ -11,12 +12,16 @@ export function FieldsProvider({ children }) {
         setAvailableFields,
         styles,
         frame,
+        availableFilterFields,
+        filters,
         setStyles,
+        setFilter,
         assignedFields,
         setAssignedFields,
         updatePostType,
         setFrame,
         setMeasure,
+        setAvailableFilterFields,
         updateOption,
         addOptionToImageArea,
         buildPostBlockStyles
@@ -77,6 +82,7 @@ export function FieldsProvider({ children }) {
                     fsection: Array.isArray(data.data.defaultKeys.fsection) ? data.data.defaultKeys.fsection : Object.values(data.data.defaultKeys.fsection),
                     lsection: Array.isArray(data.data.defaultKeys.lsection) ? data.data.defaultKeys.lsection : Object.values(data.data.defaultKeys.lsection)
                 });
+                setAvailableFilterFields(data.data.filterFields);
             });
     }, []);
 
@@ -103,9 +109,12 @@ export function FieldsProvider({ children }) {
             setAvailableFields,
             styles,
             frame,
+            filters,
             setStyles,
+            setFilter,
             assignedFields,
             setAssignedFields,
+            availableFilterFields,
             posts,
             postTypes,
             setFrame,

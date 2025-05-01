@@ -17,6 +17,44 @@ export const assignedFields = {
     lsection: []
 };
 
+export const availableFilterFields = [];
+
+export const filters ={
+    shared: {
+        enable: true,
+        filterType: 'async',
+        enabledFilters: [
+            /*{
+                type: 'search',
+                field: 'post_title',
+                params: {},
+                list: []
+            }*/
+        ]
+    },
+    responsive: {
+        desktop: {
+            position: 'sidebar',
+            sidebarPosition: 'left',
+            filterWidth: {
+                measure: 'px',
+                value: 300
+            }
+        },
+        tablet: {
+            position: 'sidebar',
+            sidebarPosition: 'moveLeft',
+            filterWidth: {
+                measure: 'px',
+                value: 300
+            }
+        },
+        mobile: {
+            position: 'sidebar',
+            sidebarPosition: 'moveLeft',
+        }
+    }
+}
 
 export const styles = {
     shared: {

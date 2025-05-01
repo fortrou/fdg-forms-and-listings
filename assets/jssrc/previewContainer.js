@@ -23,14 +23,14 @@ export default function PreviewContent() {
         postTypes
     } = useFieldsContext();
 
-    const [usedTab, setUsedTab] = useState('configurations')
+    const [usedTab, setUsedTab] = useState('filters')
 
     return (
         <div className="listing-global-container">
             <div className="listing-tabs">
-                <div className="tab-item" onClick={(e) => setUsedTab('configurations')}>Listing setup</div>
-                <div className="listing-settings" onClick={(e) => setUsedTab('filters')}>Filters setup</div>
-                <div className="listing-settings" onClick={(e) => setUsedTab('settings')}>Settings</div>
+                <div className={`tab-item listing-configurations ${(usedTab == 'configurations') ? 'active' : ''}`} onClick={(e) => setUsedTab('configurations')}>Listing setup</div>
+                <div className={`tab-item listing-filters ${(usedTab == 'filters') ? 'active' : ''}`} onClick={(e) => setUsedTab('filters')}>Filters setup</div>
+                <div className={`tab-item listing-settings ${(usedTab == 'settings') ? 'active' : ''}`} onClick={(e) => setUsedTab('settings')}>Settings</div>
             </div>
             <ConfigurationsTab usedTab={usedTab} />
             <FiltersTab usedTab={usedTab} />

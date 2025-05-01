@@ -89,7 +89,7 @@
 
 .configurations-container {
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: 1fr;
   column-gap: 30px;
   margin-top: 20px;
 
@@ -99,6 +99,10 @@
     padding: 0 12px;
     height: 100%;
     overflow-y: auto;
+    display: grid;
+    column-gap: 20px;
+    grid-template-columns: 40% auto auto;
+
     .tab-item {
       margin-bottom: 12px;
       border: .3px solid #222;
@@ -116,6 +120,9 @@
       .tab-content {
         border-top: .3px solid #2222;
         padding: 12px 8px;
+        max-height: 330px;
+        box-sizing: border-box;
+        overflow-y: auto;
 
         .setting-holder {
           &:not(:last-child) {
@@ -264,39 +271,6 @@
               }
             }
 
-            .switcher-wrapper {
-              .switcher-holder {
-                width: 100%;
-                border-radius: 26px;
-                background: #dbe1e8;
-                height: 24px;
-                max-width: 60px;
-                position: relative;
-                cursor: pointer;
-                transition: .6s;
-
-                &:after {
-                  content: '';
-                  height: 18px;
-                  width: 18px;
-                  border-radius: 50%;
-                  position: absolute;
-                  top: 3px;
-                  left: 3px;
-                  transition: .6s;
-                  background: #2d4f60;
-                }
-
-                &.active {
-                  background: #3a4d63;
-                  &:after {
-                    left: calc(100% - 21px);
-                    background: #80f680;
-                  }
-                }
-              }
-            }
-
             &.tabs-section {
               display: flex;
               justify-content: space-between;
@@ -310,6 +284,80 @@
 
       &:not(:last-child) {
         margin-bottom: 12px;
+      }
+    }
+  }
+}
+
+.switcher-wrapper {
+  .switcher-holder {
+    width: 100%;
+    border-radius: 26px;
+    background: #dbe1e8;
+    height: 24px;
+    max-width: 60px;
+    position: relative;
+    cursor: pointer;
+    transition: .6s;
+
+    &:after {
+      content: '';
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: .6s;
+      background: #2d4f60;
+    }
+
+    &.active {
+      background: #3a4d63;
+      &:after {
+        left: calc(100% - 21px);
+        background: #80f680;
+      }
+    }
+  }
+}
+
+.filters-configurations {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  .filters-settings {
+    box-sizing: border-box;
+    padding: 12px 24px;
+    background: #f0f0f0;
+    border-radius: 20px;
+    width: 100%;
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 30px;
+  }
+}
+
+.listing-global-container {
+  .listing-tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #e8e8e8;
+    padding: 12px 0;
+
+    .tab-item {
+      padding: 8px 12px;
+      background: #e1ded1;
+      border: .5px solid #242424;
+
+      &.active {
+        border: none;
+        border-bottom: .5px solid #242424;
+        background: #e8e8e8;
       }
     }
   }

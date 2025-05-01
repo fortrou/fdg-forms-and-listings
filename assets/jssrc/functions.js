@@ -2,16 +2,21 @@ import {useState, useRef, useReducer} from "@wordpress/element";
 import {
     availableFields as defaultAvailableFields,
     assignedFields as defaultAssignedFields,
-    styles as defaultStyles
+    styles as defaultStyles,
+    availableFilterFields as defaultAvailableFilterFields,
+    filters as defaultFilters, filters
 } from './exportableconstants';
 
 export function useFieldsLogic() {
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [frame, setFrame] = useState('desktop')
 
+
+    const [availableFilterFields, setAvailableFilterFields] = useState(defaultAvailableFilterFields)
     const [availableFields, setAvailableFields] = useState(defaultAvailableFields);
     const [assignedFields, setAssignedFields] = useState(defaultAssignedFields);
-    //setStyles
+
+    const filters = useRef(defaultFilters)
     const styles = useRef(defaultStyles);
 
     const setMeasure = (field, index, fieldKey, value) => {
@@ -87,16 +92,23 @@ export function useFieldsLogic() {
         forceUpdate();
     }
 
+    const setFilter = (path, value) => {
+        setter(filters.current, path, value);
+
+        forceUpdate();
+    }
+
     const updatePostType = (value) => {
         setStyles(current => ({
             ...current,
             ['postType']: value
         }))
-        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${value}&per_page=${styles.current.responsive[frame].perPage}`)
+        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${value}&per_page=${styles.current.shared.perPage}`)
             .then(res => res.json())
             .then(data => {
                 setPosts(data.data.posts);
                 setAvailableFields(Object.values(data.data.keys));
+                setAvailableFilterFields(data.data.filterFields);
             });
     }
 
@@ -234,8 +246,12 @@ export function useFieldsLogic() {
     return {
         availableFields,
         setAvailableFields,
+        setAvailableFilterFields,
+        availableFilterFields,
         styles,
+        filters,
         setStyles,
+        setFilter,
         assignedFields,
         setAssignedFields,
         forceUpdate,

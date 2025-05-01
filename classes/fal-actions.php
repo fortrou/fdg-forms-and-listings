@@ -72,7 +72,6 @@ class Fal_Actions
         $defaultKeys = [];
 
         foreach ($keys as $key => $value) {
-
             $properties = [
                 'key' => $value,
                 'name' => str_replace('_', ' ', $value),
@@ -122,15 +121,59 @@ class Fal_Actions
             if (in_array($value, ['thumbnail', 'post_title', 'post_excerpt'])) {
                 $defaultKeys[$value] = $properties;
             }
-
         }
 
         wp_send_json_success([
             'posts' => apply_filters('demonstration_posts_listing', $returnList),
             'keys'  => $resortedKeys,
+            'filterFields' => $this->get_all_custom_meta_keys_for_post_type($_REQUEST['post_type']),
             'defaultKeys' => apply_filters('fdg_fil_default_keys_editor', ['fsection' => $defaultKeys, 'lsection' => []]),
         ]);
     }
+
+    public function get_all_custom_meta_keys_for_post_type($post_type) {
+        global $wpdb;
+
+        $meta_keys = [];
+        $db_keys = $wpdb->get_col(
+            $wpdb->prepare("
+            SELECT DISTINCT pm.meta_key
+            FROM {$wpdb->postmeta} pm
+            INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+            WHERE p.post_type = %s
+              AND pm.meta_key NOT LIKE '\_%'
+        ", $post_type)
+        );
+        $meta_keys = array_merge($meta_keys, $db_keys);
+
+        if (function_exists('get_registered_meta_keys')) {
+            $registered_meta = get_registered_meta_keys('post', $post_type);
+            $meta_keys = array_merge($meta_keys, array_keys($registered_meta));
+        }
+
+        if (function_exists('acf_get_field_groups')) {
+            $acf_groups = acf_get_field_groups(['post_type' => $post_type]);
+            foreach ($acf_groups as $group) {
+                $fields = acf_get_fields($group['key']);
+                foreach ($fields as $field) {
+                    // Исключаем repeater и flexible_content
+                    if (in_array($field['type'], ['repeater', 'flexible_content', 'group'])) {
+                        continue;
+                    }
+                    if (!empty($field['name'])) {
+                        $meta_keys[] = $field['name'];
+                    }
+                }
+            }
+        }
+
+        $meta_keys = array_unique($meta_keys);
+        sort($meta_keys);
+
+        return $meta_keys;
+    }
+
+
     public function add_listing_post()
     {
         $type = sanitize_text_field($_POST['post_type_to_add']);

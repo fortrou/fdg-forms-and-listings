@@ -4,7 +4,8 @@ import {
     assignedFields as defaultAssignedFields,
     styles as defaultStyles,
     availableFilterFields as defaultAvailableFilterFields,
-    filters as defaultFilters, filters
+    filters as defaultFilters,
+    resolutions as defaultResolutions
 } from './exportableconstants';
 
 export function useFieldsLogic() {
@@ -16,6 +17,7 @@ export function useFieldsLogic() {
     const [availableFields, setAvailableFields] = useState(defaultAvailableFields);
     const [assignedFields, setAssignedFields] = useState(defaultAssignedFields);
 
+    const [resolutions, setResolutions] = useState(defaultResolutions);
     const filters = useRef(defaultFilters)
     const styles = useRef(defaultStyles);
 
@@ -35,7 +37,6 @@ export function useFieldsLogic() {
 
 
             if (!wrapper) return prev;
-            console.log(wrapper)
 
             const updatedOptions = Object.entries(prev[wrapper][index].options).reduce((acc, [key, val]) => {
                 if (key !== fieldKey) {
@@ -93,8 +94,12 @@ export function useFieldsLogic() {
     }
 
     const setFilter = (path, value) => {
-        setter(filters.current, path, value);
+        if (path == 'enabledFilters') {
+            filters.current.shared.enabledFilters[value.field] = value;
 
+        } else {
+            setter(filters.current, path, value);
+        }
         forceUpdate();
     }
 
@@ -185,6 +190,65 @@ export function useFieldsLogic() {
         }));
     };
 
+    const buildFiltersBlockStyle = (filters) => {
+        let styles = '';
+        if (filters.shared.enable) {
+            styles += `
+            .listing-container .filters-side {
+                grid-area: filters;
+            }
+            .listing-container .preview-container {
+                grid-area: content;
+            }
+            `
+            Object.keys(filters.responsive).forEach(key => {
+                let mediaQuery = '';
+                let basicLayoutStyles = '';
+
+                if (resolutions[key]) {
+                    mediaQuery = `@media screen and (max-width: ${resolutions[key]}px)`;
+                }
+
+                const field = filters.responsive[key];
+                basicLayoutStyles += `display: grid; column-gap: ${field.columnGap}px; row-gap: ${field.rowGap}px;`;
+                if (field.position == 'sidebar') {
+                    if (field.sidebarPosition == 'left') {
+                        basicLayoutStyles += `grid-template-columns: ${field.filterWidth.value}${field.filterWidth.measure} auto; grid-template-areas: "filters content";`
+                    }
+
+                    if (field.sidebarPosition == 'right') {
+                        basicLayoutStyles += `grid-template-columns: auto ${field.filterWidth.value}${field.filterWidth.measure}; grid-template-areas: "content filters";`
+                    }
+                } else if (field.position == 'top') {
+                    basicLayoutStyles += `grid-template-columns: 1fr`;
+                } else {
+
+                }
+                if (basicLayoutStyles) {
+                    let tempStyles = `
+                        .listing-container {
+                            width: 100%;
+                            ${basicLayoutStyles}
+                        }
+                    `;
+
+                    if (mediaQuery) {
+                        styles += `
+                            ${mediaQuery} {
+                                ${tempStyles}
+                            }
+                        `
+                    } else {
+                        styles += tempStyles;
+                    }
+                }
+            });
+            //console.log(styles)
+            return styles;
+        }
+        styles = '.listing-container {display: block;} .listing-container .filters-side {display: none;}'
+    }
+
     const buildPostBlockStyles = (assignedFields) => {
         const fields = [...assignedFields.fsection, ...assignedFields.lsection];
 
@@ -261,6 +325,7 @@ export function useFieldsLogic() {
         setMeasure,
         updateOption,
         addOptionToImageArea,
+        buildFiltersBlockStyle,
         buildPostBlockStyles
     };
 }

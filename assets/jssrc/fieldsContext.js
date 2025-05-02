@@ -23,6 +23,7 @@ export function FieldsProvider({ children }) {
         setMeasure,
         setAvailableFilterFields,
         updateOption,
+        buildFiltersBlockStyle,
         addOptionToImageArea,
         buildPostBlockStyles
     } = useFieldsLogic();
@@ -64,7 +65,7 @@ export function FieldsProvider({ children }) {
             padding: ${styles.contentPaddingTop + 'px ' + styles.contentPaddingRight + 'px ' + styles.contentPaddingBottom + 'px ' + styles.contentPaddingLeft + 'px '};
             ${(styles.itemsShowImages && styles.postDisplay == 'flex' && (styles.flexDirection == 'row' || styles.flexDirection == 'row-reverse')) ? `width: calc(100% - ${parseInt(styles.imageWidth, 10) + styles.imageMarginRight + styles.imageMarginLeft}px);` : ''}
         }
-    ` + buildPostBlockStyles(assignedFields);
+    ` + buildPostBlockStyles(assignedFields) + buildFiltersBlockStyle(filters.current);
 
 
 

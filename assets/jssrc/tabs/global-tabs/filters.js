@@ -2,6 +2,8 @@ import {useFieldsContext} from "../../useFieldContext";
 import DynamicComponent from "../../components/dynamicCompontent";
 import TabSwitcher from "../../switcher";
 import {filters} from "../../exportableconstants";
+import {useState} from "@wordpress/element";
+import SimpleFIlterComponent from "../../components/simpleFIlterComponent";
 
 export default function FiltersTab({usedTab}) {
     const {
@@ -24,8 +26,20 @@ export default function FiltersTab({usedTab}) {
         postTypes
     } = useFieldsContext();
 
+    const [currentFilterField, setCurrentFilterField] = useState('');
+    const addFilterField = () => {
+        if (currentFilterField != '') {
+            setFilter('enabledFilters', {
+                type: 'search',
+                field: currentFilterField,
+                params: {},
+                list: []
+            })
+            setCurrentFilterField('')
+        }
+    }
     return (
-        <div className="filters-configurations" style={{display: (usedTab == 'filters') ? 'grid' : 'none'}}>
+        <div className="filters-configurations" style={{display: (usedTab == 'filters') ? 'flex' : 'none'}}>
             <div className="filters-settings">
                 <div className="column-left">
                     <div className="setting-item">
@@ -47,7 +61,8 @@ export default function FiltersTab({usedTab}) {
                             Filter position
                         </div>
                         <div className="setting-content">
-                            <select value={filters.current.responsive[frame].sidebarPosition} onChange={(e) => setFilter(`responsive.${frame}.sidebarPosition`, e.target.value)}>
+                            <select value={filters.current.responsive[frame].sidebarPosition}
+                                    onChange={(e) => setFilter(`responsive.${frame}.sidebarPosition`, e.target.value)}>
                                 {frame === 'desktop' && (
                                     <>
                                         <option value="top">Top</option>
@@ -76,47 +91,60 @@ export default function FiltersTab({usedTab}) {
                             Filter field
                         </div>
                         <div className="setting-content">
-                            <select name="" id="">
+                            <select value={currentFilterField}
+                                    onChange={(e) => {
+                                        console.log(e.target.value)
+                                        setCurrentFilterField(e.target.value)
+                                    }}>
+                                <option value="">Choose field</option>
                                 {availableFilterFields.map(field => {
                                     return (
-                                        <option value="field">{field}</option>
+                                        <option value={`${field}`}>{field}</option>
                                     )
                                 })}
                             </select>
+                            <button onClick={addFilterField}>Add filter</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div className="configurations-container">
-                <div className="filters-side">
-                </div>
-                <div className={`preview-container ${styles.current.shared.type}`}>
-                    {posts.map(post => (
-                        <div key={post.ID} className="post-item">
-                            {styles.current.shared.itemsShowImages && (
-                                <div className="left-side">
-                                    {assignedFields.fsection.map(field => {
-                                            let fieldData = post[field.key] ? post[field.key] : '';
-                                            return (
-                                                <DynamicComponent field={field} data={fieldData}/>
-                                            )
-                                        }
-                                    )}
-                                </div>
-                            )}
-                            {styles.current.shared.useTwoSection && (
-                                <div className="content-side">
-                                    {assignedFields.lsection.map(field => {
-                                            let fieldData = post[field.key] ? post[field.key] : '';
-                                            return (
-                                                <DynamicComponent field={field} data={fieldData}/>
-                                            )
-                                        }
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                <div className="listing-container">
+                    {filters.current.shared.enable && (
+                    <div className="filters-side">
+                        {Object.values(filters.current.shared.enabledFilters).map((filter, index) => (
+                            <SimpleFIlterComponent key={index} field={filter} />
+                        ))}
+                    </div>
+                    )}
+                    <div className={`preview-container ${styles.current.shared.type}`}>
+                        {posts.map(post => (
+                            <div key={post.ID} className="post-item">
+                                {styles.current.shared.itemsShowImages && (
+                                    <div className="left-side">
+                                        {assignedFields.fsection.map(field => {
+                                                let fieldData = post[field.key] ? post[field.key] : '';
+                                                return (
+                                                    <DynamicComponent field={field} data={fieldData}/>
+                                                )
+                                            }
+                                        )}
+                                    </div>
+                                )}
+                                {styles.current.shared.useTwoSection && (
+                                    <div className="content-side">
+                                        {assignedFields.lsection.map(field => {
+                                                let fieldData = post[field.key] ? post[field.key] : '';
+                                                return (
+                                                    <DynamicComponent field={field} data={fieldData}/>
+                                                )
+                                            }
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

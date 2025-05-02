@@ -12,6 +12,11 @@ export const availableFields = [
         name: 'post excerpt'
     }
 ];
+
+export const resolutions = {
+    tablet: 1100,
+    mobile: 767
+}
 export const assignedFields = {
     fsection: [],
     lsection: []
@@ -36,6 +41,8 @@ export const filters ={
         desktop: {
             position: 'sidebar',
             sidebarPosition: 'left',
+            columnGap: 30,
+            rowGap: 30,
             filterWidth: {
                 measure: 'px',
                 value: 300
@@ -44,6 +51,8 @@ export const filters ={
         tablet: {
             position: 'sidebar',
             sidebarPosition: 'moveLeft',
+            columnGap: 30,
+            rowGap: 30,
             filterWidth: {
                 measure: 'px',
                 value: 300
@@ -52,6 +61,12 @@ export const filters ={
         mobile: {
             position: 'sidebar',
             sidebarPosition: 'moveLeft',
+            columnGap: 30,
+            rowGap: 30,
+            filterWidth: {
+                measure: 'px',
+                value: 300
+            }
         }
     }
 }

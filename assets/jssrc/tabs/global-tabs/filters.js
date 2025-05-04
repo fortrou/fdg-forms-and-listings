@@ -4,6 +4,14 @@ import TabSwitcher from "../../switcher";
 import {filters} from "../../exportableconstants";
 import {useState} from "@wordpress/element";
 import SimpleFIlterComponent from "../../components/simpleFIlterComponent";
+import {
+    DndContext,
+    closestCenter,
+    PointerSensor,
+    useSensor,
+    useSensors
+} from '@dnd-kit/core';
+import {SortableContext, arrayMove, verticalListSortingStrategy} from '@dnd-kit/sortable';
 
 export default function FiltersTab({usedTab}) {
     const {
@@ -14,6 +22,7 @@ export default function FiltersTab({usedTab}) {
         availableFilterFields,
         setStyles,
         setFilter,
+        setEnabledFilter,
         assignedFields,
         setAssignedFields,
         updatePostType,
@@ -38,6 +47,34 @@ export default function FiltersTab({usedTab}) {
             setCurrentFilterField('')
         }
     }
+
+    const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 5 } });
+    const sensors = useSensors(sensor);
+
+    const filterList = Object.values(filters.current.shared.enabledFilters);
+    const filterKeys = filterList.map(f => f.field);
+
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+        if (active.id !== over?.id) {
+            const filtersObj = filters.current.shared.enabledFilters;
+
+            const sorted = Object.values(filtersObj);
+
+            const oldIndex = sorted.findIndex(f => f.field === active.id);
+            const newIndex = sorted.findIndex(f => f.field === over.id);
+
+            const newOrder = arrayMove(sorted, oldIndex, newIndex);
+
+            const newEnabledFilters = {};
+            newOrder.forEach(f => {
+                newEnabledFilters[f.field] = f;
+            });
+            setEnabledFilter(newEnabledFilters);
+        }
+    };
+
+
     return (
         <div className="filters-configurations" style={{display: (usedTab == 'filters') ? 'flex' : 'none'}}>
             <div className="filters-settings">
@@ -93,7 +130,6 @@ export default function FiltersTab({usedTab}) {
                         <div className="setting-content">
                             <select value={currentFilterField}
                                     onChange={(e) => {
-                                        console.log(e.target.value)
                                         setCurrentFilterField(e.target.value)
                                     }}>
                                 <option value="">Choose field</option>
@@ -112,9 +148,17 @@ export default function FiltersTab({usedTab}) {
                 <div className="listing-container">
                     {filters.current.shared.enable && (
                     <div className="filters-side">
-                        {Object.values(filters.current.shared.enabledFilters).map((filter, index) => (
-                            <SimpleFIlterComponent key={index} field={filter} />
-                        ))}
+                        <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={handleDragEnd}
+                        >
+                            <SortableContext items={filterKeys} strategy={verticalListSortingStrategy}>
+                                {filterList.map((filter) => (
+                                    <SimpleFIlterComponent key={filter.field} field={filter} />
+                                ))}
+                            </SortableContext>
+                        </DndContext>
                     </div>
                     )}
                     <div className={`preview-container ${styles.current.shared.type}`}>

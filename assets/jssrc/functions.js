@@ -93,6 +93,11 @@ export function useFieldsLogic() {
         forceUpdate();
     }
 
+    const setEnabledFilter = (values) => {
+        filters.current.shared.enabledFilters = values;
+        forceUpdate();
+    }
+
     const setFilter = (path, value) => {
         if (path == 'enabledFilters') {
             filters.current.shared.enabledFilters[value.field] = value;
@@ -193,14 +198,6 @@ export function useFieldsLogic() {
     const buildFiltersBlockStyle = (filters) => {
         let styles = '';
         if (filters.shared.enable) {
-            styles += `
-            .listing-container .filters-side {
-                grid-area: filters;
-            }
-            .listing-container .preview-container {
-                grid-area: content;
-            }
-            `
             Object.keys(filters.responsive).forEach(key => {
                 let mediaQuery = '';
                 let basicLayoutStyles = '';
@@ -213,14 +210,14 @@ export function useFieldsLogic() {
                 basicLayoutStyles += `display: grid; column-gap: ${field.columnGap}px; row-gap: ${field.rowGap}px;`;
                 if (field.position == 'sidebar') {
                     if (field.sidebarPosition == 'left') {
-                        basicLayoutStyles += `grid-template-columns: ${field.filterWidth.value}${field.filterWidth.measure} auto; grid-template-areas: "filters content";`
+                        basicLayoutStyles += `grid-template-columns: ${field.filterWidth.value}${field.filterWidth.measure} auto; grid-template-areas: "filters content";height: 100%;`
                     }
 
                     if (field.sidebarPosition == 'right') {
-                        basicLayoutStyles += `grid-template-columns: auto ${field.filterWidth.value}${field.filterWidth.measure}; grid-template-areas: "content filters";`
+                        basicLayoutStyles += `grid-template-columns: auto ${field.filterWidth.value}${field.filterWidth.measure}; grid-template-areas: "content filters";height: 100%;`
                     }
                 } else if (field.position == 'top') {
-                    basicLayoutStyles += `grid-template-columns: 1fr`;
+                    basicLayoutStyles += `grid-template-columns: 1fr; height: auto;`;
                 } else {
 
                 }
@@ -230,12 +227,24 @@ export function useFieldsLogic() {
                             width: 100%;
                             ${basicLayoutStyles}
                         }
+                        .listing-container .filters-side {
+                            grid-area: filters;
+                        }
+                        .listing-container .preview-container {
+                            grid-area: content;
+                        }
                     `;
 
                     if (mediaQuery) {
                         styles += `
                             ${mediaQuery} {
                                 ${tempStyles}
+                                .listing-container .filters-side {
+                                    grid-area: unset;
+                                }
+                                .listing-container .preview-container {
+                                    grid-area: unset;
+                                }
                             }
                         `
                     } else {
@@ -326,6 +335,7 @@ export function useFieldsLogic() {
         updateOption,
         addOptionToImageArea,
         buildFiltersBlockStyle,
-        buildPostBlockStyles
+        buildPostBlockStyles,
+        setEnabledFilter
     };
 }

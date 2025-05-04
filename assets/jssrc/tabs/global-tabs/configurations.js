@@ -3,6 +3,9 @@ import ListingData from "../listingData";
 import GridStyles from "../gridStyles";
 import DynamicComponent from "../../components/dynamicCompontent";
 import {useState} from "@wordpress/element";
+import {closestCenter, DndContext} from "@dnd-kit/core";
+import {SortableContext, verticalListSortingStrategy} from "@dnd-kit/sortable";
+import SimpleFIlterComponent from "../../components/simpleFIlterComponent";
 
 export default function ConfigurationsTab({usedTab, showOptions}) {
     const {
@@ -11,6 +14,7 @@ export default function ConfigurationsTab({usedTab, showOptions}) {
         styles,
         setStyles,
         setFrame,
+        filters,
         assignedFields,
         setAssignedFields,
         updatePostType,
@@ -23,11 +27,12 @@ export default function ConfigurationsTab({usedTab, showOptions}) {
         postTypes
     } = useFieldsContext();
 
+    const filterList = Object.values(filters.current.shared.enabledFilters);
 
 
     return (
-        <div className="configurations-container" style={{ display: (usedTab == 'configurations') ? 'grid' : 'none' }}>
-            <div className="configurations-side" style={{ display: (showOptions) ? 'grid' : 'none' }}>
+        <div className="configurations-container" style={{display: (usedTab == 'configurations') ? 'grid' : 'none'}}>
+            <div className="configurations-side" style={{display: (showOptions) ? 'grid' : 'none'}}>
 
                 <ListingData/>
 
@@ -101,33 +106,44 @@ export default function ConfigurationsTab({usedTab, showOptions}) {
                     </div>
                 </div>
             </div>
-            <div className={`preview-container ${styles.current.shared.type}`}>
-                {posts.map(post => (
-                    <div key={post.ID} className="post-item">
-                        {styles.current.shared.itemsShowImages && (
-                            <div className="left-side">
-                                {assignedFields.fsection.map(field => {
-                                        let fieldData = post[field.key] ? post[field.key] : '';
-                                        return (
-                                            <DynamicComponent field={field} data={fieldData}/>
-                                        )
-                                    }
+            <div className="configurations-container">
+                <div className="listing-container">
+                    {filters.current.shared.enable && (
+                        <div className="filters-side">
+                            {filterList.map((filter) => (
+                                <SimpleFIlterComponent key={filter.field} field={filter}/>
+                            ))}
+                        </div>
+                    )}
+                    <div className={`preview-container ${styles.current.shared.type}`}>
+                        {posts.map(post => (
+                            <div key={post.ID} className="post-item">
+                                {styles.current.shared.itemsShowImages && (
+                                    <div className="left-side">
+                                        {assignedFields.fsection.map(field => {
+                                                let fieldData = post[field.key] ? post[field.key] : '';
+                                                return (
+                                                    <DynamicComponent field={field} data={fieldData}/>
+                                                )
+                                            }
+                                        )}
+                                    </div>
+                                )}
+                                {styles.current.shared.useTwoSection && (
+                                    <div className="content-side">
+                                        {assignedFields.lsection.map(field => {
+                                                let fieldData = post[field.key] ? post[field.key] : '';
+                                                return (
+                                                    <DynamicComponent field={field} data={fieldData}/>
+                                                )
+                                            }
+                                        )}
+                                    </div>
                                 )}
                             </div>
-                        )}
-                        {styles.current.shared.useTwoSection && (
-                            <div className="content-side">
-                                {assignedFields.lsection.map(field => {
-                                        let fieldData = post[field.key] ? post[field.key] : '';
-                                        return (
-                                            <DynamicComponent field={field} data={fieldData}/>
-                                        )
-                                    }
-                                )}
-                            </div>
-                        )}
+                        ))}
                     </div>
-                ))}
+                </div>
             </div>
         </div>
     )

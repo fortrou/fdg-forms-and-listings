@@ -36,6 +36,20 @@ export default function PreviewContent() {
                     <div className={`tab-item listing-settings ${(usedTab == 'settings') ? 'active' : ''}`} onClick={(e) => setUsedTab('settings')}>Settings</div>
                 </div>
                 <div className="settings-trigger">
+                    <div className="frame-selector">
+                        <button className={`trigger-settings ${(frame == 'desktop') ? 'active' : ''}`}
+                                onClick={(e) => setFrame('desktop')}>
+                            <img src={DefaultIcons.frameDesktop} alt=""/>
+                        </button>
+                        <button className={`trigger-settings ${(frame == 'tablet') ? 'active' : ''}`}
+                                onClick={(e) => setFrame('tablet')}>
+                            <img src={DefaultIcons.frameTablet} alt=""/>
+                        </button>
+                        <button className={`trigger-settings ${(frame == 'mobile') ? 'active' : ''}`}
+                                onClick={(e) => setFrame('mobile')}>
+                            <img src={DefaultIcons.frameMobile} alt=""/>
+                        </button>
+                    </div>
                     <button className={`trigger-settings ${(usedTab == 'configurations') ? 'active' : ''}`}
                             onClick={(e) => setShowOptions(!showOptions)}>
                         <img src={DefaultIcons.settings} alt=""/>

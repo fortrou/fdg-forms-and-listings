@@ -1,8 +1,8 @@
 <?php
 /*
-* Plugin Name: FiL forms and listings
+* Plugin Name: FaL Directory Builder
 * Plugin URI: https://fortrou.dev
-* Description: Builder for forms and listings.
+* Description: A flexible builder for frontend forms and custom listings. Create, manage, and display user-submitted content with ease.
 * Author: Serhii Nechyporenko
 * Author URI: https://fortrou.dev
 * License: GPL v2 or later

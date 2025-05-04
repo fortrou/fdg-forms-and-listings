@@ -24,6 +24,7 @@ export function FieldsProvider({ children }) {
         setAvailableFilterFields,
         updateOption,
         buildFiltersBlockStyle,
+        setEnabledFilter,
         addOptionToImageArea,
         buildPostBlockStyles
     } = useFieldsLogic();
@@ -123,6 +124,7 @@ export function FieldsProvider({ children }) {
             setMeasure,
             updateOption,
             addOptionToImageArea,
+            setEnabledFilter,
             buildPostBlockStyles,
         }}>
 

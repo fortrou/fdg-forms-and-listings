@@ -17,19 +17,31 @@ import alignStart from '../../images/align-start.svg';
 import alignEnd from '../../images/align-end.svg';
 import alignCenter from '../../images/align-center.svg';
 
+// frames
+import frameDesktop from '../../images/frame-desktop.svg';
+import frameTablet from '../../images/frame-tablet.svg';
+import frameMobile from '../../images/frame-mobile.svg';
+
 
 export const DefaultIcons = {
     settings: settingsIcon,
+// arrows
     arrowUp: arrowUp,
     arrowDown: arrowDown,
     arrowLeft: arrowLeft,
     arrowRight: arrowRight,
+// justify content
     justifyCenter: justifyCenter,
     flexStart: flexStart,
     flexEnd: flexEnd,
     spaceBetween: spaceBetween,
+// align content
     alignBaseline: alignBaseline,
     alignStart: alignStart,
     alignEnd: alignEnd,
-    alignCenter: alignCenter
+    alignCenter: alignCenter,
+// frames
+    frameDesktop: frameDesktop,
+    frameTablet: frameTablet,
+    frameMobile: frameMobile
 };

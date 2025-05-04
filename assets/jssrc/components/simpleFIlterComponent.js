@@ -1,6 +1,8 @@
 import {DefaultIcons} from "./iconsComponent";
 import {useState} from "@wordpress/element";
 import {useFieldsContext} from "../useFieldContext";
+import {useSortable} from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
 
 export default function SimpleFIlterComponent({field})
 {
@@ -8,12 +10,27 @@ export default function SimpleFIlterComponent({field})
         filters,
         setFilter,
     } = useFieldsContext();
+
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+    } = useSortable({id: field.field});
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
+
     const [expanded, setExpanded] = useState(false);
     return (
-        <div>
+        <div ref={setNodeRef} {...attributes} style={style}>
             <div className="filter-item">
                 <div className="filter-top-line">
-                    <div className="filter-title">Field: {field.field}</div>
+                    <div className="filter-title" {...listeners}>Field: {field.field}</div>
                     <div
                         className="filter-edit"
                         onClick={() => setExpanded(prev => !prev)}

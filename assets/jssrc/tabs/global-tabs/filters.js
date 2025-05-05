@@ -4,6 +4,7 @@ import TabSwitcher from "../../switcher";
 import {filters} from "../../exportableconstants";
 import {useState} from "@wordpress/element";
 import SimpleFIlterComponent from "../../components/simpleFIlterComponent";
+import PreviewIframeComponent from "../../components/previewIframeComponent";
 import {
     DndContext,
     closestCenter,
@@ -122,7 +123,7 @@ export default function FiltersTab({usedTab}) {
                         </div>
                     </div>
                 </div>
-                <div className="column-right" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
+                <div className="column-center" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
                     <div className="setting-item">
                         <div className="setting-title">
                             Filter field
@@ -143,23 +144,26 @@ export default function FiltersTab({usedTab}) {
                         </div>
                     </div>
                 </div>
+                <div className="column-right">
+
+                </div>
             </div>
             <div className="configurations-container">
                 <div className="listing-container">
                     {filters.current.shared.enable && (
-                    <div className="filters-side">
-                        <DndContext
-                            sensors={sensors}
-                            collisionDetection={closestCenter}
-                            onDragEnd={handleDragEnd}
-                        >
-                            <SortableContext items={filterKeys} strategy={verticalListSortingStrategy}>
-                                {filterList.map((filter) => (
-                                    <SimpleFIlterComponent key={filter.field} field={filter} />
-                                ))}
-                            </SortableContext>
-                        </DndContext>
-                    </div>
+                        <div className="filters-side">
+                            <DndContext
+                                sensors={sensors}
+                                collisionDetection={closestCenter}
+                                onDragEnd={handleDragEnd}
+                            >
+                                <SortableContext items={filterKeys} strategy={verticalListSortingStrategy}>
+                                    {filterList.map((filter) => (
+                                        <SimpleFIlterComponent key={filter.field} field={filter}/>
+                                    ))}
+                                </SortableContext>
+                            </DndContext>
+                        </div>
                     )}
                     <div className={`preview-container ${styles.current.shared.type}`}>
                         {posts.map(post => (
@@ -191,6 +195,7 @@ export default function FiltersTab({usedTab}) {
                     </div>
                 </div>
             </div>
+            <PreviewIframeComponent />
         </div>
     )
 }

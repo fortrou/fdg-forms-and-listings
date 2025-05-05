@@ -112,6 +112,7 @@ export function FieldsProvider({ children }) {
             styles,
             frame,
             filters,
+            stylesString,
             setStyles,
             setFilter,
             assignedFields,

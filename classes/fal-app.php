@@ -51,6 +51,7 @@ class Fal_App
         add_action('admin_head', function () {
             remove_submenu_page('fil-forms', 'fil-forms');
         });
+
     }
 
     public function render_fil_forms()

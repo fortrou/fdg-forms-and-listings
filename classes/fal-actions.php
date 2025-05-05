@@ -11,6 +11,11 @@ class Fal_Actions
         add_action('wp_ajax_add_listing_post', [$this, 'add_listing_post']);
         add_action('wp_ajax_get_fil_demo_posts_listing', [$this, 'get_demo_posts_listing']);
         add_action('wp_ajax_get_fil_fetchable_posttypes', [$this, 'get_fil_fetchable_posttypes']);
+        add_action('admin_post_fal_preview', [$this, 'fal_render_preview_page']);
+    }
+
+    public function fal_render_preview_page() {
+        require_once FDG_FORMS_LISTINGS_PLUGIN_PATH . '/templates/fal-preview-template.php';
     }
 
     public function get_fil_fetchable_posttypes()

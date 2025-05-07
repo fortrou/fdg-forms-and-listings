@@ -98,6 +98,8 @@ export function useFieldsLogic() {
     }
 
     const updateOption = (path, value) => {
+        console.log(assignedFields.current)
+        console.log(path)
         setter(assignedFields.current, path, value);
         forceUpdate();
         setSubmitPending(true);

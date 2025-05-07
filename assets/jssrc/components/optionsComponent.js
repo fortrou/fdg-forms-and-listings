@@ -1,15 +1,21 @@
 import {useState, useRef} from "@wordpress/element";
 import MeasuringSwitcher from './MeasuringSwitcher';
+import {useFieldsContext} from "../useFieldContext";
 
 
 
-export const PaddingComponent = ({field, values, updateOption, index}) => {
+export const PaddingComponent = ({field, values, index, section}) => {
     const [localState, setLocalState] = useState({
         top: values.value.top,
         right: values.value.right,
         bottom: values.value.bottom,
         left: values.value.left,
     });
+
+    const {
+        updateOption,
+    } = useFieldsContext();
+
     const [localProperty, setLocalProperty] = useState('');
     const timeoutRef = useRef(null);
 
@@ -24,7 +30,7 @@ export const PaddingComponent = ({field, values, updateOption, index}) => {
         }
 
         timeoutRef.current = setTimeout(() => {
-            updateOption(field, index, 'margin', property, value);
+            updateOption(`${section}[${index}].options.padding.value.${property}`, value);
         }, 500);
     };
 
@@ -96,13 +102,18 @@ export const PaddingComponent = ({field, values, updateOption, index}) => {
     )
 }
 
-export const MarginComponent = ({field, values, updateOption, index}) => {
+export const MarginComponent = ({field, values, index, section}) => {
     const [localState, setLocalState] = useState({
         top: values.value.top,
         right: values.value.right,
         bottom: values.value.bottom,
         left: values.value.left,
     });
+
+    const {
+        updateOption,
+    } = useFieldsContext();
+
     const [localProperty, setLocalProperty] = useState('');
     const timeoutRef = useRef(null);
 
@@ -117,7 +128,7 @@ export const MarginComponent = ({field, values, updateOption, index}) => {
         }
 
         timeoutRef.current = setTimeout(() => {
-            updateOption(field, index, 'margin', property, value);
+            updateOption(`${section}[${index}].options.margin.value.${property}`, value);
         }, 500);
     };
 
@@ -186,9 +197,13 @@ export const MarginComponent = ({field, values, updateOption, index}) => {
     )
 }
 
-export const HeightComponent = ({field, values, updateOption, index}) => {
+export const HeightComponent = ({field, values, index, section}) => {
     const [localValue, setLocalValue] = useState(values.value ?? '');
     const timeoutRef = useRef(null);
+
+    const {
+        updateOption,
+    } = useFieldsContext();
 
     const handleKeyUp = (e) => {
         const newValue = e.target.value;
@@ -198,7 +213,7 @@ export const HeightComponent = ({field, values, updateOption, index}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(field, index, 'height', '', newValue);
+            updateOption(`${section}[${index}].options.height.value`, newValue);
         }, 700);
     };
     return (
@@ -221,9 +236,13 @@ export const HeightComponent = ({field, values, updateOption, index}) => {
     )
 }
 
-export const WidthComponent = ({field, values, updateOption, index}) => {
+export const WidthComponent = ({field, values, index, section}) => {
     const [localValue, setLocalValue] = useState(values.value ?? '');
     const timeoutRef = useRef(null);
+
+    const {
+        updateOption,
+    } = useFieldsContext();
 
     const handleKeyUp = (e) => {
         const newValue = e.target.value;
@@ -233,7 +252,7 @@ export const WidthComponent = ({field, values, updateOption, index}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(field, index, 'width', '', newValue);
+            updateOption(`${section}[${index}].options.width.value`, newValue);
         }, 700);
     };
     return (
@@ -256,9 +275,13 @@ export const WidthComponent = ({field, values, updateOption, index}) => {
     )
 }
 
-export const FontSizeComponent = ({ field, values, updateOption, index }) => {
+export const FontSizeComponent = ({ field, values, index, section}) => {
     const [localValue, setLocalValue] = useState(values.value ?? '');
     const timeoutRef = useRef(null);
+
+    const {
+        updateOption,
+    } = useFieldsContext();
 
     const handleKeyUp = (e) => {
         const newValue = e.target.value;
@@ -268,7 +291,7 @@ export const FontSizeComponent = ({ field, values, updateOption, index }) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(field, index, 'fontSize', '', newValue);
+            updateOption(`${section}[${index}].options.fontSize.value`, newValue);
         }, 700);
     };
 
@@ -296,7 +319,11 @@ export const FontSizeComponent = ({ field, values, updateOption, index }) => {
 };
 
 
-export const FontWeightComponent = ({field, values, updateOption, index}) => {
+export const FontWeightComponent = ({field, values, index, section}) => {
+
+    const {
+        updateOption,
+    } = useFieldsContext();
 
     return (
         <div className="setting-holder">
@@ -306,7 +333,7 @@ export const FontWeightComponent = ({field, values, updateOption, index}) => {
             <div className="setting-content">
                 <div className="grid grid-2">
                     <div className="input-container">
-                        <select value={values.value} onChange={(e) => updateOption(field, index, 'fontWeight', '', parseInt(e.target.value, 10))}>
+                        <select value={values.value} onChange={(e) => updateOption(`${section}[${index}].options.fontWeight.value`, parseInt(e.target.value, 10))}>
                             <option value="400">400</option>
                             <option value="500">500</option>
                             <option value="600">600</option>

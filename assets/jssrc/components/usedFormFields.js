@@ -23,7 +23,7 @@ import {PaddingComponent, MarginComponent, HeightComponent, WidthComponent, Font
 import ImageComponent from "./imageComponent";
 
 
-const DraggableItem = ({ id, field, updateOption, index }) => {
+const DraggableItem = ({ id, field, index, section }) => {
     const {
         attributes,
         listeners,
@@ -42,22 +42,22 @@ const DraggableItem = ({ id, field, updateOption, index }) => {
 
     const DetectComponent = {
         padding: ({ field, data }) => (
-            <PaddingComponent index={index} field={field} values={data} updateOption={updateOption} />
+            <PaddingComponent index={index} field={field} values={data} section={section} />
         ),
         margin: ({ field, data }) => (
-            <MarginComponent index={index} field={field} values={data} updateOption={updateOption} />
+            <MarginComponent index={index} field={field} values={data} section={section} />
         ),
         height: ({ field, data }) => (
-            <HeightComponent index={index} field={field} values={data} updateOption={updateOption} />
+            <HeightComponent index={index} field={field} values={data} section={section} />
         ),
         width: ({ field, data }) => (
-            <WidthComponent index={index} field={field} values={data} updateOption={updateOption} />
+            <WidthComponent index={index} field={field} values={data} section={section} />
         ),
         fontSize: ({ field, data }) => (
-            <FontSizeComponent index={index} field={field} values={data} updateOption={updateOption} />
+            <FontSizeComponent index={index} field={field} values={data} section={section} />
         ),
         fontWeight: ({ field, data }) => (
-            <FontWeightComponent index={index} field={field} values={data} updateOption={updateOption} />
+            <FontWeightComponent index={index} field={field} values={data} section={section} />
         ),
     };
 
@@ -108,7 +108,7 @@ export default function UsedFormFields({fields, updateOption, sectionId}) {
     return (
             <div ref={setNodeRef} className="draggable-fields">
                 {fields.map((field, index) => (
-                    <DraggableItem key={field.key} index={index} id={field.key} field={field} updateOption={updateOption} />
+                    <DraggableItem key={field.key} index={index} id={field.key} field={field} section={sectionId} />
                 ))}
             </div>
     );

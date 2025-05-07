@@ -23,8 +23,8 @@ export default function PreviewContent() {
         postTypes
     } = useFieldsContext();
 
-    const [usedTab, setUsedTab] = useState('filters');
-    const [showOptions, setShowOptions] = useState(false);
+    const [usedTab, setUsedTab] = useState('configurations');
+    const [showOptions, setShowOptions] = useState(true);
 
     return (
         <div className="listing-global-container">

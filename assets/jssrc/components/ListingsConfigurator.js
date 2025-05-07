@@ -44,16 +44,12 @@ export default function ListingConfigurator() {
 
         // Случай 1: дропнули на пустую секцию
         if (allSections.includes(overId)) {
+
             const targetSection = overId;
             if (targetSection === sourceSection) return;
 
 
             updateOption(sourceSection, assignedFields.current[sourceSection].filter((f) => f.key !== activeId))
-
-            assignedFields.current[targetSection] = [
-                movedField,
-                ...assignedFields.current[targetSection]
-            ];
             updateOption(targetSection, [
                 movedField,
                 ...assignedFields.current[targetSection]
@@ -73,6 +69,7 @@ export default function ListingConfigurator() {
         if (!sourceSection || !targetSection) return;
 
         if (sourceSection === targetSection) {
+            console.log(222)
             const oldIndex = assignedFields.current[sourceSection].findIndex(f => f.key === activeId);
             const newIndex = assignedFields.current[targetSection].findIndex(f => f.key === overId);
 
@@ -83,12 +80,10 @@ export default function ListingConfigurator() {
             updateOption(sourceSection, reordered)
 
         } else {
-            // drag из одной секции в другую (через элемент)
-
+            console.log(333)
             updateOption(sourceSection, assignedFields.current[sourceSection].filter(f => f.key !== activeId))
-            updateOption(targetSection, [movedField, ...prev[targetSection]])
+            updateOption(targetSection, [movedField, ...assignedFields.current[targetSection]])
         }
-        submitPreviewForm(formRef)
     };
 
 
@@ -123,7 +118,6 @@ export default function ListingConfigurator() {
                         <UsedFormFields
                             sectionId="fsection"
                             fields={assignedFields.current.fsection}
-
                             updateOption={updateOption}
                         />
 
@@ -131,7 +125,6 @@ export default function ListingConfigurator() {
                             <UsedFormFields
                                 sectionId="lsection"
                                 fields={assignedFields.current.lsection}
-
                                 updateOption={updateOption}
                             />
                         )}

@@ -36,6 +36,7 @@ export default function PreviewIframeComponent()
         enableFilters: filters.current.shared.enable
     };
 
+
     const [formReady, setFormReady] = useState(false);
 
     useEffect(() => {
@@ -53,7 +54,7 @@ export default function PreviewIframeComponent()
                 onSubmit={() => setFormReady(false)}
             >
                 <input type="hidden" name="config" value={JSON.stringify(config)} />
-                <input type="hidden" name="filters" value={JSON.stringify(filters.current.shared.enabledFilters)} />
+                <input type="hidden" name="enabledFilters" value={JSON.stringify({ ...filters.current.shared.enabledFilters })} />
                 <input type="hidden" name="stylesheet" value={encodeURIComponent(stylesString)} />
             </form>
 

@@ -102,19 +102,18 @@ export function useFieldsLogic() {
             ...current,
             ['postType']: value
         }))
-        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${value}&per_page=${styles.current.shared.perPage}`)
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${value}&listing_id=${id}`)
             .then(res => res.json())
             .then(data => {
-                setPosts(data.data.posts);
-                setAvailableFields(Object.values(data.data.keys));
+                setAvailableFields(Object.values(data.data.availableFields));
                 setAvailableFilterFields(data.data.filterFields);
                 setSubmitPending(formRef)
             });
     }
 
     const updateOption = (path, value) => {
-        console.log(assignedFields.current)
-        console.log(path)
         setter(assignedFields.current, path, value);
         forceUpdate();
         setSubmitPending(true);

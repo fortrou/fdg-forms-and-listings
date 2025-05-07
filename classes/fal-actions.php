@@ -1,4 +1,5 @@
 <?php
+require_once FDG_FORMS_LISTINGS_PLUGIN_PATH . '/classes/fal-filter-templatter.php';
 class Fal_Actions
 {
     public function __construct()
@@ -12,6 +13,18 @@ class Fal_Actions
         add_action('wp_ajax_get_fil_demo_posts_listing', [$this, 'get_demo_posts_listing']);
         add_action('wp_ajax_get_fil_fetchable_posttypes', [$this, 'get_fil_fetchable_posttypes']);
         add_action('admin_post_fal_preview', [$this, 'fal_render_preview_page']);
+
+        add_filter('fdg_fil_default_keys_editor', [$this, 'get_current_fields'], 10, 3);
+    }
+
+    public function get_current_fields($state, $id, $type)
+    {
+        if ($type == 'posts') {
+            if (get_post_meta($id, 'assigned_fields', true)) {
+                return get_post_meta($id, 'assigned_fields', true);
+            }
+        }
+        return $state;
     }
 
     public function fal_render_preview_page() {
@@ -36,105 +49,81 @@ class Fal_Actions
 
     public function get_demo_posts_listing()
     {
-        $posts = get_posts([
-            'posts_per_page' => $_REQUEST['per_page'],
-            'post_type'      => $_REQUEST['post_type'],
-        ]);
+        $listingId = $_REQUEST['listing_id'];
 
+        $basicOptionsSet = apply_filters('modify_options_set', $this->getPropertiesSet());
 
-        $returnList = [];
+        $fieldsList = [
+            'thumbnail' => [
+                'properties' => [],
+                'options' => [],
+                'key' => 'thumbnail',
+                'type' => 'image',
+            ],
+            'post_title' => [
+                'properties' => [],
+                'options' => [],
+                'key' => 'post_title',
+                'type' => 'text',
+            ],
+            'post_exerpt' => [
+                'properties' => [],
+                'options' => [],
+                'key' => 'post_excerpt',
+                'type' => 'short_text',
+            ],
+            'button' => [
+                'properties' => [
+                    'text' => 'Read more',
+                    'url_format' => '{{permalink}}'
+                ],
+                'options' => [],
+                'key' => 'button',
+                'type' => 'button',
+            ],
+            'author_date' => [
+                'properties' => [
+                    'text' => '{{author}} | {{date=Y-m-d}}',
+                ],
+                'options' => [],
+                'key' => 'author_date',
+                'type' => 'formatted_text',
+            ],
+        ];
 
-        foreach ($posts as $post) {
-            $image = get_the_post_thumbnail_url($post->ID, 'full');
-            $arrayEncoded = json_decode(json_encode($post), true);
-            $arrayEncoded['thumbnail'] = [
-                'url' => $image,
-                'alt' => $post->post_title,
-            ];
-
-            unset($arrayEncoded['post_date_gmt'],
-                $arrayEncoded['post_content'],
-                $arrayEncoded['post_status'],
-                $arrayEncoded['comment_status'],
-                $arrayEncoded['ping_status'],
-                $arrayEncoded['post_password'],
-                $arrayEncoded['to_ping'],
-                $arrayEncoded['pinged'],
-                $arrayEncoded['post_modified_gmt'],
-                $arrayEncoded['post_content_filtered'],
-                $arrayEncoded['post_parent'],
-                $arrayEncoded['guid'],
-                $arrayEncoded['menu_order'],
-                $arrayEncoded['post_type'],
-                $arrayEncoded['post_mime_type'],
-                $arrayEncoded['comment_count'],
-                $arrayEncoded['filter']);
-            $returnList[] = $arrayEncoded;
-        }
-
-        $keys = array_keys($returnList[0]);
         $resortedKeys = [];
         $defaultKeys = [];
 
-        foreach ($keys as $key => $value) {
-            $properties = [
-                'key' => $value,
-                'name' => str_replace('_', ' ', $value),
-                'options' => [
-                    'margin' => [
-                        'measure' => 'px',
-                        'value' => [
-                            'top' => 0,
-                            'right' => 0,
-                            'bottom' => 0,
-                            'left' => 0,
-                        ]
-                    ],
-                    'padding' => [
-                        'measure' => 'px',
-                        'value' => [
-                            'top' => 0,
-                            'right' => 0,
-                            'bottom' => 0,
-                            'left' => 0,
-                        ]
-                    ]
-                ]
-            ];
-            if ($value == 'thumbnail') {
-                $properties['options']['height'] = [
-                    'measure' => 'custom',
-                    'value' => 'auto'
-                ];
+        foreach ($fieldsList as $key => &$value) {
+            $value['options']['margin'] = $basicOptionsSet['margin'];
+            $value['options']['padding'] = $basicOptionsSet['padding'];
+            $value['name'] = str_replace('_', ' ', $key);
 
-                $properties['options']['width'] = [
-                    'measure' => '%',
-                    'value' => '100'
-                ];
+            if ($value['type'] == 'image') {
+                $value['options']['height'] = $basicOptionsSet['height'];
+                $value['options']['width'] = $basicOptionsSet['width'];
+                $value['options']['borderRadius'] = $basicOptionsSet['borderRadius'];
+
+            } else if ($value['type'] == 'button') {
+                $value['options']['borderRadius'] = $basicOptionsSet['borderRadius'];
+                $value['options']['background'] = $basicOptionsSet['background'];
+                $value['options']['textColor'] = $basicOptionsSet['textColor'];
             } else {
-                $properties['options']['fontSize'] = [
-                    'measure' => 'px',
-                    'value' => 16
-                ];
-                $properties['options']['fontWeight'] = [
-                    'value' => 400
-                ];
-                $properties['options']['lineHeight'] = [
-                    'measure' => 'em',
-                    'value' => 1.5
-                ];
+                $value['options']['fontSize'] = $basicOptionsSet['fontSize'];
+                $value['options']['fontWeight'] = $basicOptionsSet['fontWeight'];
+                $value['options']['lineHeight'] = $basicOptionsSet['lineHeight'];
+                $value['options']['textColor'] = $basicOptionsSet['textColor'];
             }
-            $resortedKeys[$value] = $properties;
-            if (in_array($value, ['thumbnail', 'post_title', 'post_excerpt'])) {
-                $defaultKeys[$value] = $properties;
+            if (in_array($key, ['thumbnail', 'post_title', 'post_excerpt', 'button', 'author_date'])) {
+                $defaultKeys[$key] = $value;
             }
         }
 
         wp_send_json_success([
-            'posts' => apply_filters('demonstration_posts_listing', $returnList),
+            'availableFields' => $fieldsList,
             'keys'  => $resortedKeys,
             'filterFields' => $this->get_all_custom_meta_keys_for_post_type($_REQUEST['post_type']),
-            'defaultKeys' => apply_filters('fdg_fil_default_keys_editor', ['fsection' => $defaultKeys, 'lsection' => []]),
+            'defaultKeys' => apply_filters('fdg_fil_default_keys_editor', ['fsection' => $defaultKeys, 'lsection' => []], $listingId, 'post'),
         ]);
     }
 
@@ -203,5 +192,57 @@ class Fal_Actions
                 'status' => 'error',
             ]);
         }
+    }
+
+    public function getPropertiesSet() {
+        return [
+            'width' => [
+                'measure' => '%',
+                'value' => '100'
+            ],
+            'height' => [
+                'measure' => 'custom',
+                'value' => 'auto'
+            ],
+            'borderRadius' => [
+                'measure' => 'px',
+                'value' => '0'
+            ],
+            'fontSize' => [
+                'measure' => 'px',
+                'value' => 16
+            ],
+            'fontWeight' => [
+                'value' => 400
+            ],
+            'lineHeight' => [
+                'measure' => 'em',
+                'value' => 1.5
+            ],
+            'background' => [
+                'value' => '#fff'
+            ],
+            'textColor' => [
+                'value' => '#000'
+            ],
+            'padding' => [
+                'measure' => 'px',
+                'value' => [
+                    'top' => 0,
+                    'right' => 0,
+                    'bottom' => 0,
+                    'left' => 0,
+                ]
+            ],
+            'margin' => [
+                'measure' => 'px',
+                'value' => [
+                    'top' => 0,
+                    'right' => 0,
+                    'bottom' => 0,
+                    'left' => 0,
+                ]
+            ],
+        ];
     }
 }

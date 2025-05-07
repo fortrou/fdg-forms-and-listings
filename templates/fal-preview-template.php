@@ -1,8 +1,7 @@
 <?php
 // Пример генерации динамического HTML превью
-$filters = json_decode(stripslashes($_POST['filters'] ?? '[]'), true);
+$filters = json_decode(stripslashes($_POST['enabledFilters'] ?? '[]'), true);
 $configs = json_decode(stripslashes($_POST['config'] ?? '[]'), true);
-
 
 $stylesheet = urldecode($_POST['stylesheet']) ?? '';
 
@@ -31,6 +30,10 @@ $posts = new WP_Query([
             <div class="filters-side">
                 <?php if (!empty($filters)): ?>
                     <?php foreach ($filters as $filter): ?>
+                    <?php
+                        $filtersHolder = new Fal_Filter_Templatter($filters);
+                        $filtersHolder->displayFilters();
+                    ?>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>

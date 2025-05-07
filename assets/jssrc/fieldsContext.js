@@ -119,11 +119,12 @@ export function FieldsProvider({ children }) {
     const [postTypes, setPostTypes] = useState([]);
 
     useEffect(() => {
-        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${styles.current.shared.postType}&per_page=${styles.current.shared.perPage}`)
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${styles.current.shared.postType}&listing_id=${id}`)
             .then(res => res.json())
             .then(data => {
-                setPosts(Object.values(data.data.posts));
-                setAvailableFields(Object.values(data.data.keys));
+                setAvailableFields(Object.values(data.data.availableFields));
                 updateOption('fsection', Array.isArray(data.data.defaultKeys.fsection) ? data.data.defaultKeys.fsection : Object.values(data.data.defaultKeys.fsection));
                 updateOption('lsection', Array.isArray(data.data.defaultKeys.lsection) ? data.data.defaultKeys.lsection : Object.values(data.data.defaultKeys.lsection));
                 setAvailableFilterFields(data.data.filterFields);

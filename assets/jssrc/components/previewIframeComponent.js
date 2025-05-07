@@ -32,7 +32,7 @@ export default function PreviewIframeComponent()
         display: styles.current.shared.type,
         blockLayout: styles.current.shared.useTwoSection,
         perPage: styles.current.shared.perPage,
-        assignedFields: assignedFields,
+        assignedFields: assignedFields.current,
         enableFilters: filters.current.shared.enable
     };
 

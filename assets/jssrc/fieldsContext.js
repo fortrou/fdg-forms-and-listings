@@ -41,14 +41,14 @@ export function FieldsProvider({ children }) {
         }
         
         .preview-container .post-item {
-            ${styles.current.shared.itemBorderWidth > 0 ? 'border: ' + styles.itemBorderWidth + 'px solid ' + styles.itemsBorderColor : ''};
+            ${styles.current.shared.itemsBorderWidth != '' ? 'border: ' + styles.current.shared.itemsBorderWidth + 'px solid ' + styles.current.shared.itemsBorderColor : ''};
             border-radius: ${styles.current.shared.itemsBorderRadius}px;
             overflow: hidden;
             padding: ${styles.current.responsive.desktop.padding.top + 'px ' + styles.current.responsive.desktop.padding.right + 'px ' + styles.current.responsive.desktop.padding.bottom + 'px ' + styles.current.responsive.desktop.padding.left + 'px '};
-            display: ${styles.postDisplay};
-            ${styles.postDisplay == 'flex' ? 'justify-content: ' + styles.justifyContent + ';' : ''}
-            ${styles.postDisplay == 'flex' ? 'flex-direction: ' + styles.flexDirection + ';' : ''}
-            ${styles.postDisplay == 'flex' ? 'align-items: ' + styles.alignItems + ';' : ''}
+            display: ${styles.current.shared.postDisplay};
+            ${styles.current.shared.postDisplay == 'flex' ? 'justify-content: ' + styles.current.shared.justifyContent + ';' : ''}
+            ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + styles.current.shared.flexDirection + ';' : ''}
+            ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + styles.current.shared.alignItems + ';' : ''}
         }
         
         .preview-container .post-item .left-side img {
@@ -56,7 +56,7 @@ export function FieldsProvider({ children }) {
             height: 100%;
             object-fit: cover;
             object-position: center;
-            border-radius: ${styles.imageBorderRadius};
+            border-radius: ${styles.current.shared.imageBorderRadius};
         }
         .preview-container .post-item .left-side {
             width: ${styles.imageWidth};
@@ -78,14 +78,14 @@ export function FieldsProvider({ children }) {
             }
             
             .preview-container .post-item {
-                ${styles.current.shared.itemBorderWidth > 0 ? 'border: ' + styles.itemBorderWidth + 'px solid ' + styles.itemsBorderColor : ''};
+                ${styles.current.shared.itemsBorderWidth != '' ? 'border: ' + styles.itemsBorderWidth + 'px solid ' + styles.itemsBorderColor : ''};
                 border-radius: ${styles.current.shared.itemsBorderRadius}px;
                 overflow: hidden;
                 padding: ${styles.current.responsive.tablet.padding.top + 'px ' + styles.current.responsive.tablet.padding.right + 'px ' + styles.current.responsive.tablet.padding.bottom + 'px ' + styles.current.responsive.tablet.padding.left + 'px '};
-                display: ${styles.postDisplay};
-                ${styles.postDisplay == 'flex' ? 'justify-content: ' + styles.justifyContent + ';' : ''}
-                ${styles.postDisplay == 'flex' ? 'flex-direction: ' + styles.flexDirection + ';' : ''}
-                ${styles.postDisplay == 'flex' ? 'align-items: ' + styles.alignItems + ';' : ''}
+                display: ${styles.current.shared.postDisplay};
+                ${styles.current.shared.postDisplay == 'flex' ? 'justify-content: ' + styles.current.shared.justifyContent + ';' : ''}
+                ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + styles.current.shared.flexDirection + ';' : ''}
+                ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + styles.current.shared.alignItems + ';' : ''}
             }
         }
         
@@ -99,14 +99,14 @@ export function FieldsProvider({ children }) {
             }
             
             .preview-container .post-item {
-                ${styles.current.shared.itemBorderWidth > 0 ? 'border: ' + styles.itemBorderWidth + 'px solid ' + styles.itemsBorderColor : ''};
+                ${styles.current.shared.itemsBorderWidth != '' ? 'border: ' + styles.current.shared.itemsBorderWidth + 'px solid ' + styles.current.shared.itemsBorderColor : ''};
                 border-radius: ${styles.current.shared.itemsBorderRadius}px;
                 overflow: hidden;
                 padding: ${styles.current.responsive.mobile.padding.top + 'px ' + styles.current.responsive.mobile.padding.right + 'px ' + styles.current.responsive.mobile.padding.bottom + 'px ' + styles.current.responsive.mobile.padding.left + 'px '};
-                display: ${styles.postDisplay};
-                ${styles.postDisplay == 'flex' ? 'justify-content: ' + styles.justifyContent + ';' : ''}
-                ${styles.postDisplay == 'flex' ? 'flex-direction: ' + styles.flexDirection + ';' : ''}
-                ${styles.postDisplay == 'flex' ? 'align-items: ' + styles.alignItems + ';' : ''}
+                display: ${styles.current.shared.postDisplay};
+                ${styles.current.shared.postDisplay == 'flex' ? 'justify-content: ' + styles.current.shared.justifyContent + ';' : ''}
+                ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + styles.current.shared.flexDirection + ';' : ''}
+                ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + styles.current.shared.alignItems + ';' : ''}
             }
         }
     ` + buildPostBlockStyles(assignedFields) + buildFiltersBlockStyle(filters.current);

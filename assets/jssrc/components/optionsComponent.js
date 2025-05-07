@@ -94,7 +94,7 @@ export const PaddingComponent = ({field, values, index, section}) => {
                         />
                     </div>
                     <MeasuringSwitcher
-                        fieldData={{field: field, index: index, key: 'padding'}}
+                        param={`${section}[${index}].options.padding.measure`}
                         current={values.measure} />
                 </div>
             </div>
@@ -189,7 +189,7 @@ export const MarginComponent = ({field, values, index, section}) => {
                                onKeyUp={(e) => handleKeyUp(e.target.value, 'left')}/>
                     </div>
                     <MeasuringSwitcher
-                        fieldData={{field: field, index: index, key: 'margin'}}
+                        param={`${section}[${index}].options.margin.measure`}
                         current={values.measure} />
                 </div>
             </div>
@@ -229,7 +229,7 @@ export const HeightComponent = ({field, values, index, section}) => {
                                onKeyUp={handleKeyUp}
                         />
                     </div>
-                    <MeasuringSwitcher current={values.measure} />
+                    <MeasuringSwitcher param={`${section}[${index}].options.height.measure`} current={values.measure} />
                 </div>
             </div>
         </div>
@@ -267,7 +267,7 @@ export const WidthComponent = ({field, values, index, section}) => {
                                onChange={(e) => setLocalValue(e.target.value)}
                                onKeyUp={handleKeyUp}/>
                     </div>
-                    <MeasuringSwitcher current={values.measure} />
+                    <MeasuringSwitcher param={`${section}[${index}].options.width.measure`} current={values.measure} />
 
                 </div>
             </div>
@@ -311,7 +311,7 @@ export const FontSizeComponent = ({ field, values, index, section}) => {
                             onKeyUp={handleKeyUp}
                         />
                     </div>
-                    <MeasuringSwitcher current={values.measure} />
+                    <MeasuringSwitcher param={`${section}[${index}].options.fontSize.measure`} current={values.measure} />
                 </div>
             </div>
         </div>
@@ -333,7 +333,7 @@ export const FontWeightComponent = ({field, values, index, section}) => {
             <div className="setting-content">
                 <div className="grid grid-2">
                     <div className="input-container">
-                        <select value={values.value} onChange={(e) => updateOption(`${section}[${index}].options.fontWeight.value`, parseInt(e.target.value, 10))}>
+                        <select value={values.value} onChange={(e) => updateOption(`${section}[${index}].options.fontWeight.value`, e.target.value)}>
                             <option value="400">400</option>
                             <option value="500">500</option>
                             <option value="600">600</option>

@@ -116,7 +116,9 @@ class Fal_Actions
                     'measure' => 'px',
                     'value' => 16
                 ];
-                $properties['options']['fontWeight'] = 400;
+                $properties['options']['fontWeight'] = [
+                    'value' => 400
+                ];
                 $properties['options']['lineHeight'] = [
                     'measure' => 'em',
                     'value' => 1.5

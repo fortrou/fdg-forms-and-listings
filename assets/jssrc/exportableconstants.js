@@ -83,7 +83,7 @@ export const styles = {
         postType: 'post',
         itemsBorderColor: '#ffffff',
         itemsBorderRadius: 0,
-        itemBorderWidth: 0,
+        itemsBorderWidth: 0,
         postDisplay: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',

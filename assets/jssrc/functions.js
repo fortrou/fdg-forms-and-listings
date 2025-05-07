@@ -60,7 +60,6 @@ export function useFieldsLogic() {
 
     const setStyles = (path, value) => {
         setter(styles.current, path, value);
-
         forceUpdate();
         setSubmitPending(true);
     }

@@ -84,9 +84,9 @@ export default function ConfigurationsTab({usedTab, showOptions}) {
                                     <div className="border-container grid grid-3">
                                         <div className="input-container">
                                             <label>width</label>
-                                            <input type="text" name="item-border-width"
-                                                   value={styles.current.shared.itemBorderWidth}
-                                                   onChange={(e) => setStyles(`shared.itemsBorderWidth`, parseInt(e.target.value, 10))}/>
+                                            <input type="text"
+                                                   value={styles.current.shared.itemsBorderWidth || ''}
+                                                   onChange={(e) => setStyles(`shared.itemsBorderWidth`, e.target.value)}/>
                                         </div>
                                         <div className="input-container">
                                             <label>color</label>

@@ -1,17 +1,23 @@
 import {useState} from "@wordpress/element";
 import {useFieldsLogic} from "../functions";
+import {useFieldsContext} from "../useFieldContext";
 
 
 
-export default function MeasuringSwitcher ({fieldData, current, available = ['px', 'em', 'custom']}) {
+export default function MeasuringSwitcher ({param, current, available = ['px', 'em', '%', 'custom']}) {
     const [currentState, setCurrentState] = useState(current);
     const [active, setActive] = useState(false)
+
+    const {
+        updateOption,
+    } = useFieldsContext();
+
     let newState = '';
     const handleMeasureSelect = (measure) => {
         //console.log(measure)
         setCurrentState(measure);
         setActive(false);
-        setMeasure(fieldData.field, fieldData.index, fieldData.key, measure)
+        updateOption(param, measure)
     }
     return (
         <div className="switcher-holder">

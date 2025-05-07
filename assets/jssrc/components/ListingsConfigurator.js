@@ -19,7 +19,9 @@ export default function ListingConfigurator() {
         addOptionToImageArea,
         buildPostBlockStyles,
         posts,
-        postTypes
+        postTypes,
+        formRef,
+        submitPreviewForm,
     } = useFieldsContext();
 
     const sensors = useSensors(useSensor(PointerSensor));
@@ -86,6 +88,7 @@ export default function ListingConfigurator() {
                 [targetSection]: [movedField, ...prev[targetSection]]
             }));
         }
+        submitPreviewForm(formRef)
     };
 
 

@@ -3,6 +3,7 @@ import {useFieldsContext} from "./useFieldContext";
 import ConfigurationsTab from "./tabs/global-tabs/configurations";
 import FiltersTab from "./tabs/global-tabs/filters";
 import {DefaultIcons} from "./components/iconsComponent";
+import PreviewIframeComponent from "./components/previewIframeComponent";
 
 
 export default function PreviewContent() {
@@ -58,6 +59,8 @@ export default function PreviewContent() {
             </div>
             <ConfigurationsTab usedTab={usedTab} showOptions={showOptions} />
             <FiltersTab usedTab={usedTab} />
+
+            <PreviewIframeComponent />
         </div>
     );
 }

@@ -1,11 +1,12 @@
-import {useState, useRef, useReducer} from "@wordpress/element";
+import {useState, useRef, useReducer, useEffect} from "@wordpress/element";
 import {
     availableFields as defaultAvailableFields,
     assignedFields as defaultAssignedFields,
     styles as defaultStyles,
     availableFilterFields as defaultAvailableFilterFields,
     filters as defaultFilters,
-    resolutions as defaultResolutions
+    resolutions as defaultResolutions,
+    frameMeasures
 } from './exportableconstants';
 
 export function useFieldsLogic() {
@@ -87,15 +88,42 @@ export function useFieldsLogic() {
         current[keys[0]] = value;
     }
 
+
+    const formRef = useRef(null);
+    let timeoutRef = null;
+    const [submitPending, setSubmitPending] = useState(false);
+
+
+    function submitPreviewForm(formRef, delay = 500) {
+        if (!formRef?.current) return;
+
+        clearTimeout(timeoutRef);
+
+        timeoutRef = setTimeout(() => {
+            if (formRef.current) {
+                formRef.current.submit();
+            }
+        }, delay);
+    }
+
+    useEffect(() => {
+        if (submitPending) {
+            submitPreviewForm(formRef);
+            setSubmitPending(false); // сброс
+        }
+    }, [submitPending]);
+
     const setStyles = (path, value) => {
         setter(styles.current, path, value);
 
         forceUpdate();
+        setSubmitPending(true);
     }
 
     const setEnabledFilter = (values) => {
         filters.current.shared.enabledFilters = values;
         forceUpdate();
+        setSubmitPending(true);
     }
 
     const setFilter = (path, value) => {
@@ -106,6 +134,7 @@ export function useFieldsLogic() {
             setter(filters.current, path, value);
         }
         forceUpdate();
+        setSubmitPending(true);
     }
 
     const updatePostType = (value) => {
@@ -119,6 +148,7 @@ export function useFieldsLogic() {
                 setPosts(data.data.posts);
                 setAvailableFields(Object.values(data.data.keys));
                 setAvailableFilterFields(data.data.filterFields);
+                setSubmitPending(formRef)
             });
     }
 
@@ -330,6 +360,9 @@ export function useFieldsLogic() {
         forceUpdate,
         frame,
         setFrame,
+        formRef,
+        frameMeasures,
+        submitPreviewForm,
         updatePostType,
         setMeasure,
         updateOption,

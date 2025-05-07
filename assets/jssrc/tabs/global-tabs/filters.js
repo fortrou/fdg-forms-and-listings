@@ -33,7 +33,7 @@ export default function FiltersTab({usedTab}) {
         buildPostBlockStyles,
         frame,
         posts,
-        postTypes
+        postTypes,
     } = useFieldsContext();
 
     const [currentFilterField, setCurrentFilterField] = useState('');
@@ -148,54 +148,21 @@ export default function FiltersTab({usedTab}) {
 
                 </div>
             </div>
-            <div className="configurations-container">
-                <div className="listing-container">
-                    {filters.current.shared.enable && (
-                        <div className="filters-side">
-                            <DndContext
-                                sensors={sensors}
-                                collisionDetection={closestCenter}
-                                onDragEnd={handleDragEnd}
-                            >
-                                <SortableContext items={filterKeys} strategy={verticalListSortingStrategy}>
-                                    {filterList.map((filter) => (
-                                        <SimpleFIlterComponent key={filter.field} field={filter}/>
-                                    ))}
-                                </SortableContext>
-                            </DndContext>
-                        </div>
-                    )}
-                    <div className={`preview-container ${styles.current.shared.type}`}>
-                        {posts.map(post => (
-                            <div key={post.ID} className="post-item">
-                                {styles.current.shared.itemsShowImages && (
-                                    <div className="left-side">
-                                        {assignedFields.fsection.map(field => {
-                                                let fieldData = post[field.key] ? post[field.key] : '';
-                                                return (
-                                                    <DynamicComponent field={field} data={fieldData}/>
-                                                )
-                                            }
-                                        )}
-                                    </div>
-                                )}
-                                {styles.current.shared.useTwoSection && (
-                                    <div className="content-side">
-                                        {assignedFields.lsection.map(field => {
-                                                let fieldData = post[field.key] ? post[field.key] : '';
-                                                return (
-                                                    <DynamicComponent field={field} data={fieldData}/>
-                                                )
-                                            }
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+            {filters.current.shared.enable && (
+                <div className="filters-side">
+                    <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleDragEnd}
+                    >
+                        <SortableContext items={filterKeys} strategy={verticalListSortingStrategy}>
+                            {filterList.map((filter) => (
+                                <SimpleFIlterComponent key={filter.field} field={filter}/>
+                            ))}
+                        </SortableContext>
+                    </DndContext>
                 </div>
-            </div>
-            <PreviewIframeComponent />
+            )}
         </div>
     )
 }

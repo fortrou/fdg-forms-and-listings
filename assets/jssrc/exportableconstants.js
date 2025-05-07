@@ -17,6 +17,12 @@ export const resolutions = {
     tablet: 1100,
     mobile: 767
 }
+
+export const frameMeasures = {
+    desktop: '100%',
+    tablet: '820px',
+    mobile: '375px'
+}
 export const assignedFields = {
     fsection: [],
     lsection: []

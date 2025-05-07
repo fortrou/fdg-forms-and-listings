@@ -7,10 +7,6 @@ export default function MeasuringSwitcher ({fieldData, current, available = ['px
     const [currentState, setCurrentState] = useState(current);
     const [active, setActive] = useState(false)
     let newState = '';
-
-    const {
-        setMeasure
-    } = useFieldsLogic();
     const handleMeasureSelect = (measure) => {
         //console.log(measure)
         setCurrentState(measure);

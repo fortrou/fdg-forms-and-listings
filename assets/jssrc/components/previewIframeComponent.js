@@ -15,7 +15,6 @@ export default function PreviewIframeComponent()
         assignedFields,
         frameMeasures,
         updatePostType,
-        setMeasure,
         updateOption,
         addOptionToImageArea,
         buildPostBlockStyles,

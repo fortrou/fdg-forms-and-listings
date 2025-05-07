@@ -16,66 +16,11 @@ export function useFieldsLogic() {
 
     const [availableFilterFields, setAvailableFilterFields] = useState(defaultAvailableFilterFields)
     const [availableFields, setAvailableFields] = useState(defaultAvailableFields);
-    const [assignedFields, setAssignedFields] = useState(defaultAssignedFields);
-
     const [resolutions, setResolutions] = useState(defaultResolutions);
+
+    const assignedFields = useRef(defaultAssignedFields);
     const filters = useRef(defaultFilters)
     const styles = useRef(defaultStyles);
-
-    const setMeasure = (field, index, fieldKey, value) => {
-        setAssignedFields(prev => {
-            let wrapper = '';
-            for (const [sectionKey, fields] of Object.entries(prev)) {
-                for (const item of fields) {
-                    console.log(item.key)
-                    if (item.key === field) {
-                        wrapper = sectionKey;
-                        break;
-                    }
-                }
-                if (wrapper) break;
-            }
-
-
-            if (!wrapper) return prev;
-
-            const updatedOptions = Object.entries(prev[wrapper][index].options).reduce((acc, [key, val]) => {
-                if (key !== fieldKey) {
-                    acc[key] = val;
-                    return acc;
-                }
-
-                if ( typeof val?.value === 'object' && val.value !== null && !Array.isArray(val.value) ) {
-                    acc[key] = {
-                        ...val,
-                        value: {
-                            ...val.value,
-                            [property]: value
-                        }
-                    };
-                } else {
-                    acc[key] = {
-                        ...val,
-                        value
-                    };
-                }
-
-                return acc;
-            }, {});
-
-            return {
-                ...prev,
-                [wrapper]: prev[wrapper].map((item, i) =>
-                    i === index
-                        ? {
-                            ...item,
-                            options: updatedOptions
-                        }
-                        : item
-                )
-            };
-        });
-    };
 
     const setter = (obj, path, value) => {
         const keys = path.replace(/\[(\d+)]/g, '.$1').split('.');
@@ -152,65 +97,10 @@ export function useFieldsLogic() {
             });
     }
 
-    const updateOption = (section, index, fieldKey, property, value) => {
-        setAssignedFields(prev => {
-            let wrapper = '';
-
-            for (const [sectionKey, fields] of Object.entries(prev)) {
-                for (const field of fields) {
-                    if (field.key === section) {
-                        wrapper = sectionKey;
-                        break;
-                    }
-                }
-                if (wrapper) break;
-            }
-
-            if (!wrapper) return prev;
-
-            const updatedOptions = Object.entries(prev[wrapper][index].options).reduce((acc, [key, val]) => {
-                if (key !== fieldKey) {
-                    acc[key] = val;
-                    return acc;
-                }
-
-                // Обновляем нужное поле
-                if (
-                    typeof val?.value === 'object' &&
-                    val.value !== null &&
-                    !Array.isArray(val.value)
-                ) {
-                    // Сложное поле
-                    acc[key] = {
-                        ...val,
-                        value: {
-                            ...val.value,
-                            [property]: value
-                        }
-                    };
-                } else {
-                    // Простое поле
-                    acc[key] = {
-                        ...val,
-                        value
-                    };
-                }
-
-                return acc;
-            }, {});
-
-            return {
-                ...prev,
-                [wrapper]: prev[wrapper].map((item, i) =>
-                    i === index
-                        ? {
-                            ...item,
-                            options: updatedOptions
-                        }
-                        : item
-                )
-            };
-        });
+    const updateOption = (path, value) => {
+        setter(assignedFields.current, path, value);
+        forceUpdate();
+        setSubmitPending(true);
     };
 
 
@@ -218,11 +108,7 @@ export function useFieldsLogic() {
         const field = availableFields.find(field => field.key === param);
 
         if (!field) return;
-
-        setAssignedFields(current => ({
-            ...current,
-            [section]: [...current[section], field]
-        }));
+        updateOption(section, [...assignedFields.current[section], field])
     };
 
     const buildFiltersBlockStyle = (filters) => {
@@ -234,6 +120,7 @@ export function useFieldsLogic() {
 
                 if (resolutions[key]) {
                     mediaQuery = `@media screen and (max-width: ${resolutions[key]}px)`;
+                    basicLayoutStyles += 'grid-template-areas: unset;grid-template-columns: 1fr;'
                 }
 
                 const field = filters.responsive[key];
@@ -289,7 +176,7 @@ export function useFieldsLogic() {
     }
 
     const buildPostBlockStyles = (assignedFields) => {
-        const fields = [...assignedFields.fsection, ...assignedFields.lsection];
+        const fields = [...assignedFields.current.fsection, ...assignedFields.current.lsection];
 
         let styles = '';
 
@@ -353,10 +240,10 @@ export function useFieldsLogic() {
         availableFilterFields,
         styles,
         filters,
+        resolutions,
         setStyles,
         setFilter,
         assignedFields,
-        setAssignedFields,
         forceUpdate,
         frame,
         setFrame,
@@ -364,7 +251,6 @@ export function useFieldsLogic() {
         frameMeasures,
         submitPreviewForm,
         updatePostType,
-        setMeasure,
         updateOption,
         addOptionToImageArea,
         buildFiltersBlockStyle,

@@ -12,9 +12,7 @@ export default function ListingConfigurator() {
         styles,
         setStyles,
         assignedFields,
-        setAssignedFields,
         updatePostType,
-        setMeasure,
         updateOption,
         addOptionToImageArea,
         buildPostBlockStyles,
@@ -32,35 +30,41 @@ export default function ListingConfigurator() {
         const activeId = active.id;
         const overId = over.id;
 
-        const allSections = Object.keys(assignedFields);
-        const movedField = Object.values(assignedFields).flat().find(f => f.key === activeId);
+        const allSections = Object.keys(assignedFields.current);
+        const movedField = Object.values(assignedFields.current).flat().find(f => f.key === activeId);
         if (!movedField) return;
 
         let sourceSection = null;
         for (const section of allSections) {
-            if (assignedFields[section].some(f => f.key === activeId)) {
+            if (assignedFields.current[section].some(f => f.key === activeId)) {
                 sourceSection = section;
                 break;
             }
         }
 
-        // 👇 Случай 1: дропнули на пустую секцию
+        // Случай 1: дропнули на пустую секцию
         if (allSections.includes(overId)) {
             const targetSection = overId;
             if (targetSection === sourceSection) return;
 
-            setAssignedFields(prev => ({
-                ...prev,
-                [sourceSection]: prev[sourceSection].filter(f => f.key !== activeId),
-                [targetSection]: [movedField, ...prev[targetSection]]
-            }));
+
+            updateOption(sourceSection, assignedFields.current[sourceSection].filter((f) => f.key !== activeId))
+
+            assignedFields.current[targetSection] = [
+                movedField,
+                ...assignedFields.current[targetSection]
+            ];
+            updateOption(targetSection, [
+                movedField,
+                ...assignedFields.current[targetSection]
+            ])
             return;
         }
 
-        // 👇 Случай 2: перемещение внутри секции или между секциями через другой элемент
+        // Случай 2: перемещение внутри секции или между секциями через другой элемент
         let targetSection = null;
         for (const section of allSections) {
-            if (assignedFields[section].some(f => f.key === overId)) {
+            if (assignedFields.current[section].some(f => f.key === overId)) {
                 targetSection = section;
                 break;
             }
@@ -69,24 +73,20 @@ export default function ListingConfigurator() {
         if (!sourceSection || !targetSection) return;
 
         if (sourceSection === targetSection) {
-            const oldIndex = assignedFields[sourceSection].findIndex(f => f.key === activeId);
-            const newIndex = assignedFields[targetSection].findIndex(f => f.key === overId);
+            const oldIndex = assignedFields.current[sourceSection].findIndex(f => f.key === activeId);
+            const newIndex = assignedFields.current[targetSection].findIndex(f => f.key === overId);
 
             if (oldIndex === -1 || newIndex === -1) return;
 
-            const reordered = arrayMove(assignedFields[sourceSection], oldIndex, newIndex);
+            const reordered = arrayMove(assignedFields.current[sourceSection], oldIndex, newIndex);
 
-            setAssignedFields(prev => ({
-                ...prev,
-                [sourceSection]: reordered
-            }));
+            updateOption(sourceSection, reordered)
+
         } else {
             // drag из одной секции в другую (через элемент)
-            setAssignedFields(prev => ({
-                ...prev,
-                [sourceSection]: prev[sourceSection].filter(f => f.key !== activeId),
-                [targetSection]: [movedField, ...prev[targetSection]]
-            }));
+
+            updateOption(sourceSection, assignedFields.current[sourceSection].filter(f => f.key !== activeId))
+            updateOption(targetSection, [movedField, ...prev[targetSection]])
         }
         submitPreviewForm(formRef)
     };
@@ -115,27 +115,23 @@ export default function ListingConfigurator() {
                     {/* Секция A */}
                     <SortableContext
                         items={[
-                            ...assignedFields.fsection.map(f => f.key),
-                            ...assignedFields.lsection.map(f => f.key)
+                            ...assignedFields.current.fsection.map(f => f.key),
+                            ...assignedFields.current.lsection.map(f => f.key)
                         ]}
                         strategy={verticalListSortingStrategy}
                     >
                         <UsedFormFields
                             sectionId="fsection"
-                            fields={assignedFields.fsection}
-                            setFields={newFields =>
-                                setAssignedFields(prev => ({...prev, fsection: newFields}))
-                            }
+                            fields={assignedFields.current.fsection}
+
                             updateOption={updateOption}
                         />
 
                         {styles.current.shared.useTwoSection && (
                             <UsedFormFields
                                 sectionId="lsection"
-                                fields={assignedFields.lsection}
-                                setFields={newFields =>
-                                    setAssignedFields(prev => ({...prev, lsection: newFields}))
-                                }
+                                fields={assignedFields.current.lsection}
+
                                 updateOption={updateOption}
                             />
                         )}

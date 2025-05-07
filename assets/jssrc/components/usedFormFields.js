@@ -97,7 +97,7 @@ const DraggableItem = ({ id, field, updateOption, index }) => {
     );
 };
 
-export default function UsedFormFields({fields, setFields, updateOption, sectionId}) {
+export default function UsedFormFields({fields, updateOption, sectionId}) {
     const sensors = useSensors(
         useSensor(PointerSensor)
     );

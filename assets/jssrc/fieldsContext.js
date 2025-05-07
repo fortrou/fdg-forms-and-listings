@@ -15,15 +15,14 @@ export function FieldsProvider({ children }) {
         availableFilterFields,
         filters,
         frameMeasures,
+        resolutions,
         setStyles,
         setFilter,
         assignedFields,
-        setAssignedFields,
         updatePostType,
         formRef,
         submitPreviewForm,
         setFrame,
-        setMeasure,
         setAvailableFilterFields,
         updateOption,
         buildFiltersBlockStyle,
@@ -69,6 +68,47 @@ export function FieldsProvider({ children }) {
             padding: ${styles.contentPaddingTop + 'px ' + styles.contentPaddingRight + 'px ' + styles.contentPaddingBottom + 'px ' + styles.contentPaddingLeft + 'px '};
             ${(styles.itemsShowImages && styles.postDisplay == 'flex' && (styles.flexDirection == 'row' || styles.flexDirection == 'row-reverse')) ? `width: calc(100% - ${parseInt(styles.imageWidth, 10) + styles.imageMarginRight + styles.imageMarginLeft}px);` : ''}
         }
+        @media only screen and (max-width: ${resolutions.tablet}px) {
+            .preview-container {
+                box-sizing: border-box;
+                display: ${styles.current.shared.type == "grid" ? 'grid;' : ''}
+                ${styles.current.shared.type == "grid" ? 'grid-template-columns: repeat(' + styles.current.responsive.tablet.gridColumns + ', 1fr);' : ''}
+                ${styles.current.shared.type == "grid" ? 'column-gap: ' + styles.current.responsive.tablet.gridGap + 'px;' : ''}
+                ${styles.current.shared.type == "grid" ? 'row-gap: ' + styles.current.responsive.tablet.rowGap + 'px' : ''}
+            }
+            
+            .preview-container .post-item {
+                ${styles.current.shared.itemBorderWidth > 0 ? 'border: ' + styles.itemBorderWidth + 'px solid ' + styles.itemsBorderColor : ''};
+                border-radius: ${styles.current.shared.itemsBorderRadius}px;
+                overflow: hidden;
+                padding: ${styles.current.responsive.tablet.padding.top + 'px ' + styles.current.responsive.tablet.padding.right + 'px ' + styles.current.responsive.tablet.padding.bottom + 'px ' + styles.current.responsive.tablet.padding.left + 'px '};
+                display: ${styles.postDisplay};
+                ${styles.postDisplay == 'flex' ? 'justify-content: ' + styles.justifyContent + ';' : ''}
+                ${styles.postDisplay == 'flex' ? 'flex-direction: ' + styles.flexDirection + ';' : ''}
+                ${styles.postDisplay == 'flex' ? 'align-items: ' + styles.alignItems + ';' : ''}
+            }
+        }
+        
+        @media only screen and (max-width: ${resolutions.mobile}px) {
+            .preview-container {
+                box-sizing: border-box;
+                display: ${styles.current.shared.type == "grid" ? 'grid;' : ''}
+                ${styles.current.shared.type == "grid" ? 'grid-template-columns: repeat(' + styles.current.responsive.mobile.gridColumns + ', 1fr);' : ''}
+                ${styles.current.shared.type == "grid" ? 'column-gap: ' + styles.current.responsive.mobile.gridGap + 'px;' : ''}
+                ${styles.current.shared.type == "grid" ? 'row-gap: ' + styles.current.responsive.mobile.rowGap + 'px' : ''}
+            }
+            
+            .preview-container .post-item {
+                ${styles.current.shared.itemBorderWidth > 0 ? 'border: ' + styles.itemBorderWidth + 'px solid ' + styles.itemsBorderColor : ''};
+                border-radius: ${styles.current.shared.itemsBorderRadius}px;
+                overflow: hidden;
+                padding: ${styles.current.responsive.mobile.padding.top + 'px ' + styles.current.responsive.mobile.padding.right + 'px ' + styles.current.responsive.mobile.padding.bottom + 'px ' + styles.current.responsive.mobile.padding.left + 'px '};
+                display: ${styles.postDisplay};
+                ${styles.postDisplay == 'flex' ? 'justify-content: ' + styles.justifyContent + ';' : ''}
+                ${styles.postDisplay == 'flex' ? 'flex-direction: ' + styles.flexDirection + ';' : ''}
+                ${styles.postDisplay == 'flex' ? 'align-items: ' + styles.alignItems + ';' : ''}
+            }
+        }
     ` + buildPostBlockStyles(assignedFields) + buildFiltersBlockStyle(filters.current);
 
 
@@ -83,10 +123,8 @@ export function FieldsProvider({ children }) {
             .then(data => {
                 setPosts(Object.values(data.data.posts));
                 setAvailableFields(Object.values(data.data.keys));
-                setAssignedFields({
-                    fsection: Array.isArray(data.data.defaultKeys.fsection) ? data.data.defaultKeys.fsection : Object.values(data.data.defaultKeys.fsection),
-                    lsection: Array.isArray(data.data.defaultKeys.lsection) ? data.data.defaultKeys.lsection : Object.values(data.data.defaultKeys.lsection)
-                });
+                updateOption('fsection', Array.isArray(data.data.defaultKeys.fsection) ? data.data.defaultKeys.fsection : Object.values(data.data.defaultKeys.fsection));
+                updateOption('lsection', Array.isArray(data.data.defaultKeys.lsection) ? data.data.defaultKeys.lsection : Object.values(data.data.defaultKeys.lsection));
                 setAvailableFilterFields(data.data.filterFields);
             });
     }, []);
@@ -120,7 +158,6 @@ export function FieldsProvider({ children }) {
             setStyles,
             setFilter,
             assignedFields,
-            setAssignedFields,
             availableFilterFields,
             posts,
             postTypes,
@@ -128,7 +165,6 @@ export function FieldsProvider({ children }) {
             formRef,
             submitPreviewForm,
             updatePostType,
-            setMeasure,
             updateOption,
             addOptionToImageArea,
             setEnabledFilter,

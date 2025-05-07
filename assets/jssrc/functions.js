@@ -33,6 +33,22 @@ export function useFieldsLogic() {
         current[keys[0]] = value;
     }
 
+    const getter = (obj, path, defaultValue = '') => {
+        if (!obj || !path) return defaultValue;
+
+        const keys = Array.isArray(path) ? path : path.split('.');
+
+        let current = obj;
+        for (let key of keys) {
+            if (current == null || typeof current !== 'object' || !(key in current)) {
+                return defaultValue;
+            }
+            current = current[key];
+        }
+
+        return current === undefined || current == '' ? defaultValue : current;
+    }
+
 
     const formRef = useRef(null);
     let timeoutRef = null;
@@ -235,6 +251,7 @@ export function useFieldsLogic() {
     }
 
     return {
+        getter,
         availableFields,
         setAvailableFields,
         setAvailableFilterFields,

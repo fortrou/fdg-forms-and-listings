@@ -18,6 +18,8 @@ export default function ListingData() {
         addOptionToImageArea,
         buildPostBlockStyles,
         posts,
+        getter,
+        frame,
         postTypes
     } = useFieldsContext();
     return (
@@ -77,20 +79,20 @@ export default function ListingData() {
                                 <div className="input-container">
                                     <label>Sections direction</label>
                                     <div className="icons-list grid grid-4 no-padding">
-                                        <div className={`icon-item ${styles.current.shared.flexDirection === 'row' ? 'active' : ''}`}
-                                             onClick={(e) => setStyles('shared.flexDirection', 'row')} >
+                                        <div className={`icon-item ${getter(styles.current, `responsive.${frame}.flexDirection`, styles.current.responsive['desktop'].flexDirection) === 'row' ? 'active' : ''}`}
+                                             onClick={(e) => setStyles(`responsive.${frame}.flexDirection`, 'row')} >
                                             <img src={DefaultIcons.arrowRight}/>
                                         </div>
-                                        <div className={`icon-item ${styles.current.shared.flexDirection === 'column' ? 'active' : ''}`}
-                                             onClick={(e) => setStyles('shared.flexDirection', 'column')}>
+                                        <div className={`icon-item ${getter(styles.current, `responsive.${frame}.flexDirection`, styles.current.responsive['desktop'].flexDirection) === 'column' ? 'active' : ''}`}
+                                             onClick={(e) => setStyles(`responsive.${frame}.flexDirection`, 'column')}>
                                             <img src={DefaultIcons.arrowDown}/>
                                         </div>
-                                        <div className={`icon-item ${styles.current.shared.flexDirection === 'row-reverse' ? 'active' : ''}`}
-                                             onClick={(e) => setStyles('shared.flexDirection', 'row-reverse')}>
+                                        <div className={`icon-item ${getter(styles.current, `responsive.${frame}.flexDirection`, styles.current.responsive['desktop'].flexDirection) === 'row-reverse' ? 'active' : ''}`}
+                                             onClick={(e) => setStyles(`responsive.${frame}.flexDirection`, 'row-reverse')}>
                                             <img src={DefaultIcons.arrowLeft}/>
                                         </div>
-                                        <div className={`icon-item ${styles.current.shared.flexDirection === 'column-reverse' ? 'active' : ''}`}
-                                             onClick={(e) => setStyles('shared.flexDirection', 'column-reverse')}>
+                                        <div className={`icon-item ${getter(styles.current, `responsive.${frame}.flexDirection`, styles.current.responsive['desktop'].flexDirection) === 'column-reverse' ? 'active' : ''}`}
+                                             onClick={(e) => setStyles(`responsive.${frame}.flexDirection`, 'column-reverse')}>
                                             <img src={DefaultIcons.arrowUp}/>
                                         </div>
                                     </div>
@@ -99,23 +101,23 @@ export default function ListingData() {
                                     <label>Justify content</label>
                                     <div className="icons-list grid grid-4 no-padding">
                                         <div
-                                            className={`icon-item ${styles.current.shared.justifyContent === 'space-between' ? 'active' : ''}`}
-                                            onClick={(e) => setStyles('shared.justifyContent', 'space-between')}>
+                                            className={`icon-item ${getter(styles.current, `responsive.${frame}.justifyContent`, styles.current.responsive['desktop'].justifyContent) === 'space-between' ? 'active' : ''}`}
+                                            onClick={(e) => setStyles(`responsive.${frame}.justifyContent`, 'space-between')}>
                                             <img src={DefaultIcons.spaceBetween}/>
                                         </div>
                                         <div
-                                            className={`icon-item ${styles.current.shared.justifyContent === 'flex-start' ? 'active' : ''}`}
-                                            onClick={(e) => setStyles('shared.justifyContent', 'flex-start')}>
+                                            className={`icon-item ${getter(styles.current, `responsive.${frame}.justifyContent`, styles.current.responsive['desktop'].justifyContent) === 'flex-start' ? 'active' : ''}`}
+                                            onClick={(e) => setStyles(`responsive.${frame}.justifyContent`, 'flex-start')}>
                                             <img src={DefaultIcons.flexStart}/>
                                         </div>
                                         <div
-                                            className={`icon-item ${styles.current.shared.justifyContent === 'flex-end' ? 'active' : ''}`}
-                                            onClick={(e) => setStyles('shared.justifyContent', 'flex-end')}>
+                                            className={`icon-item ${getter(styles.current, `responsive.${frame}.justifyContent`, styles.current.responsive['desktop'].justifyContent) === 'flex-end' ? 'active' : ''}`}
+                                            onClick={(e) => setStyles(`responsive.${frame}.justifyContent`, 'flex-end')}>
                                             <img src={DefaultIcons.flexEnd}/>
                                         </div>
                                         <div
-                                            className={`icon-item ${styles.current.shared.justifyContent === 'center' ? 'active' : ''}`}
-                                            onClick={(e) => setStyles('shared.justifyContent', 'center')}>
+                                            className={`icon-item ${getter(styles.current, `responsive.${frame}.justifyContent`, styles.current.responsive['desktop'].justifyContent) === 'center' ? 'active' : ''}`}
+                                            onClick={(e) => setStyles(`responsive.${frame}.justifyContent`, 'center')}>
                                             <img src={DefaultIcons.justifyCenter}/>
                                         </div>
                                     </div>
@@ -124,23 +126,23 @@ export default function ListingData() {
                                     <label>align items</label>
                                     <div className="icons-list grid grid-4 no-padding">
                                         <div
-                                            className={`icon-item ${styles.current.shared.alignItems === 'baseline' ? 'active' : ''}`}
-                                            onClick={(e) => setStyles('shared.alignItems', 'baseline')}>
+                                            className={`icon-item ${getter(styles.current, `responsive.${frame}.alignItems`, styles.current.responsive['desktop'].alignItems) === 'baseline' ? 'active' : ''}`}
+                                            onClick={(e) => setStyles(`responsive.${frame}.alignItems`, 'baseline')}>
                                             <img src={DefaultIcons.alignBaseline}/>
                                         </div>
                                         <div
-                                            className={`icon-item ${styles.current.shared.alignItems === 'flex-start' ? 'active' : ''}`}
-                                            onClick={(e) => setStyles('shared.alignItems', 'flex-start')}>
+                                            className={`icon-item ${getter(styles.current, `responsive.${frame}.alignItems`, styles.current.responsive['desktop'].alignItems) === 'flex-start' ? 'active' : ''}`}
+                                            onClick={(e) => setStyles(`responsive.${frame}.alignItems`, 'flex-start')}>
                                             <img src={DefaultIcons.alignStart}/>
                                         </div>
                                         <div
-                                            className={`icon-item ${styles.current.shared.alignItems === 'flex-end' ? 'active' : ''}`}
-                                            onClick={(e) => setStyles('shared.alignItems', 'flex-end')}>
+                                            className={`icon-item ${getter(styles.current, `responsive.${frame}.alignItems`, styles.current.responsive['desktop'].alignItems) === 'flex-end' ? 'active' : ''}`}
+                                            onClick={(e) => setStyles(`responsive.${frame}.alignItems`, 'flex-end')}>
                                             <img src={DefaultIcons.alignEnd}/>
                                         </div>
                                         <div
-                                            className={`icon-item ${styles.current.shared.alignItems === 'center' ? 'active' : ''}`}
-                                            onClick={(e) => setStyles('shared.alignItems', 'center')}>
+                                            className={`icon-item ${getter(styles.current, `responsive.${frame}.alignItems`, styles.current.responsive['desktop'].alignItems) === 'center' ? 'active' : ''}`}
+                                            onClick={(e) => setStyles(`responsive.${frame}.alignItems`, 'center')}>
                                             <img src={DefaultIcons.alignCenter}/>
                                         </div>
                                     </div>

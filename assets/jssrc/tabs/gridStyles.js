@@ -2,6 +2,7 @@ import {useFieldsContext} from "../useFieldContext";
 
 export default function GridStyles() {
     const {
+        getter,
         availableFields,
         setAvailableFields,
         styles,
@@ -28,19 +29,19 @@ export default function GridStyles() {
                             <div className="input-container">
                                 <label>columns</label>
                                 <input type="number" name="grid-columns" min="1" max="8"
-                                       value={styles.current.responsive[frame].gridColumns}
+                                       value={getter(styles.current, `responsive.${frame}.gridColumns`, styles.current.responsive['desktop'].gridColumns)}
                                        onChange={(e) => setStyles(`responsive.${frame}.gridColumns`, parseInt(e.target.value, 10))}/>
                             </div>
                             <div className="input-container">
                                 <label>columns gap</label>
                                 <input type="number" name="column-gap"
-                                       value={styles.current.responsive[frame].gridGap}
+                                       value={getter(styles.current, `responsive.${frame}.gridGap`, styles.current.responsive['desktop'].gridGap)}
                                        onChange={(e) => setStyles(`responsive.${frame}.gridGap`, parseInt(e.target.value, 10))}/>
                             </div>
                             <div className="input-container">
                                 <label>row gap</label>
                                 <input type="number" name="column-gap"
-                                       value={styles.current.responsive[frame].rowGap}
+                                       value={getter(styles.current, `responsive.${frame}.rowGap`, styles.current.responsive['desktop'].rowGap)}
                                        onChange={(e) => setStyles(`responsive.${frame}.rowGap`, parseInt(e.target.value, 10))}/>
                             </div>
                         </div>

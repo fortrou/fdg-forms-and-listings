@@ -8,6 +8,7 @@ export const FieldsContext = createContext(null);
 export function FieldsProvider({ children }) {
 
     const {
+        getter,
         availableFields,
         setAvailableFields,
         styles,
@@ -46,9 +47,9 @@ export function FieldsProvider({ children }) {
             overflow: hidden;
             padding: ${styles.current.responsive.desktop.padding.top + 'px ' + styles.current.responsive.desktop.padding.right + 'px ' + styles.current.responsive.desktop.padding.bottom + 'px ' + styles.current.responsive.desktop.padding.left + 'px '};
             display: ${styles.current.shared.postDisplay};
-            ${styles.current.shared.postDisplay == 'flex' ? 'justify-content: ' + styles.current.shared.justifyContent + ';' : ''}
-            ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + styles.current.shared.flexDirection + ';' : ''}
-            ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + styles.current.shared.alignItems + ';' : ''}
+            ${styles.current.shared.postDisplay == 'flex' ? 'justify-content: ' + getter(styles.current, `responsive.desktop.justifyContent`, styles.current.responsive['desktop'].justifyContent) + ';' : ''}
+            ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + getter(styles.current, `responsive.desktop.flexDirection`, styles.current.responsive['desktop'].flexDirection) + ';' : ''}
+            ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + getter(styles.current, `responsive.desktop.alignItems`, styles.current.responsive['desktop'].alignItems) + ';' : ''}
         }
         
         .preview-container .post-item .left-side img {
@@ -83,9 +84,9 @@ export function FieldsProvider({ children }) {
                 overflow: hidden;
                 padding: ${styles.current.responsive.tablet.padding.top + 'px ' + styles.current.responsive.tablet.padding.right + 'px ' + styles.current.responsive.tablet.padding.bottom + 'px ' + styles.current.responsive.tablet.padding.left + 'px '};
                 display: ${styles.current.shared.postDisplay};
-                ${styles.current.shared.postDisplay == 'flex' ? 'justify-content: ' + styles.current.shared.justifyContent + ';' : ''}
-                ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + styles.current.shared.flexDirection + ';' : ''}
-                ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + styles.current.shared.alignItems + ';' : ''}
+                ${styles.current.shared.postDisplay == 'flex' ? 'justify-content: ' + getter(styles.current, `responsive.tablet.justifyContent`, styles.current.responsive['desktop'].justifyContent) + ';' : ''}
+                ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + getter(styles.current, `responsive.tablet.flexDirection`, styles.current.responsive['desktop'].flexDirection) + ';' : ''}
+                ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + getter(styles.current, `responsive.tablet.alignItems`, styles.current.responsive['desktop'].alignItems) + ';' : ''}
             }
         }
         
@@ -104,9 +105,9 @@ export function FieldsProvider({ children }) {
                 overflow: hidden;
                 padding: ${styles.current.responsive.mobile.padding.top + 'px ' + styles.current.responsive.mobile.padding.right + 'px ' + styles.current.responsive.mobile.padding.bottom + 'px ' + styles.current.responsive.mobile.padding.left + 'px '};
                 display: ${styles.current.shared.postDisplay};
-                ${styles.current.shared.postDisplay == 'flex' ? 'justify-content: ' + styles.current.shared.justifyContent + ';' : ''}
-                ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + styles.current.shared.flexDirection + ';' : ''}
-                ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + styles.current.shared.alignItems + ';' : ''}
+                ${styles.current.shared.postDisplay == 'flex' ? 'justify-content: ' + getter(styles.current, `responsive.mobile.justifyContent`, styles.current.responsive['desktop'].justifyContent) + ';' : ''}
+                ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + getter(styles.current, `responsive.mobile.flexDirection`, styles.current.responsive['desktop'].flexDirection) + ';' : ''}
+                ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + getter(styles.current, `responsive.mobile.alignItems`, styles.current.responsive['desktop'].alignItems) + ';' : ''}
             }
         }
     ` + buildPostBlockStyles(assignedFields) + buildFiltersBlockStyle(filters.current);
@@ -169,6 +170,7 @@ export function FieldsProvider({ children }) {
             addOptionToImageArea,
             setEnabledFilter,
             buildPostBlockStyles,
+            getter
         }}>
 
             {children}

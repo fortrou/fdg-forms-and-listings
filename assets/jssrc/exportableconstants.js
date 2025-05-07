@@ -85,9 +85,6 @@ export const styles = {
         itemsBorderRadius: 0,
         itemsBorderWidth: 0,
         postDisplay: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
         itemsShowImages: true,
         imageBorderRadius: 0,
         currentSelectedImageField: '',
@@ -111,6 +108,9 @@ export const styles = {
             imageSize: { width: '100%', height: 'auto' },
             imageMargin: { top: 0, right: 0, bottom: 0, left: 0 },
             contentPadding: { top: 0, right: 0, bottom: 0, left: 0 },
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
         },
 
         tablet: {
@@ -128,6 +128,9 @@ export const styles = {
             imageSize: { width: '100%', height: 'auto' },
             imageMargin: { top: 0, right: 0, bottom: 0, left: 0 },
             contentPadding: { top: 0, right: 0, bottom: 0, left: 0 },
+            flexDirection: '',
+            justifyContent: '',
+            alignItems: '',
         },
 
         mobile: {
@@ -145,6 +148,9 @@ export const styles = {
             imageSize: { width: '100%', height: 'auto' },
             imageMargin: { top: 0, right: 0, bottom: 0, left: 0 },
             contentPadding: { top: 0, right: 0, bottom: 0, left: 0 },
+            flexDirection: '',
+            justifyContent: '',
+            alignItems: '',
         },
     }
 };

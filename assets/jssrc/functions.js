@@ -138,68 +138,46 @@ export function useFieldsLogic() {
         submitPreviewForm(formRef);
     }
 
+    const directions = {
+        left : 'row',
+        right : 'row-reverse',
+        top : 'column'
+    }
+
     const buildFiltersBlockStyle = (filters) => {
         let styles = '';
         if (filters.shared.enable) {
-            Object.keys(filters.responsive).forEach(key => {
-                let mediaQuery = '';
-                let basicLayoutStyles = '';
-
-                if (resolutions[key]) {
-                    mediaQuery = `@media screen and (max-width: ${resolutions[key]}px)`;
-                    basicLayoutStyles += 'grid-template-areas: unset;grid-template-columns: 1fr;'
+            styles += `
+                .listing-container {
+                    display: flex;
+                    ${directions[filters.responsive.desktop.sidebarPosition] ? 'flex-direction: ' + directions[filters.responsive.desktop.sidebarPosition] + ';' : ''}
+                    position: relative;
+                    align-items: flex-start;
                 }
-
-                const field = filters.responsive[key];
-                basicLayoutStyles += `display: grid; column-gap: ${field.columnGap}px; row-gap: ${field.rowGap}px;`;
-                if (field.position == 'sidebar') {
-                    if (field.sidebarPosition == 'left') {
-                        basicLayoutStyles += `grid-template-columns: ${field.filterWidth.value}${field.filterWidth.measure} auto; grid-template-areas: "filters content";height: 100%;`
-                    }
-
-                    if (field.sidebarPosition == 'right') {
-                        basicLayoutStyles += `grid-template-columns: auto ${field.filterWidth.value}${field.filterWidth.measure}; grid-template-areas: "content filters";height: 100%;`
-                    }
-                } else if (field.position == 'top') {
-                    basicLayoutStyles += `grid-template-columns: 1fr; height: auto;`;
-                } else {
-
+                
+                .listing-container .filters-side {
+                    background: #fff;
+                    ${!directions[filters.responsive.desktop.sidebarPosition] ? 'position: absolute;top: 0;' : ''}
+                    width: ${filters.responsive.desktop.filterWidth.value + filters.responsive.desktop.filterWidth.measure };
+                    height: auto;padding: 20px 18px;
+                    box-sizing: border-box;
+                    ${filters.responsive.desktop.sidebarPosition == 'moveLeft' ? 'left: -100vw;' : ''}
+                    ${filters.responsive.desktop.sidebarPosition == 'moveRight' ? 'right: -100vw;' : ''}
+                    
                 }
-                if (basicLayoutStyles) {
-                    let tempStyles = `
-                        .listing-container {
-                            width: 100%;
-                            ${basicLayoutStyles}
-                        }
-                        .listing-container .filters-side {
-                            grid-area: filters;
-                        }
-                        .listing-container .preview-container {
-                            grid-area: content;
-                        }
-                    `;
-
-                    if (mediaQuery) {
-                        styles += `
-                            ${mediaQuery} {
-                                ${tempStyles}
-                                .listing-container .filters-side {
-                                    grid-area: unset;
-                                }
-                                .listing-container .preview-container {
-                                    grid-area: unset;
-                                }
-                            }
+                
+                .listing-container .preview-container {
+                    ${(filters.responsive.desktop.sidebarPosition != 'moveLeft' 
+                        && filters.responsive.desktop.sidebarPosition != 'moveRight'
+                        && filters.responsive.desktop.sidebarPosition != 'top') && `
+                        width: calc(100% - ${(filters.responsive.desktop.filterWidth.value + 30) + filters.responsive.desktop.filterWidth.measure });
                         `
-                    } else {
-                        styles += tempStyles;
                     }
                 }
-            });
+            `;
             //console.log(styles)
             return styles;
         }
-        styles = '.listing-container {display: block;} .listing-container .filters-side {display: none;}'
     }
 
     const buildPostBlockStyles = (assignedFields) => {

@@ -412,20 +412,29 @@
     width: 100%;
     margin-top: 24px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     column-gap: 30px;
+
+    .filters-listing {
+      background: #0d99d533;
+      margin-top: 20px;
+      max-height: 360px;
+      overflow-y: auto;
+    }
+
+    @media screen and (max-width: 1100px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   .filters-side {
     display: flex;
     justify-content: flex-start;
-    align-items: center;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    .filter-item {
-      margin-right: 10px;
-      margin-left: 10px;
-    }
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding: 20px 16px;
   }
 }
 
@@ -562,73 +571,98 @@
   }
 }
 
-.filter-item {
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 5px;
-  margin-bottom: 20px;
-  position: relative;
+.filter-item-wrap {
+  width: 100%;
+  box-sizing: border-box;
+  .filter-item {
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 5px;
+    margin-bottom: 8px;
+    width: 100%;
+    position: relative;
 
-  .filter-top-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .filter-title {
-      background: #f0f0f0;
-      height: 24px;
-      box-sizing: border-box;
-      padding: 0 20px;
-      width: calc(100% - 70px);
-      border-radius: 3px;
+    .filter-top-line {
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
-      white-space: nowrap;
-      border: .3px solid #0073aa;
-      cursor: grab;
-    }
 
-    .draggable-item-settings-wrapper {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      .filter-edit {
+      .filter-title {
+        background: #f0f0f0;
+        min-height: 24px;
+        height: auto;
+        box-sizing: border-box;
+        padding: 0 20px;
+        width: calc(100% - 70px);
         border-radius: 3px;
-        width: 24px;
-        height: 24px;
+        word-break: break-all;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        cursor: pointer;
         border: .3px solid #0073aa;
-        background: transparent;
-        transition: .3s;
+        cursor: grab;
+      }
 
-        &:hover {
-          background: #f0f0f0;
-        }
+      .draggable-item-settings-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        .filter-edit {
+          border-radius: 3px;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          border: .3px solid #0073aa;
+          background: transparent;
+          transition: .3s;
 
-        img {
-          width: 17px;
-          height: 17px;
-        }
+          &:hover {
+            background: #f0f0f0;
+          }
 
-        &:not(:last-child) {
-          margin-right: 12px;
+          img {
+            width: 17px;
+            height: 17px;
+          }
+
+          &:not(:last-child) {
+            margin-right: 12px;
+          }
         }
       }
     }
-  }
 
-  .filter-details {
-    margin-top: 6px;
-    width: 100%;
-    background: #f0f0f0;
-    border: .3px solid #0073aa;
-    padding: 6px;
-    border-radius: 6px;
-    position: absolute;
+    .filter-details {
+      margin-top: 6px;
+      width: 100%;
+      background: #f0f0f0;
+      border: .3px solid #0073aa;
+      padding: 6px;
+      border-radius: 6px;
+      box-sizing: border-box;
+
+      .detail-line {
+        &:not(:last-child) {
+          margin-bottom: 8px;
+        }
+
+        input, select {
+          height: 24px;
+          min-height: 24px;
+          font-size: 12px;
+          box-sizing: border-box;
+          outline: none;
+          transition: .3s;
+
+          &:focus {
+            border: 1px solid #0d99d5;
+          }
+        }
+      }
+    }
   }
 }
 

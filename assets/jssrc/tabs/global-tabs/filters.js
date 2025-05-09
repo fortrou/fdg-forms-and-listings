@@ -40,9 +40,11 @@ export default function FiltersTab({usedTab}) {
             setFilter('enabledFilters', {
                 type: 'search',
                 field: currentFilterField,
+                label: currentFilterField,
                 params: {},
                 list: []
             })
+
             setCurrentFilterField('')
         }
     }
@@ -77,7 +79,7 @@ export default function FiltersTab({usedTab}) {
     return (
         <div className="filters-configurations" style={{display: (usedTab == 'filters') ? 'flex' : 'none'}}>
             <div className="filters-settings">
-                <div className="column-left">
+                <div className="column-filters-global">
                     <div className="setting-item">
                         <div className="setting-title">
                             Enable filters
@@ -121,7 +123,7 @@ export default function FiltersTab({usedTab}) {
                         </div>
                     </div>
                 </div>
-                <div className="column-center" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
+                <div className="column-filters-fields" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
                     <div className="setting-item">
                         <div className="setting-title">
                             Filter field
@@ -141,26 +143,29 @@ export default function FiltersTab({usedTab}) {
                             <button onClick={addFilterField}>Add filter</button>
                         </div>
                     </div>
+                    <div className="filters-listing">
+                        {filters.current.shared.enable && (
+                            <div className="filters-side">
+                                <DndContext
+                                    sensors={sensors}
+                                    collisionDetection={closestCenter}
+                                    onDragEnd={handleDragEnd}
+                                >
+                                    <SortableContext items={filterKeys} strategy={verticalListSortingStrategy}>
+                                        {filterList.map((filter) => (
+                                            <SimpleFIlterComponent key={filter.field} field={filter}/>
+                                        ))}
+                                    </SortableContext>
+                                </DndContext>
+                            </div>
+                        )}
+                    </div>
                 </div>
-                <div className="column-right">
+                <div className="column-filters-styles" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
 
                 </div>
+                <div className="column-filters-styles" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}></div>
             </div>
-            {filters.current.shared.enable && (
-                <div className="filters-side">
-                    <DndContext
-                        sensors={sensors}
-                        collisionDetection={closestCenter}
-                        onDragEnd={handleDragEnd}
-                    >
-                        <SortableContext items={filterKeys} strategy={verticalListSortingStrategy}>
-                            {filterList.map((filter) => (
-                                <SimpleFIlterComponent key={filter.field} field={filter}/>
-                            ))}
-                        </SortableContext>
-                    </DndContext>
-                </div>
-            )}
         </div>
     )
 }

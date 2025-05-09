@@ -9,6 +9,7 @@ export default function SimpleFIlterComponent({field})
     const {
         filters,
         setFilter,
+        removeFilter
     } = useFieldsContext();
 
     const {
@@ -31,11 +32,19 @@ export default function SimpleFIlterComponent({field})
             <div className="filter-item">
                 <div className="filter-top-line">
                     <div className="filter-title" {...listeners}>Field: {field.field}</div>
-                    <div
-                        className="filter-edit"
-                        onClick={() => setExpanded(prev => !prev)}
-                    >
-                        <img src={DefaultIcons.settings} alt=""/>
+                    <div className="draggable-item-settings-wrapper">
+                        <div className="filter-edit draggable-item-settings trash-icon"
+                             onClick={() => removeField(field.key, section)}
+                        >
+                            <img src={DefaultIcons.trashIcon} alt=""/>
+                        </div>
+
+                        <div
+                            className="filter-edit"
+                            onClick={() => setExpanded(prev => !prev)}
+                        >
+                            <img src={DefaultIcons.settings} alt=""/>
+                        </div>
                     </div>
                 </div>
                 {expanded && (

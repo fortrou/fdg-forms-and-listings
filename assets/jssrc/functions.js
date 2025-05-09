@@ -133,6 +133,11 @@ export function useFieldsLogic() {
         submitPreviewForm(formRef);
     }
 
+    const removeFilter = () => {
+        forceUpdate();
+        submitPreviewForm(formRef);
+    }
+
     const buildFiltersBlockStyle = (filters) => {
         let styles = '';
         if (filters.shared.enable) {

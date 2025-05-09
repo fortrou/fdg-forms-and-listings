@@ -1,4 +1,7 @@
+// system
 import settingsIcon from '../../images/settings-ico.svg';
+import trashIcon from '../../images/trash.svg';
+
 // arrows
 import arrowUp from '../../images/arrow-up.svg';
 import arrowDown from '../../images/arrow-down.svg';
@@ -24,6 +27,8 @@ import frameMobile from '../../images/frame-mobile.svg';
 
 
 export const DefaultIcons = {
+// system
+    trashIcon: trashIcon,
     settings: settingsIcon,
 // arrows
     arrowUp: arrowUp,

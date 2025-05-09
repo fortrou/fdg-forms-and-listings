@@ -21,6 +21,7 @@ import {CSS} from '@dnd-kit/utilities';
 import { DefaultIcons } from './iconsComponent';
 import {PaddingComponent, MarginComponent, HeightComponent, WidthComponent, FontSizeComponent, FontWeightComponent} from "./optionsComponent";
 import ImageComponent from "./imageComponent";
+import {useFieldsContext} from "../useFieldContext";
 
 
 const DraggableItem = ({ id, field, index, section }) => {
@@ -37,6 +38,10 @@ const DraggableItem = ({ id, field, index, section }) => {
         transition,
         cursor: 'grab'
     };
+
+    const {
+        removeField
+    } = useFieldsContext()
 
     const [expanded, setExpanded] = useState(false);
 
@@ -81,11 +86,19 @@ const DraggableItem = ({ id, field, index, section }) => {
                 <strong>{field.name}</strong>
             </div>
 
-            <div
-                className="draggable-item-settings"
-                onClick={() => setExpanded(prev => !prev)}
-            >
-                <img src={DefaultIcons.settings} alt="" />
+            <div className="draggable-item-settings-wrapper">
+                <div className="draggable-item-settings trash-icon"
+                    onClick={() => removeField(field.key, section)}
+                >
+                    <img src={DefaultIcons.trashIcon} alt=""/>
+                </div>
+
+                <div
+                    className="draggable-item-settings"
+                    onClick={() => setExpanded(prev => !prev)}
+                >
+                    <img src={DefaultIcons.settings} alt="" />
+                </div>
             </div>
 
             {expanded && (

@@ -127,6 +127,12 @@ export function useFieldsLogic() {
         updateOption(section, [...assignedFields.current[section], field])
     };
 
+    const removeField = (key, section) => {
+        assignedFields.current[section] = assignedFields.current[section].filter(f => f.key !== key);
+        forceUpdate();
+        submitPreviewForm(formRef);
+    }
+
     const buildFiltersBlockStyle = (filters) => {
         let styles = '';
         if (filters.shared.enable) {
@@ -265,6 +271,7 @@ export function useFieldsLogic() {
         frame,
         setFrame,
         formRef,
+        removeField,
         frameMeasures,
         submitPreviewForm,
         updatePostType,

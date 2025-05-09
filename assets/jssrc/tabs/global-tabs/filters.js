@@ -13,6 +13,7 @@ import {
     useSensors
 } from '@dnd-kit/core';
 import {SortableContext, arrayMove, verticalListSortingStrategy} from '@dnd-kit/sortable';
+import MeasuringSwitcher from "../../components/MeasuringSwitcher";
 
 export default function FiltersTab({usedTab}) {
     const {
@@ -162,9 +163,26 @@ export default function FiltersTab({usedTab}) {
                     </div>
                 </div>
                 <div className="column-filters-styles" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
-
+                    <div className="settings-line">
+                        <div className="input-container">
+                            <label>Filters background</label>
+                            <input type="color" value={filters.current.shared.filtersBackground}
+                                   onChange={(e) => setFilter(`shared.filtersBackground`, e.target.value)}/>
+                        </div>
+                    </div>
+                    <div className="settings-line">
+                        <div className="input-container">
+                            <label>Filters width</label>
+                            <div className="input-holder">
+                                <input type="text" value={filters.current.responsive[frame].filterWidth.value}
+                                onChange={(e) => setFilter(`responsive.${frame}.filterWidth.value`, e.target.value)} />
+                                <MeasuringSwitcher param={`responsive[${frame}].filterWidth.measure`} current={filters.current.responsive[frame].filterWidth.measure} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="column-filters-styles" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}></div>
+                <div className="column-filters-styles"
+                     style={{'display': filters.current.shared.enable ? 'block' : 'none'}}></div>
             </div>
         </div>
     )

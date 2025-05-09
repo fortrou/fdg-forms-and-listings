@@ -4,12 +4,13 @@ import {useFieldsContext} from "../useFieldContext";
 
 
 
-export default function MeasuringSwitcher ({param, current, available = ['px', 'em', '%', 'custom']}) {
+export default function MeasuringSwitcher ({param, current, instance = 'styles', available = ['px', 'em', '%', 'custom']}) {
     const [currentState, setCurrentState] = useState(current);
     const [active, setActive] = useState(false)
 
     const {
         updateOption,
+        setFilter,
     } = useFieldsContext();
 
     let newState = '';
@@ -17,7 +18,11 @@ export default function MeasuringSwitcher ({param, current, available = ['px', '
         //console.log(measure)
         setCurrentState(measure);
         setActive(false);
-        updateOption(param, measure)
+        if (instance == 'styles') {
+            updateOption(param, measure)
+        } else if (instance == 'filters') {
+            setFilter(param, measure)
+        }
     }
     return (
         <div className="switcher-holder">

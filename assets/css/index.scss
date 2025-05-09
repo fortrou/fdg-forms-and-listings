@@ -666,6 +666,21 @@
   }
 }
 
+.column-filters-styles {
+  .settings-line {
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
+    .input-container {
+      width: 100%;
+      .input-holder {
+        position: relative;
+        width: 100%;
+      }
+    }
+  }
+}
+
 .preview-iframe {
   display: block;
   max-width: 100%;

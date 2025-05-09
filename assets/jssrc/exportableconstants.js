@@ -34,6 +34,7 @@ export const filters ={
     shared: {
         enable: true,
         filterType: 'async',
+        filtersBackground: '#ffffff',
         enabledFilters: [
             /*{
                 type: 'search',

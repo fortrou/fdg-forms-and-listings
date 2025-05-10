@@ -53,6 +53,10 @@ export const filters ={
             filterWidth: {
                 measure: 'px',
                 value: 300
+            },
+            borderRadius: {
+                measure: 'px',
+                value: 12
             }
         },
         tablet: {
@@ -63,6 +67,10 @@ export const filters ={
             filterWidth: {
                 measure: 'px',
                 value: 300
+            },
+            borderRadius: {
+                measure: 'px',
+                value: 12
             }
         },
         mobile: {
@@ -73,6 +81,10 @@ export const filters ={
             filterWidth: {
                 measure: 'px',
                 value: 300
+            },
+            borderRadius: {
+                measure: 'px',
+                value: 12
             }
         }
     }

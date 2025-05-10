@@ -5,6 +5,9 @@ import {filters} from "../../exportableconstants";
 import {useState} from "@wordpress/element";
 import SimpleFIlterComponent from "../../components/simpleFIlterComponent";
 import PreviewIframeComponent from "../../components/previewIframeComponent";
+
+import {TextFieldComponent} from "../../components/settingsComponents/configurationComponents.js"
+
 import {
     DndContext,
     closestCenter,
@@ -164,21 +167,40 @@ export default function FiltersTab({usedTab}) {
                 </div>
                 <div className="column-filters-styles" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
                     <div className="settings-line">
-                        <div className="input-container">
-                            <label>Filters background</label>
-                            <input type="color" value={filters.current.shared.filtersBackground}
-                                   onChange={(e) => setFilter(`shared.filtersBackground`, e.target.value)}/>
+                        <div className="grid grid-3">
+                            <div className="input-container">
+                                <label>Filters background</label>
+                                <div className="input-holder">
+                                    <input type="color" value={filters.current.shared.filtersBackground}
+                                           onChange={(e) => setFilter(`shared.filtersBackground`, e.target.value)}/>
+                                </div>
+                            </div>
+
+                            <TextFieldComponent value={filters.current.responsive[frame].filterWidth.value}
+                                                path={`responsive.${frame}.filterWidth.value`}
+                                                label={"Filters width"}
+                                                method={setFilter}
+                                                measure={{
+                                                    path: `responsive[${frame}].filterWidth.measure`,
+                                                    instance: 'filters',
+                                                    value: filters.current.responsive[frame].filterWidth.measure
+                                                }}
+                            />
+
+                            <TextFieldComponent value={filters.current.responsive[frame].borderRadius.value}
+                                                path={`responsive.${frame}.borderRadius.value`}
+                                                label={"Border radius"}
+                                                method={setFilter}
+                                                measure={{
+                                                    path: `responsive[${frame}].filterWidth.measure`,
+                                                    instance: 'filters',
+                                                    value: filters.current.responsive[frame].borderRadius.measure
+                                                }}
+                            />
                         </div>
                     </div>
                     <div className="settings-line">
-                        <div className="input-container">
-                            <label>Filters width</label>
-                            <div className="input-holder">
-                                <input type="text" value={filters.current.responsive[frame].filterWidth.value}
-                                onChange={(e) => setFilter(`responsive.${frame}.filterWidth.value`, e.target.value)} />
-                                <MeasuringSwitcher param={`responsive[${frame}].filterWidth.measure`} current={filters.current.responsive[frame].filterWidth.measure} />
-                            </div>
-                        </div>
+
                     </div>
                 </div>
                 <div className="column-filters-styles"

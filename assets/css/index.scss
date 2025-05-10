@@ -668,14 +668,43 @@
 
 .column-filters-styles {
   .settings-line {
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      column-gap: 8px;
+      row-gap: 8px;
+
+      &.grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      &.grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      &.grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
     &:not(:last-child) {
       margin-bottom: 12px;
     }
     .input-container {
       width: 100%;
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 10px;
+        font-weight: 600;
+      }
       .input-holder {
         position: relative;
         width: 100%;
+        input {
+          width: 100%;
+        }
       }
     }
   }

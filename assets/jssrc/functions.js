@@ -153,6 +153,7 @@ export function useFieldsLogic() {
                     ${directions[filters.responsive.desktop.sidebarPosition] ? 'flex-direction: ' + directions[filters.responsive.desktop.sidebarPosition] + ';' : ''}
                     position: relative;
                     align-items: flex-start;
+                    justify-content: space-between;
                 }
                 
                 .listing-container .filters-side {
@@ -161,6 +162,8 @@ export function useFieldsLogic() {
                     width: ${filters.responsive.desktop.filterWidth.value + filters.responsive.desktop.filterWidth.measure };
                     height: auto;padding: 20px 18px;
                     box-sizing: border-box;
+                    background: ${filters.shared.filtersBackground};
+                    border-radius: ${filters.responsive.desktop.borderRadius.value}${filters.responsive.desktop.borderRadius.measure};
                     ${filters.responsive.desktop.sidebarPosition == 'moveLeft' ? 'left: -100vw;' : ''}
                     ${filters.responsive.desktop.sidebarPosition == 'moveRight' ? 'right: -100vw;' : ''}
                     
@@ -170,7 +173,7 @@ export function useFieldsLogic() {
                     ${(filters.responsive.desktop.sidebarPosition != 'moveLeft' 
                         && filters.responsive.desktop.sidebarPosition != 'moveRight'
                         && filters.responsive.desktop.sidebarPosition != 'top') && `
-                        width: calc(100% - ${(filters.responsive.desktop.filterWidth.value + 30) + filters.responsive.desktop.filterWidth.measure });
+                        width: calc(100% - ${(parseInt(filters.responsive.desktop.filterWidth.value) + 30)}${filters.responsive.desktop.filterWidth.measure});
                         `
                     }
                 }

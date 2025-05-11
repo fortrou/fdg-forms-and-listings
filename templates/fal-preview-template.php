@@ -28,14 +28,16 @@ $posts = new WP_Query([
         <div class="listing-container">
             <?php if ($configs['enableFilters']): ?>
             <div class="filters-side">
-                <?php if (!empty($filters)): ?>
-                    <?php foreach ($filters as $filter): ?>
-                    <?php
-                        $filtersHolder = new Fal_Filter_Templatter($filters);
-                        $filtersHolder->displayFilters();
-                    ?>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                <div class="filters-container">
+                    <?php if (!empty($filters)): ?>
+                        <?php foreach ($filters as $filter): ?>
+                        <?php
+                            $filtersHolder = new Fal_Filter_Templatter($filters);
+                            $filtersHolder->displayFilters();
+                        ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
             </div>
             <?php endif; ?>
             <div class="preview-container grid">

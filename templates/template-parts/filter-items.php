@@ -6,7 +6,7 @@
             <div class="filter-title">
                 <?php echo $filter['label']; ?>
             </div>
-            <div class="filter-field">
+            <div class="filter-field filter-<?php echo $filter['type']; ?>">
                 <?php if ($filter['type'] == 'search'): ?>
                     <input type="text" name="filter[<?php echo $key; ?>]">
                 <?php elseif ($filter['type'] == 'dropdown'): ?>

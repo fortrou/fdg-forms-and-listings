@@ -170,7 +170,21 @@ export function useFieldsLogic() {
                     border-radius: ${filters.responsive.desktop.borderRadius.value}${filters.responsive.desktop.borderRadius.measure};
                     ${filters.responsive.desktop.sidebarPosition == 'moveLeft' ? 'left: -100vw;' : ''}
                     ${filters.responsive.desktop.sidebarPosition == 'moveRight' ? 'right: -100vw;' : ''}
-                    
+                }
+                
+                .listing-container .filters-side .filters-container {
+                    ${filters.responsive.desktop.sidebarPosition == 'top' && (
+                        `
+                        display: ${filters.responsive.desktop.layout};
+                        justify-content: center;
+                        align-items: center;
+                        flex-wrap: wrap;
+                        `
+                    )}
+                }
+                
+                .listing-container .filters-side .filter-field.filter-search input {
+                    width: 100%;
                 }
                 
                 .listing-container .preview-container {

@@ -11,6 +11,7 @@ export default function MeasuringSwitcher ({param, current, instance = 'styles',
     const {
         updateOption,
         setFilter,
+        filters
     } = useFieldsContext();
 
     let newState = '';
@@ -18,6 +19,7 @@ export default function MeasuringSwitcher ({param, current, instance = 'styles',
         //console.log(measure)
         setCurrentState(measure);
         setActive(false);
+
         if (instance == 'styles') {
             updateOption(param, measure)
         } else if (instance == 'filters') {

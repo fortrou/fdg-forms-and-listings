@@ -50,6 +50,8 @@ export const filters ={
             sidebarPosition: 'left',
             columnGap: 30,
             rowGap: 30,
+            layout: 'flex',
+            gridColumns: 5,
             filterWidth: {
                 measure: 'px',
                 value: 300
@@ -57,6 +59,15 @@ export const filters ={
             borderRadius: {
                 measure: 'px',
                 value: 12
+            },
+            blockPadding: {
+                measure: 'px',
+                value: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                }
             }
         },
         tablet: {
@@ -64,6 +75,8 @@ export const filters ={
             sidebarPosition: 'moveLeft',
             columnGap: 30,
             rowGap: 30,
+            layout: 'flex',
+            gridColumns: 3,
             filterWidth: {
                 measure: 'px',
                 value: 300
@@ -71,6 +84,15 @@ export const filters ={
             borderRadius: {
                 measure: 'px',
                 value: 12
+            },
+            blockPadding: {
+                measure: 'px',
+                value: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                }
             }
         },
         mobile: {
@@ -78,6 +100,8 @@ export const filters ={
             sidebarPosition: 'moveLeft',
             columnGap: 30,
             rowGap: 30,
+            layout: 'flex',
+            gridColumns: 1,
             filterWidth: {
                 measure: 'px',
                 value: 300
@@ -85,6 +109,15 @@ export const filters ={
             borderRadius: {
                 measure: 'px',
                 value: 12
+            },
+            blockPadding: {
+                measure: 'px',
+                value: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                }
             }
         }
     }

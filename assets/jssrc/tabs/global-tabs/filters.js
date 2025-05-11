@@ -6,7 +6,14 @@ import {useState} from "@wordpress/element";
 import SimpleFIlterComponent from "../../components/simpleFIlterComponent";
 import PreviewIframeComponent from "../../components/previewIframeComponent";
 
-import {TextFieldComponent} from "../../components/settingsComponents/configurationComponents.js"
+import {
+    TextFieldComponent,
+    ColorSelectorComponent,
+    MultiValueComponent,
+    ChooseImageComponent,
+    SelectSettingComponent,
+    NumericSettingComponent
+} from "../../components/settingsComponents/configurationComponents.js"
 
 import {
     DndContext,
@@ -168,20 +175,18 @@ export default function FiltersTab({usedTab}) {
                 <div className="column-filters-styles" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
                     <div className="settings-line">
                         <div className="grid grid-3">
-                            <div className="input-container">
-                                <label>Filters background</label>
-                                <div className="input-holder">
-                                    <input type="color" value={filters.current.shared.filtersBackground}
-                                           onChange={(e) => setFilter(`shared.filtersBackground`, e.target.value)}/>
-                                </div>
-                            </div>
+                            <ColorSelectorComponent label={"Filters background"}
+                                                    path={`shared.filtersBackground`}
+                                                    value={filters.current.shared.filtersBackground}
+                                                    method={setFilter}
+                            />
 
                             <TextFieldComponent value={filters.current.responsive[frame].filterWidth.value}
                                                 path={`responsive.${frame}.filterWidth.value`}
                                                 label={"Filters width"}
                                                 method={setFilter}
                                                 measure={{
-                                                    path: `responsive[${frame}].filterWidth.measure`,
+                                                    path: `responsive.${frame}.filterWidth.measure`,
                                                     instance: 'filters',
                                                     value: filters.current.responsive[frame].filterWidth.measure
                                                 }}
@@ -192,7 +197,7 @@ export default function FiltersTab({usedTab}) {
                                                 label={"Border radius"}
                                                 method={setFilter}
                                                 measure={{
-                                                    path: `responsive[${frame}].filterWidth.measure`,
+                                                    path: `responsive.${frame}.filterWidth.measure`,
                                                     instance: 'filters',
                                                     value: filters.current.responsive[frame].borderRadius.measure
                                                 }}
@@ -200,7 +205,68 @@ export default function FiltersTab({usedTab}) {
                         </div>
                     </div>
                     <div className="settings-line">
-
+                        <div className="grid grid-2">
+                            <MultiValueComponent label={"Filters block padding"}
+                                                 method={setFilter}
+                                                 values={[
+                                                     {
+                                                         path: `responsive.${frame}.blockPadding.value.top`,
+                                                         label: 'top',
+                                                         value: filters.current.responsive[frame].blockPadding.value.top,
+                                                     },
+                                                     {
+                                                         path: `responsive.${frame}.blockPadding.value.right`,
+                                                         label: 'right',
+                                                         value: filters.current.responsive[frame].blockPadding.value.right,
+                                                     },
+                                                     {
+                                                         path: `responsive.${frame}.blockPadding.value.bottom`,
+                                                         label: 'bottom',
+                                                         value: filters.current.responsive[frame].blockPadding.value.bottom,
+                                                     },
+                                                     {
+                                                         path: `responsive.${frame}.blockPadding.value.left`,
+                                                         label: 'left',
+                                                         value: filters.current.responsive[frame].blockPadding.value.left,
+                                                     }
+                                                 ]}
+                                                 measure={{
+                                                     path: `responsive.${frame}.blockPadding.measure`,
+                                                     instance: 'filters',
+                                                     value: filters.current.responsive[frame].blockPadding.measure
+                                                 }}
+                            />
+                            {
+                                filters.current.responsive[frame].sidebarPosition == 'top' && (
+                                    <SelectSettingComponent label={'Filters layout'}
+                                                            value={filters.current.responsive[frame].layout}
+                                                            listSet={[
+                                                                {
+                                                                    key: 'flex',
+                                                                    label: 'Flex'
+                                                                },
+                                                                {
+                                                                    key: 'grid',
+                                                                    label: 'Grid'
+                                                                }
+                                                            ]}
+                                                            method={setFilter}
+                                                            path={`responsive.${frame}.layout`}
+                                    />
+                                )
+                            }
+                        </div>
+                    </div>
+                    <div className="settings-line">
+                        <div className="grid grid-3">
+                            {(filters.current.responsive[frame].layout == 'grid' && filters.current.responsive[frame].sidebarPosition == 'top') && (
+                                <NumericSettingComponent value={filters.current.responsive[frame].gridColumns}
+                                                         path={`responsive.${frame}.gridColumns`}
+                                                         label={"Grid columns"}
+                                                         method={setFilter}
+                                />
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className="column-filters-styles"

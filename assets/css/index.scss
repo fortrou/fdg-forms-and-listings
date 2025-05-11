@@ -716,3 +716,85 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.color-picker-component {
+  .input-holder {
+    position: relative;
+
+    .color-preview {
+      height: 27px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      border-radius: 6px;
+      border: 1px solid #0d99d5;
+      cursor: pointer;
+
+      .internal-block {
+        width: calc(100% - 10px);
+        height: 19px;
+        border-radius: 3px;
+      }
+    }
+
+    .react-colorful {
+      background: #bcafaf;
+      padding: 10px;
+      position: absolute;
+      border-radius: 6px;
+      top: calc(100% + 4px);
+      z-index: 9;
+    }
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 8px;
+  row-gap: 8px;
+
+  &.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.multivalue-component {
+  .input-holder {
+    .item {
+      .input-label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 10px;
+        font-weight: 600;
+      }
+      .input-value {
+        width: 100%;
+        input {
+          width: 100%;
+        }
+      }
+    }
+
+    &.measure-enabled {
+      box-sizing: border-box;
+      padding-right: 40px;
+    }
+  }
+}
+.select-setting-component {
+  .input-holder {
+    select {
+      width: 100%;
+    }
+  }
+}

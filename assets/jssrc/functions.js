@@ -160,7 +160,11 @@ export function useFieldsLogic() {
                     background: #fff;
                     ${!directions[filters.responsive.desktop.sidebarPosition] ? 'position: absolute;top: 0;' : ''}
                     width: ${filters.responsive.desktop.filterWidth.value + filters.responsive.desktop.filterWidth.measure };
-                    height: auto;padding: 20px 18px;
+                    height: auto;
+                    padding-top: ${filters.responsive.desktop.blockPadding.value.top + filters.responsive.desktop.filterWidth.measure };
+                    padding-right: ${filters.responsive.desktop.blockPadding.value.right + filters.responsive.desktop.filterWidth.measure };
+                    padding-bottom: ${filters.responsive.desktop.blockPadding.value.bottom + filters.responsive.desktop.filterWidth.measure };
+                    padding-left: ${filters.responsive.desktop.blockPadding.value.left + filters.responsive.desktop.filterWidth.measure };
                     box-sizing: border-box;
                     background: ${filters.shared.filtersBackground};
                     border-radius: ${filters.responsive.desktop.borderRadius.value}${filters.responsive.desktop.borderRadius.measure};

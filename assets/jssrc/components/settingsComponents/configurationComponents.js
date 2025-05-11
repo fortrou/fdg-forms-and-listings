@@ -1,5 +1,6 @@
-import {useRef, useState} from "@wordpress/element";
+import { useRef, useState, useEffect } from "@wordpress/element";
 import MeasuringSwitcher from "../MeasuringSwitcher";
+import { RgbaColorPicker } from "react-colorful";
 
 export function TextFieldComponent({value, path, method, label, measure = false}) {
     const [localValue, setLocalValue] = useState(value);
@@ -29,6 +30,181 @@ export function TextFieldComponent({value, path, method, label, measure = false}
                     <MeasuringSwitcher param={measure.path} instance={measure.instance}
                                        current={measure.value} />
                 )}
+            </div>
+        </div>
+    )
+}
+
+
+export function ColorSelectorComponent({ value = "#ffffff", path, method, label }) {
+    const [colorPickerEnabled, setColorPickerEnabled] = useState(false);
+    const timeoutRef = useRef(null);
+
+    const hexToRgba = (hex) => {
+        hex = hex.replace("#", "");
+        const r = parseInt(hex.slice(0, 2), 16);
+        const g = parseInt(hex.slice(2, 4), 16);
+        const b = parseInt(hex.slice(4, 6), 16);
+        const a = hex.length === 8 ? parseInt(hex.slice(6, 8), 16) / 255 : 1;
+        return { r, g, b, a };
+    };
+
+    const rgbaToHex = ({ r, g, b, a }) => {
+        const toHex = (v) => v.toString(16).padStart(2, "0");
+        const alpha = Math.round(a * 255);
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}${toHex(alpha)}`;
+    };
+
+    const [color, setColor] = useState(hexToRgba(value));
+
+    const handleChange = (newColor) => {
+        setColor(newColor);
+
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
+            method(path, rgbaToHex(newColor));
+        }, 700);
+    };
+
+    return (
+        <div className="input-container color-picker-component">
+            <label>{label}</label>
+            <div className="input-holder">
+                <div className="color-preview" onClick={() => setColorPickerEnabled(!colorPickerEnabled)}>
+                    <div
+                        className="internal-block"
+                        style={{
+                            backgroundColor: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`,
+                        }}
+                    />
+                </div>
+                {colorPickerEnabled && (
+                    <RgbaColorPicker color={color} onChange={handleChange} />
+                )}
+            </div>
+        </div>
+    );
+}
+
+
+export function MultiValueComponent({ values = [], method, label, measure = false }) {
+    const [currentValues, setCurrentValues] = useState(values);
+    const timeoutRefs = useRef({});
+
+    const handleChange = (index, newValue) => {
+        const updated = [...currentValues];
+        updated[index] = { ...updated[index], value: newValue };
+        setCurrentValues(updated);
+
+        const path = updated[index].path;
+
+        // Очистка debounce для этого поля
+        if (timeoutRefs.current[path]) {
+            clearTimeout(timeoutRefs.current[path]);
+        }
+
+        // Новый таймер на метод
+        timeoutRefs.current[path] = setTimeout(() => {
+            method(path, newValue);
+        }, 700);
+    };
+
+    useEffect(() => {
+        return () => {
+            Object.values(timeoutRefs.current).forEach(clearTimeout);
+        };
+    }, []);
+
+    return (
+        <div className="input-container multivalue-component">
+            <label>{label}</label>
+            <div className={`input-holder ${measure ? ' measure-enabled' : ''}`}>
+                <div className={`settings-list grid grid-${values.length}`}>
+                {currentValues.map((field, index) => (
+                    <div className="item" key={index}>
+                        <div className="input-label">{field.label}</div>
+                        <div className="input-value">
+                            <input
+                                type="text"
+                                value={field.value}
+                                onChange={(e) => handleChange(index, e.target.value)}
+                            />
+                        </div>
+                    </div>
+                ))}
+                </div>
+                {measure && (
+                    <MeasuringSwitcher param={measure.path} instance={measure.instance}
+                                       current={measure.value} available={['px', '%']} />
+                )}
+            </div>
+        </div>
+    );
+}
+
+export function ChooseImageComponent({values = [], label, method}) {
+    return (
+        <div className="input-container choose-image-component">
+        </div>
+    )
+}
+
+export function SelectSettingComponent({value, listSet = [], label, method, path}) {
+    return (
+        <div className={`input-container select-setting-component`}>
+            <label>{label}</label>
+            <div className="input-holder">
+                <select value={value}
+                    onChange={e => method(path, e.target.value)}
+                >
+                    {listSet.map(field => (
+                        <option value={`${field.key}`}>{field.label}</option>
+                    ))}
+                </select>
+            </div>
+        </div>
+    )
+}
+
+export function NumericSettingComponent({value, label, method, path, limit = 10, positive = true}) {
+    const [localValue, setLocalValue] = useState(value);
+    const timeoutRef = useRef(null);
+
+    const moderateValue = (value) => {
+        if (limit != -1 && parseInt(value) > limit) {
+            value = limit;
+        } else if (limit != -1 && positive && parseInt(value) <= 0) {
+            value = 0;
+        } else {
+            value = parseInt(value)
+        }
+        if (isNaN(value)) {
+            value = '';
+        }
+        setLocalValue(value)
+    }
+
+    const handleKeyUp = (e) => {
+        const newValue = e.target.value;
+        moderateValue(newValue);
+
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
+            method(path, localValue);
+        }, 700);
+    };
+    return (
+        <div className={`input-container numeric-setting-component`}>
+            <label>{label}</label>
+            <div className="input-holder">
+                <input type="text" value={localValue}
+                       onChange={(e) => moderateValue(e.target.value)}
+                       onKeyUp={handleKeyUp}/>
+
             </div>
         </div>
     )

@@ -12,7 +12,8 @@ import {
     MultiValueComponent,
     ChooseImageComponent,
     SelectSettingComponent,
-    NumericSettingComponent
+    NumericSettingComponent,
+    SpacingComponent,
 } from "../../components/settingsComponents/configurationComponents.js"
 
 import {
@@ -24,6 +25,7 @@ import {
 } from '@dnd-kit/core';
 import {SortableContext, arrayMove, verticalListSortingStrategy} from '@dnd-kit/sortable';
 import MeasuringSwitcher from "../../components/MeasuringSwitcher";
+import {DefaultIcons} from "../../components/iconsComponent";
 
 export default function FiltersTab({usedTab}) {
     const {
@@ -206,36 +208,47 @@ export default function FiltersTab({usedTab}) {
                     </div>
                     <div className="settings-line">
                         <div className="grid grid-2">
-                            <MultiValueComponent label={"Filters block padding"}
-                                                 method={setFilter}
-                                                 values={[
-                                                     {
-                                                         path: `responsive.${frame}.blockPadding.value.top`,
-                                                         label: 'top',
-                                                         value: filters.current.responsive[frame].blockPadding.value.top,
-                                                     },
-                                                     {
-                                                         path: `responsive.${frame}.blockPadding.value.right`,
-                                                         label: 'right',
-                                                         value: filters.current.responsive[frame].blockPadding.value.right,
-                                                     },
-                                                     {
-                                                         path: `responsive.${frame}.blockPadding.value.bottom`,
-                                                         label: 'bottom',
-                                                         value: filters.current.responsive[frame].blockPadding.value.bottom,
-                                                     },
-                                                     {
-                                                         path: `responsive.${frame}.blockPadding.value.left`,
-                                                         label: 'left',
-                                                         value: filters.current.responsive[frame].blockPadding.value.left,
-                                                     }
-                                                 ]}
-                                                 measure={{
-                                                     path: `responsive.${frame}.blockPadding.measure`,
-                                                     instance: 'filters',
-                                                     value: filters.current.responsive[frame].blockPadding.measure
-                                                 }}
+                            <SpacingComponent
+                                method={setFilter}
+                                label={"Filters spacing"}
+                                outer={{
+                                    top: {
+                                        value: filters.current.responsive[frame].blockMargin.value.top,
+                                        path: `responsive.${frame}.blockMargin.value.top`
+                                    },
+                                    right: {
+                                        value: filters.current.responsive[frame].blockMargin.value.right,
+                                        path: `responsive.${frame}.blockMargin.value.right`
+                                    },
+                                    bottom: {
+                                        value: filters.current.responsive[frame].blockMargin.value.bottom,
+                                        path: `responsive.${frame}.blockMargin.value.bottom`
+                                    },
+                                    left: {
+                                        value: filters.current.responsive[frame].blockMargin.value.left,
+                                        path: `responsive.${frame}.blockMargin.value.left`
+                                    }
+                                }}
+                                internal={{
+                                    top: {
+                                        value: filters.current.responsive[frame].blockPadding.value.top,
+                                        path: `responsive.${frame}.blockPadding.value.top`
+                                    },
+                                    right: {
+                                        value: filters.current.responsive[frame].blockPadding.value.right,
+                                        path: `responsive.${frame}.blockPadding.value.right`
+                                    },
+                                    bottom: {
+                                        value: filters.current.responsive[frame].blockPadding.value.bottom,
+                                        path: `responsive.${frame}.blockPadding.value.bottom`
+                                    },
+                                    left: {
+                                        value: filters.current.responsive[frame].blockPadding.value.left,
+                                        path: `responsive.${frame}.blockPadding.value.left`
+                                    }
+                                }}
                             />
+
                             {
                                 filters.current.responsive[frame].sidebarPosition == 'top' && (
                                     <SelectSettingComponent label={'Filters layout'}
@@ -266,6 +279,20 @@ export default function FiltersTab({usedTab}) {
                                                          method={setFilter}
                                 />
                             )}
+                            <ChooseImageComponent path={`responsive.${frame}.flexDirection`} defaultPath={`responsive.desktop.flexDirection`}
+                                                  values={[
+                                                      {
+                                                          key: 'row',
+                                                          icon: DefaultIcons.arrowRight,
+                                                      },
+                                                      {
+                                                          key: 'column',
+                                                          icon: DefaultIcons.arrowDown
+                                                      }
+                                                  ]}
+                                                  method={setFilter}
+                                                  object={filters.current}
+                            />
                         </div>
                     </div>
                 </div>

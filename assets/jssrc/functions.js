@@ -161,10 +161,14 @@ export function useFieldsLogic() {
                     ${!directions[filters.responsive.desktop.sidebarPosition] ? 'position: absolute;top: 0;' : ''}
                     width: ${filters.responsive.desktop.filterWidth.value + filters.responsive.desktop.filterWidth.measure };
                     height: auto;
-                    padding-top: ${filters.responsive.desktop.blockPadding.value.top + filters.responsive.desktop.filterWidth.measure };
-                    padding-right: ${filters.responsive.desktop.blockPadding.value.right + filters.responsive.desktop.filterWidth.measure };
-                    padding-bottom: ${filters.responsive.desktop.blockPadding.value.bottom + filters.responsive.desktop.filterWidth.measure };
-                    padding-left: ${filters.responsive.desktop.blockPadding.value.left + filters.responsive.desktop.filterWidth.measure };
+                    padding-top: ${filters.responsive.desktop.blockPadding.value.top + filters.responsive.desktop.blockPadding.measure };
+                    padding-right: ${filters.responsive.desktop.blockPadding.value.right + filters.responsive.desktop.blockPadding.measure };
+                    padding-bottom: ${filters.responsive.desktop.blockPadding.value.bottom + filters.responsive.desktop.blockPadding.measure };
+                    padding-left: ${filters.responsive.desktop.blockPadding.value.left + filters.responsive.desktop.blockPadding.measure };
+                    margin-top: ${filters.responsive.desktop.blockMargin.value.top + filters.responsive.desktop.blockMargin.measure };
+                    margin-right: ${filters.responsive.desktop.blockMargin.value.right + filters.responsive.desktop.blockMargin.measure };
+                    margin-bottom: ${filters.responsive.desktop.blockMargin.value.bottom + filters.responsive.desktop.blockMargin.measure };
+                    margin-left: ${filters.responsive.desktop.blockMargin.value.left + filters.responsive.desktop.blockMargin.measure };
                     box-sizing: border-box;
                     background: ${filters.shared.filtersBackground};
                     border-radius: ${filters.responsive.desktop.borderRadius.value}${filters.responsive.desktop.borderRadius.measure};

@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect } from "@wordpress/element";
 import MeasuringSwitcher from "../MeasuringSwitcher";
 import { RgbaColorPicker } from "react-colorful";
+import {DefaultIcons} from "../iconsComponent";
+import {useFieldsContext} from "../../useFieldContext";
 
 export function TextFieldComponent({value, path, method, label, measure = false}) {
     const [localValue, setLocalValue] = useState(value);
@@ -88,8 +90,72 @@ export function ColorSelectorComponent({ value = "#ffffff", path, method, label 
     );
 }
 
+export function SpacingComponent({ outer, internal = {}, label, method }) {
+    const [values, setValues] = useState({ outer, internal });
+    const timeoutRefs = useRef({});
 
-export function MultiValueComponent({ values = [], method, label, measure = false }) {
+    const handleChange = (section, side, newValue) => {
+        const updated = { ...values };
+        updated[section][side] = {
+            ...updated[section][side],
+            value: newValue
+        };
+        setValues(updated);
+
+        const path = updated[section][side].path;
+
+        if (timeoutRefs.current[path]) {
+            clearTimeout(timeoutRefs.current[path]);
+        }
+
+        timeoutRefs.current[path] = setTimeout(() => {
+            method(path, newValue);
+        }, 700);
+    };
+
+    useEffect(() => {
+        return () => {
+            Object.values(timeoutRefs.current).forEach(clearTimeout);
+        };
+    }, []);
+
+    return (
+        <div className="input-container spacing-component">
+            <label>{label}</label>
+            <div className="spacing-container">
+                <div className="spacing-margin-wrapper">
+                    {['top', 'right', 'bottom', 'left'].map((side) => (
+                        <div key={`margin-${side}`} className={`margin-${side}-line line-holder ${side}-line`}>
+                            <input
+                                type="text"
+                                value={values.outer[side].value}
+                                onChange={(e) => handleChange('outer', side, e.target.value)}
+                                className="no-focus"
+                            />
+                        </div>
+                    ))}
+
+                    <div className="spacing-padding-wrapper">
+                        {['top', 'right', 'bottom', 'left'].map((side) => (
+                            <div key={`padding-${side}`} className={`margin-${side}-line line-holder ${side}-line`}>
+                                <input
+                                    type="text"
+                                    value={values.internal[side].value}
+                                    onChange={(e) => handleChange('internal', side, e.target.value)}
+                                    className="no-focus"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+
+export function MultiValueComponent({values = [], method, label, measure = false}) {
     const [currentValues, setCurrentValues] = useState(values);
     const timeoutRefs = useRef({});
 
@@ -144,9 +210,22 @@ export function MultiValueComponent({ values = [], method, label, measure = fals
     );
 }
 
-export function ChooseImageComponent({values = [], label, method}) {
+export function ChooseImageComponent({values = [], path, defaultPath, label, method, object}) {
+    const {
+        getter
+    } = useFieldsContext();
     return (
-        <div className="input-container choose-image-component">
+        <div className="input-container">
+            <label>Sections direction</label>
+            <div className={`icons-list grid grid-${values.length} no-padding`}>
+                {values.map(field => (
+                    <div
+                        className={`icon-item ${getter(object, path, defaultPath) === field.key ? 'active' : ''}`}
+                        onClick={(e) => method(path, field.key)}>
+                        <img src={field.icon}/>
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }
@@ -157,7 +236,7 @@ export function SelectSettingComponent({value, listSet = [], label, method, path
             <label>{label}</label>
             <div className="input-holder">
                 <select value={value}
-                    onChange={e => method(path, e.target.value)}
+                        onChange={e => method(path, e.target.value)}
                 >
                     {listSet.map(field => (
                         <option value={`${field.key}`}>{field.label}</option>

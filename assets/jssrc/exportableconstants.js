@@ -52,6 +52,7 @@ export const filters ={
             rowGap: 30,
             layout: 'flex',
             gridColumns: 5,
+            flexDirection: 'row',
             filterWidth: {
                 measure: 'px',
                 value: 300
@@ -61,6 +62,15 @@ export const filters ={
                 value: 12
             },
             blockPadding: {
+                measure: 'px',
+                value: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                }
+            },
+            blockMargin: {
                 measure: 'px',
                 value: {
                     top: 0,
@@ -77,6 +87,7 @@ export const filters ={
             rowGap: 30,
             layout: 'flex',
             gridColumns: 3,
+            flexDirection: 'row',
             filterWidth: {
                 measure: 'px',
                 value: 300
@@ -93,6 +104,15 @@ export const filters ={
                     bottom: 0,
                     left: 0
                 }
+            },
+            blockMargin: {
+                measure: 'px',
+                value: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                }
             }
         },
         mobile: {
@@ -102,6 +122,7 @@ export const filters ={
             rowGap: 30,
             layout: 'flex',
             gridColumns: 1,
+            flexDirection: 'column',
             filterWidth: {
                 measure: 'px',
                 value: 300
@@ -111,6 +132,15 @@ export const filters ={
                 value: 12
             },
             blockPadding: {
+                measure: 'px',
+                value: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                }
+            },
+            blockMargin: {
                 measure: 'px',
                 value: {
                     top: 0,

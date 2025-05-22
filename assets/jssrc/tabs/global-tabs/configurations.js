@@ -31,7 +31,7 @@ export default function ConfigurationsTab({usedTab, showOptions}) {
 
     return (
         <div className="configurations-container" style={{display: (usedTab == 'configurations') ? 'grid' : 'none'}}>
-            <div className="configurations-side" style={{display: (showOptions) ? 'grid' : 'none'}}>
+            <div className="configurations-side">
 
                 <ListingData/>
 

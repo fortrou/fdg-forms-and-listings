@@ -56,10 +56,15 @@ export default function PreviewContent() {
 
                 </div>
             </div>
-            <ConfigurationsTab usedTab={usedTab} showOptions={showOptions}/>
-            <FiltersTab usedTab={usedTab}/>
-
-            <PreviewIframeComponent/>
+            <div className="outer-preview-wrap">
+                <div className="configurations-side">
+                    <ConfigurationsTab usedTab={usedTab} showOptions={showOptions}/>
+                    <FiltersTab usedTab={usedTab}/>
+                </div>
+                <div className="preview-side">
+                    <PreviewIframeComponent/>
+                </div>
+            </div>
         </div>
     );
 }

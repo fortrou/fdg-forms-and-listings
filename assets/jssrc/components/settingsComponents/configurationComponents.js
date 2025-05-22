@@ -3,6 +3,7 @@ import MeasuringSwitcher from "../MeasuringSwitcher";
 import { RgbaColorPicker } from "react-colorful";
 import {DefaultIcons} from "../iconsComponent";
 import {useFieldsContext} from "../../useFieldContext";
+import TabSwitcher from "../../switcher";
 
 export function TextFieldComponent({value, path, method, label, measure = false}) {
     const [localValue, setLocalValue] = useState(value);
@@ -210,13 +211,13 @@ export function MultiValueComponent({values = [], method, label, measure = false
     );
 }
 
-export function ChooseImageComponent({values = [], path, defaultPath, label, method, object}) {
+export function ChooseImageComponent({values = [], path, defaultPath, label = 'Sections direction', method, object}) {
     const {
         getter
     } = useFieldsContext();
     return (
         <div className="input-container">
-            <label>Sections direction</label>
+            <label>{label}</label>
             <div className={`icons-list grid grid-${values.length} no-padding`}>
                 {values.map(field => (
                     <div
@@ -284,6 +285,24 @@ export function NumericSettingComponent({value, label, method, path, limit = 10,
                        onChange={(e) => moderateValue(e.target.value)}
                        onKeyUp={handleKeyUp}/>
 
+            </div>
+        </div>
+    )
+}
+
+export function SwitcherComponent(label, state, method, path) {
+    return (
+        <div className="setting-item">
+            <div className="setting-title">
+                {label}
+            </div>
+            <div className="setting-content">
+                <TabSwitcher
+                    value="enable_button"
+                    label=""
+                    active={state === true}
+                    onClick={(val) => method(path, !state)}
+                />
             </div>
         </div>
     )

@@ -27,22 +27,22 @@ export default function ConfigurationsTab({usedTab, showOptions}) {
     } = useFieldsContext();
 
     const filterList = Object.values(filters.current.shared.enabledFilters);
-
+    const [expandedTab, setExpandedTab] = useState('tab1');
 
     return (
         <div className="configurations-container" style={{display: (usedTab == 'configurations') ? 'grid' : 'none'}}>
             <div className="configurations-side">
 
-                <ListingData/>
+                <ListingData tab={expandedTab} setTab={setExpandedTab} />
 
                 <div className="grid-post-data">
-                    <GridStyles/>
+                    <GridStyles tab={expandedTab} setTab={setExpandedTab} />
 
                     <div className="tab-item">
-                        <div className="tab-heading">
+                        <div className="tab-heading" onClick={(e) => setExpandedTab(expandedTab == 'tab3' ? '' : 'tab3')}>
                             Posts styles
                         </div>
-                        <div className="tab-content">
+                        <div className="tab-content" style={{display: (expandedTab == 'tab3') ? 'block' : 'none'}} >
                             <div className="setting-holder">
                                 <div className="setting-title">
                                     Padding

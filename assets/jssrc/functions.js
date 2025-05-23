@@ -155,8 +155,16 @@ export function useFieldsLogic() {
                     align-items: flex-start;
                     justify-content: space-between;
                 }
-                
+                ${filters.responsive.desktop.sidebarPosition == 'top' ? (`
                 .listing-container .filters-side {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: ${filters.responsive.desktop.filtersBlockPosition};
+                }
+                `) : (``)}
+                
+                .listing-container .filters-side .filters-container {
                     background: #fff;
                     ${!directions[filters.responsive.desktop.sidebarPosition] ? 'position: absolute;top: 0;' : ''}
                     width: ${filters.responsive.desktop.filterWidth.value + filters.responsive.desktop.filterWidth.measure };
@@ -176,16 +184,48 @@ export function useFieldsLogic() {
                     ${filters.responsive.desktop.sidebarPosition == 'moveRight' ? 'right: -100vw;' : ''}
                 }
                 
-                .listing-container .filters-side .filters-container {
-                    ${filters.responsive.desktop.sidebarPosition == 'top' && (
+                .listing-container .filters-side .filters-container .filters-wrapper {
+                    ${filters.responsive.desktop.sidebarPosition == 'top' ? (
                         `
                         display: ${filters.responsive.desktop.layout};
                         justify-content: center;
                         align-items: center;
                         flex-wrap: wrap;
                         `
-                    )}
+                    ) : (``)}
                 }
+                .listing-container .filters-side .filters-container .filters-wrapper .filter-block {
+                    ${filters.responsive.desktop.sidebarPosition == 'top' ? (`
+                        margin-left: ${filters.responsive.desktop.filtersSpacing / 2}px;
+                        margin-right: ${filters.responsive.desktop.filtersSpacing / 2}px;
+                    `) : (`
+                        margin-top: ${filters.responsive.desktop.filtersSpacing / 2}px;
+                        margin-bottom: ${filters.responsive.desktop.filtersSpacing / 2}px;
+                    `)}
+                }
+                
+                .listing-container .filters-side .filters-container .filters-wrapper .filter-block .filter-title {
+                    margin-bottom: ${filters.responsive.desktop.titleSpacing}px;
+                }
+                
+                ${filters.shared.enableButton && (`
+                    .listing-container .filters-side .filters-container .filters-wrapper .filter-button {
+                        width: ${filters.responsive.desktop.button.position == 'below' ? '100%' : 'fit-content'};
+                    }
+                    .listing-container .filters-side .filters-container .filters-wrapper .filter-button button {
+                        outline: none;
+                        font-size: ${filters.responsive.desktop.button.fontSize}px;
+                        background: ${filters.responsive.desktop.button.background};
+                        color: ${filters.responsive.desktop.button.textColor};
+                        font-weight: ${filters.responsive.desktop.button.fontWeight};
+                        border: none;
+                        border-radius: ${filters.responsive.desktop.button.borderRadius.value}${filters.responsive.desktop.button.borderRadius.measure};
+                        padding: ${filters.responsive.desktop.button.spacing.padding.value.top}px ${filters.responsive.desktop.button.spacing.padding.value.right}px
+                        ${filters.responsive.desktop.button.spacing.padding.value.bottom}px ${filters.responsive.desktop.button.spacing.padding.value.left}px;
+                        margin: ${filters.responsive.desktop.button.spacing.margin.value.top}px ${filters.responsive.desktop.button.spacing.margin.value.right}px
+                        ${filters.responsive.desktop.button.spacing.margin.value.bottom}px ${filters.responsive.desktop.button.spacing.margin.value.left}px;
+                    }
+                `)}
                 
                 .listing-container .filters-side .filter-field.filter-search input {
                     width: 100%;
@@ -197,6 +237,191 @@ export function useFieldsLogic() {
                         && filters.responsive.desktop.sidebarPosition != 'top') && `
                         width: calc(100% - ${(parseInt(filters.responsive.desktop.filterWidth.value) + 30)}${filters.responsive.desktop.filterWidth.measure});
                         `
+                    }
+                }
+                
+                @media only screen and (max-width:1100px) {
+                    .listing-container {
+                        display: flex;
+                        width: 100%;
+                        ${directions[filters.responsive.tablet.sidebarPosition] ? 'flex-direction: ' + directions[filters.responsive.tablet.sidebarPosition] + ';' : ''}
+                        position: relative;
+                        align-items: flex-start;
+                        justify-content: space-between;
+                    }
+                    ${filters.responsive.tablet.sidebarPosition == 'top' ? (`
+                    .listing-container .filters-side {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: ${filters.responsive.tablet.filtersBlockPosition};
+                    }
+                    `) : (``)}
+                    
+                    .listing-container .filters-side .filters-container {
+                        background: #fff;
+                        ${!directions[filters.responsive.tablet.sidebarPosition] ? 'position: absolute;top: 0;' : ''}
+                        width: ${filters.responsive.tablet.filterWidth.value + filters.responsive.tablet.filterWidth.measure };
+                        height: auto;
+                        padding-top: ${filters.responsive.tablet.blockPadding.value.top + filters.responsive.tablet.blockPadding.measure };
+                        padding-right: ${filters.responsive.tablet.blockPadding.value.right + filters.responsive.tablet.blockPadding.measure };
+                        padding-bottom: ${filters.responsive.tablet.blockPadding.value.bottom + filters.responsive.tablet.blockPadding.measure };
+                        padding-left: ${filters.responsive.tablet.blockPadding.value.left + filters.responsive.tablet.blockPadding.measure };
+                        margin-top: ${filters.responsive.tablet.blockMargin.value.top + filters.responsive.tablet.blockMargin.measure };
+                        margin-right: ${filters.responsive.tablet.blockMargin.value.right + filters.responsive.tablet.blockMargin.measure };
+                        margin-bottom: ${filters.responsive.tablet.blockMargin.value.bottom + filters.responsive.tablet.blockMargin.measure };
+                        margin-left: ${filters.responsive.tablet.blockMargin.value.left + filters.responsive.tablet.blockMargin.measure };
+                        box-sizing: border-box;
+                        background: ${filters.shared.filtersBackground};
+                        border-radius: ${filters.responsive.tablet.borderRadius.value}${filters.responsive.tablet.borderRadius.measure};
+                        ${filters.responsive.tablet.sidebarPosition == 'moveLeft' ? 'left: -100vw;' : ''}
+                        ${filters.responsive.tablet.sidebarPosition == 'moveRight' ? 'right: -100vw;' : ''}
+                    }
+                    
+                    .listing-container .filters-side .filters-container .filters-wrapper {
+                        ${filters.responsive.tablet.sidebarPosition == 'top' ? (`
+                            display: ${filters.responsive.tablet.layout};
+                            justify-content: center;
+                            align-items: center;
+                            flex-wrap: wrap;
+                        `) : (``)}
+                    }
+                    .listing-container .filters-side .filters-container .filters-wrapper .filter-block {
+                        ${filters.responsive.tablet.sidebarPosition == 'top' ? (`
+                            margin-left: ${filters.responsive.tablet.filtersSpacing / 2}px;
+                            margin-right: ${filters.responsive.tablet.filtersSpacing / 2}px;
+                        `) : (`
+                            margin-top: ${filters.responsive.tablet.filtersSpacing / 2}px;
+                            margin-bottom: ${filters.responsive.tablet.filtersSpacing / 2}px;
+                        `)}
+                    }
+                    
+                    .listing-container .filters-side .filters-container .filters-wrapper .filter-block .filter-title {
+                        margin-bottom: ${filters.responsive.tablet.titleSpacing}px;
+                    }
+                    
+                    ${filters.shared.enableButton && (`
+                        .listing-container .filters-side .filters-container .filters-wrapper .filter-button {
+                            width: ${filters.responsive.tablet.button.position == 'below' ? '100%' : 'fit-content'};
+                        }
+                        .listing-container .filters-side .filters-container .filters-wrapper .filter-button button {
+                            outline: none;
+                            font-size: ${filters.responsive.tablet.button.fontSize}px;
+                            background: ${filters.responsive.tablet.button.background};
+                            color: ${filters.responsive.tablet.button.textColor};
+                            font-weight: ${filters.responsive.tablet.button.fontWeight};
+                            border: none;
+                            border-radius: ${filters.responsive.tablet.button.borderRadius.value}${filters.responsive.tablet.button.borderRadius.measure};
+                            padding: ${filters.responsive.tablet.button.spacing.padding.value.top}px ${filters.responsive.tablet.button.spacing.padding.value.right}px
+                            ${filters.responsive.tablet.button.spacing.padding.value.bottom}px ${filters.responsive.tablet.button.spacing.padding.value.left}px;
+                            margin: ${filters.responsive.tablet.button.spacing.margin.value.top}px ${filters.responsive.tablet.button.spacing.margin.value.right}px
+                            ${filters.responsive.tablet.button.spacing.margin.value.bottom}px ${filters.responsive.tablet.button.spacing.margin.value.left}px;
+                        }
+                    `)}
+                    
+                    .listing-container .filters-side .filter-field.filter-search input {
+                        width: 100%;
+                    }
+                    
+                    .listing-container .preview-container {
+                        ${(filters.responsive.tablet.sidebarPosition != 'moveLeft'
+                        && filters.responsive.tablet.sidebarPosition != 'moveRight'
+                        && filters.responsive.tablet.sidebarPosition != 'top') ? `
+                            width: calc(100% - ${(parseInt(filters.responsive.tablet.filterWidth.value) + 30)}${filters.responsive.tablet.filterWidth.measure});
+                        ` : `
+                            width: 100%;
+                        `}
+                    }
+                }
+                @media only screen and (max-width:767px) {
+                    .listing-container {
+                        width: 100%;
+                        display: flex;
+                        ${directions[filters.responsive.mobile.sidebarPosition] ? 'flex-direction: ' + directions[filters.responsive.mobile.sidebarPosition] + ';' : ''}
+                        position: relative;
+                        align-items: flex-start;
+                        justify-content: space-between;
+                    }
+                    ${filters.responsive.mobile.sidebarPosition == 'top' ? (`
+                    .listing-container .filters-side {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: ${filters.responsive.mobile.filtersBlockPosition};
+                    }
+                    `) : (``)}
+                    
+                    .listing-container .filters-side .filters-container {
+                        background: #fff;
+                        ${!directions[filters.responsive.mobile.sidebarPosition] ? 'position: absolute;top: 0;' : ''}
+                        width: ${filters.responsive.mobile.filterWidth.value + filters.responsive.mobile.filterWidth.measure };
+                        height: auto;
+                        padding-top: ${filters.responsive.mobile.blockPadding.value.top + filters.responsive.mobile.blockPadding.measure };
+                        padding-right: ${filters.responsive.mobile.blockPadding.value.right + filters.responsive.mobile.blockPadding.measure };
+                        padding-bottom: ${filters.responsive.mobile.blockPadding.value.bottom + filters.responsive.mobile.blockPadding.measure };
+                        padding-left: ${filters.responsive.mobile.blockPadding.value.left + filters.responsive.mobile.blockPadding.measure };
+                        margin-top: ${filters.responsive.mobile.blockMargin.value.top + filters.responsive.mobile.blockMargin.measure };
+                        margin-right: ${filters.responsive.mobile.blockMargin.value.right + filters.responsive.mobile.blockMargin.measure };
+                        margin-bottom: ${filters.responsive.mobile.blockMargin.value.bottom + filters.responsive.mobile.blockMargin.measure };
+                        margin-left: ${filters.responsive.mobile.blockMargin.value.left + filters.responsive.mobile.blockMargin.measure };
+                        box-sizing: border-box;
+                        background: ${filters.shared.filtersBackground};
+                        border-radius: ${filters.responsive.mobile.borderRadius.value}${filters.responsive.mobile.borderRadius.measure};
+                        ${filters.responsive.mobile.sidebarPosition == 'moveLeft' ? 'left: -100vw;' : ''}
+                        ${filters.responsive.mobile.sidebarPosition == 'moveRight' ? 'right: -100vw;' : ''}
+                    }
+                    
+                    .listing-container .filters-side .filters-container .filters-wrapper {
+                        ${filters.responsive.mobile.sidebarPosition == 'top' ? (`
+                            display: ${filters.responsive.mobile.layout};
+                            justify-content: center;
+                            align-items: center;
+                            flex-wrap: wrap;
+                        `) : (``)}
+                    }
+                    .listing-container .filters-side .filters-container .filters-wrapper .filter-block {
+                        ${filters.responsive.mobile.sidebarPosition == 'top' ? (`
+                            margin-left: ${filters.responsive.mobile.filtersSpacing / 2}px;
+                            margin-right: ${filters.responsive.mobile.filtersSpacing / 2}px;
+                        `) : (`
+                            margin-top: ${filters.responsive.mobile.filtersSpacing / 2}px;
+                            margin-bottom: ${filters.responsive.mobile.filtersSpacing / 2}px;
+                        `)}
+                    }
+                    
+                    .listing-container .filters-side .filters-container .filters-wrapper .filter-block .filter-title {
+                        margin-bottom: ${filters.responsive.mobile.titleSpacing}px;
+                    }
+                    
+                    ${filters.shared.enableButton && (`
+                        .listing-container .filters-side .filters-container .filters-wrapper .filter-button {
+                            width: ${filters.responsive.mobile.button.position == 'below' ? '100%' : 'fit-content'};
+                        }
+                        .listing-container .filters-side .filters-container .filters-wrapper .filter-button button {
+                            outline: none;
+                            font-size: ${filters.responsive.mobile.button.fontSize}px;
+                            background: ${filters.responsive.mobile.button.background};
+                            color: ${filters.responsive.mobile.button.textColor};
+                            font-weight: ${filters.responsive.mobile.button.fontWeight};
+                            border: none;
+                            border-radius: ${filters.responsive.mobile.button.borderRadius.value}${filters.responsive.mobile.button.borderRadius.measure};
+                            padding: ${filters.responsive.mobile.button.spacing.padding.value.top}px ${filters.responsive.mobile.button.spacing.padding.value.right}px
+                            ${filters.responsive.mobile.button.spacing.padding.value.bottom}px ${filters.responsive.mobile.button.spacing.padding.value.left}px;
+                            margin: ${filters.responsive.mobile.button.spacing.margin.value.top}px ${filters.responsive.mobile.button.spacing.margin.value.right}px
+                            ${filters.responsive.mobile.button.spacing.margin.value.bottom}px ${filters.responsive.mobile.button.spacing.margin.value.left}px;
+                        }
+                    `)}
+                    
+                    .listing-container .filters-side .filter-field.filter-search input {
+                        width: 100%;
+                    }
+                    
+                    .listing-container .preview-container {
+                        ${(filters.responsive.mobile.sidebarPosition != 'moveLeft'
+                            && filters.responsive.mobile.sidebarPosition != 'moveRight'
+                            && filters.responsive.mobile.sidebarPosition != 'top') && `
+                            width: calc(100% - ${(parseInt(filters.responsive.mobile.filterWidth.value) + 30)}${filters.responsive.mobile.filterWidth.measure});
+                        `}
                     }
                 }
             `;

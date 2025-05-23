@@ -1,6 +1,6 @@
 import {useFieldsContext} from "../useFieldContext";
 
-export default function GridStyles() {
+export default function GridStyles({tab, setTab}) {
     const {
         getter,
         availableFields,
@@ -19,10 +19,10 @@ export default function GridStyles() {
     } = useFieldsContext();
     return (
         <div className="tab-item half-height-tab" style={{display: styles.current.shared.type === 'masonry' ? 'none' : 'block'}}>
-            <div className="tab-heading">
+            <div className="tab-heading" onClick={(e) => setTab(tab == 'tab2' ? '' : 'tab2')}>
                 Grid styles
             </div>
-            <div className="tab-content">
+            <div className="tab-content" style={{display: (tab == 'tab2') ? 'block' : 'none'}} >
                 <div className="setting-holder">
                     <div className="setting-content">
                         <div className="grid grid-3">

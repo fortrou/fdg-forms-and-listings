@@ -36,6 +36,7 @@ export const filters ={
         filterType: 'async',
         filtersBackground: '#ffffff',
         enableButton: true,
+        buttonText: 'Submit filters',
         enabledFilters: [
             /*{
                 type: 'search',
@@ -52,6 +53,7 @@ export const filters ={
             columnGap: 30,
             rowGap: 30,
             layout: 'flex',
+            filtersBlockPosition: 'center',
             gridColumns: 5,
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -59,8 +61,15 @@ export const filters ={
             filtersSpacing: 20,
             titleSpacing: 8,
             button: {
-                enable: true,
                 position: 'below',
+                fontSize: 16,
+                background: '#ffffff',
+                textColor: '#000000',
+                fontWeight: '400',
+                borderRadius: {
+                    value: 0,
+                    measure: 'px',
+                },
                 spacing: {
                     padding: {
                         value: {
@@ -113,12 +122,43 @@ export const filters ={
             columnGap: 30,
             rowGap: 30,
             layout: 'flex',
+            filtersBlockPosition: 'flex-start',
             gridColumns: 3,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
             filtersSpacing: 20,
             titleSpacing: 8,
+            button: {
+                enable: true,
+                position: 'below',
+                fontSize: 16,
+                background: '#ffffff',
+                textColor: '#000000',
+                fontWeight: '400',
+                borderRadius: {
+                    value: 0,
+                    measure: 'px',
+                },
+                spacing: {
+                    padding: {
+                        value: {
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0
+                        }
+                    },
+                    margin: {
+                        value: {
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0
+                        }
+                    },
+                }
+            },
             filterWidth: {
                 measure: 'px',
                 value: 300
@@ -152,12 +192,43 @@ export const filters ={
             columnGap: 30,
             rowGap: 30,
             layout: 'flex',
+            filtersBlockPosition: 'flex-end',
             gridColumns: 1,
             flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'center',
             filtersSpacing: 20,
             titleSpacing: 8,
+            button: {
+                enable: true,
+                position: 'below',
+                fontSize: 16,
+                background: '#ffffff',
+                textColor: '#000000',
+                fontWeight: '400',
+                borderRadius: {
+                    value: 0,
+                    measure: 'px',
+                },
+                spacing: {
+                    padding: {
+                        value: {
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0
+                        }
+                    },
+                    margin: {
+                        value: {
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0
+                        }
+                    },
+                }
+            },
             filterWidth: {
                 measure: 'px',
                 value: 300

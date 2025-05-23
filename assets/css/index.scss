@@ -106,10 +106,6 @@
 
     .grid-post-data {
       grid-template-columns: 1fr;
-      .half-height-tab {
-        height: 160px;
-        row-gap: 10px;
-      }
     }
   }
 }
@@ -119,7 +115,7 @@
   border: .3px solid #222;
   border-radius: 12px;
   overflow: hidden;
-
+  height: auto;
 
 
   .tab-heading {
@@ -128,13 +124,19 @@
     font-weight: 500;
     padding: 6px 8px;
     background: #49a39d22;
+    cursor: pointer;
   }
 
   .tab-content {
     border-top: .3px solid #2222;
     padding: 12px 8px;
-    max-height: 330px;
     box-sizing: border-box;
+
+    .settings-line {
+      .input-holder {
+        position: relative;
+      }
+    }
 
     &.grid-tab {
       display: grid;
@@ -174,6 +176,9 @@
 
         .input-container {
           position: relative;
+          label {
+            margin-bottom: 10px;
+          }
 
           .icons-list {
             .icon-item {
@@ -907,6 +912,19 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 99;
+  margin-top: 16px;
+
+  .configurations-content {
+    margin-top: 5px;
+    width: 100%;
+    background: #e1ded1;
+    padding: 5px;
+    box-shadow: 0 0 6px rgba(0,0,0,.3);
+    box-sizing: border-box;
+  }
+
   .configurations-title-line {
     width: 100%;
     cursor: pointer;
@@ -920,6 +938,8 @@
 
     .config-title {
       width: calc(100% - 35px);
+      box-sizing: border-box;
+      padding-left: 3px;
     }
     .config-settings {
       width: 30px;
@@ -934,5 +954,12 @@
         height: 18px;
       }
     }
+  }
+}
+
+.input-container {
+  label {
+    display: block;
+    margin-bottom: 10px;
   }
 }

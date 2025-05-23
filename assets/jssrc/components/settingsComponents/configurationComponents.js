@@ -290,7 +290,7 @@ export function NumericSettingComponent({value, label, method, path, limit = 10,
     )
 }
 
-export function SwitcherComponent(label, state, method, path) {
+export function SwitcherComponent({label, state, method, path}) {
     return (
         <div className="setting-item">
             <div className="setting-title">
@@ -303,6 +303,29 @@ export function SwitcherComponent(label, state, method, path) {
                     active={state === true}
                     onClick={(val) => method(path, !state)}
                 />
+            </div>
+        </div>
+    )
+}
+
+
+export const FontWeightConfigComponent = ({method, value, path, label = 'Font weight'}) => {
+    return (
+        <div className="setting-holder">
+            <div className="setting-title">
+                {label}
+            </div>
+            <div className="setting-content">
+                <div className="input-container">
+                    <select value={value} onChange={(e) => method(path, e.target.value)}>
+                        <option value="400">400</option>
+                        <option value="500">500</option>
+                        <option value="600">600</option>
+                        <option value="700">700</option>
+                        <option value="800">800</option>
+                        <option value="900">900</option>
+                    </select>
+                </div>
             </div>
         </div>
     )

@@ -7,78 +7,105 @@ import {
     SelectSettingComponent,
     NumericSettingComponent,
     SpacingComponent,
-    SwitcherComponent,
+    SwitcherComponent, FontWeightConfigComponent,
 } from "./configurationComponents.js"
 
 import {DefaultIcons} from "../iconsComponent";
-export function ConfigurationSet({set, method, object, label = ''}) {
+export function ConfigurationSet({set, method, object, label = '', basicSelector}) {
     const DetectComponent = {
         enable: ({ data }) => (
-            <SwitcherComponent method={method} state={data} label={'Enable'} path={''} />
-        ),/*
+            <SwitcherComponent method={method} state={data} label={'Enable'} path={basicSelector + '.enable'} />
+        ),
         spacing: ({ field, data }) => (
             <SpacingComponent
                 method={method}
-                label={"Filters spacing"}
+                label={"Spacing"}
                 outer={{
                     top: {
-                        value: filters.current.responsive[frame].blockMargin.value.top,
-                        path: `responsive.${frame}.blockMargin.value.top`
+                        value: data.margin.value.top,
+                        path: basicSelector + `.spacing.margin.value.top`
                     },
                     right: {
-                        value: filters.current.responsive[frame].blockMargin.value.right,
-                        path: `responsive.${frame}.blockMargin.value.right`
+                        value: data.margin.value.right,
+                        path: basicSelector + `.spacing.margin.value.right`
                     },
                     bottom: {
-                        value: filters.current.responsive[frame].blockMargin.value.bottom,
-                        path: `responsive.${frame}.blockMargin.value.bottom`
+                        value: data.margin.value.bottom,
+                        path: basicSelector + `.spacing.margin.value.bottom`
                     },
                     left: {
-                        value: filters.current.responsive[frame].blockMargin.value.left,
-                        path: `responsive.${frame}.blockMargin.value.left`
+                        value: data.margin.value.left,
+                        path: basicSelector + `.spacing.margin.value.left`
                     }
                 }}
                 internal={{
                     top: {
-                        value: filters.current.responsive[frame].blockPadding.value.top,
-                        path: `responsive.${frame}.blockPadding.value.top`
+                        value: data.padding.value.top,
+                        path: basicSelector + `.spacing.padding.value.top`
                     },
                     right: {
-                        value: filters.current.responsive[frame].blockPadding.value.right,
-                        path: `responsive.${frame}.blockPadding.value.right`
+                        value: data.padding.value.right,
+                        path: basicSelector + `.spacing.padding.value.right`
                     },
                     bottom: {
-                        value: filters.current.responsive[frame].blockPadding.value.bottom,
-                        path: `responsive.${frame}.blockPadding.value.bottom`
+                        value: data.padding.value.bottom,
+                        path: basicSelector + `.spacing.padding.value.bottom`
                     },
                     left: {
-                        value: filters.current.responsive[frame].blockPadding.value.left,
-                        path: `responsive.${frame}.blockPadding.value.left`
+                        value: data.padding.value.left,
+                        path: basicSelector + `.spacing.padding.value.left`
                     }
                 }}
             />
         ),
-        position: ({ field, data }) => (
-            <SelectSettingComponent  label={"Font weight"} method={method} value={data} path={field} />
+        position: ({ data }) => (
+            <SelectSettingComponent listSet={[
+                {
+                    key: 'inline',
+                    label: 'In line'
+                },
+                {
+                    key: 'below',
+                    label: 'Below filters'
+                }
+            ]} label={"Position"} method={method} value={data} path={basicSelector + '.position'} />
         ),
-        fontSize: ({ field, data }) => (
-            <TextFieldComponent label={"Font weight"} method={method} />
+        fontSize: ({ data }) => (
+            <TextFieldComponent label={"Font size"} method={method} value={data} path={basicSelector + '.fontSize'} />
         ),
-        fontWeight: ({ field, data }) => (
-            <TextFieldComponent label={"Font weight"} method={method} />
-        ),*/
+        background: ({ data }) => (
+            <ColorSelectorComponent label={"Background color"} method={method} value={data} path={basicSelector + '.background'} />
+        ),
+        textColor: ({ data }) => (
+            <ColorSelectorComponent label={"Text color"} method={method} value={data} path={basicSelector + '.textColor'} />
+        ),
+        fontWeight: ({ data }) => (
+            <FontWeightConfigComponent label={"Font weight"} method={method} value={data} path={basicSelector + '.fontWeight'} />
+        ),
+        borderRadius: ({ data }) => (
+            <TextFieldComponent value={data.value}
+                                path={basicSelector + '.borderRadius.value'}
+                                label={"Border radius"}
+                                method={method}
+                                measure={{
+                                    path: basicSelector + '.borderRadius.measure',
+                                    instance: 'filters',
+                                    value: data.measure
+                                }}
+            />
+        )
     };
 
     const [expanded, setExpanded] = useState(false);
 
     const scrapeOptions = (field) => {
-
+        console.log(field);
         return Object.keys(field).map((key) => {
-            console.log(field)
-            console.log(key)
             const Component = DetectComponent[key];
+            const data = field[key];
+
             return Component ? (
-                <Component data={field[key]} />
+                <Component key={key} data={data} />
             ) : null;
         });
     };
@@ -90,13 +117,15 @@ export function ConfigurationSet({set, method, object, label = ''}) {
                     <img src={DefaultIcons.settings} alt=""/>
                 </div>
             </div>
+            {expanded && (
             <div className="configurations-content">
-                {expanded && (
-                    <div className="field-details">
+
+                    <div className="field-details grid grid-2">
                         {set ? scrapeOptions(set) : null}
                     </div>
-                )}
+
             </div>
+            )}
         </div>
     )
 }

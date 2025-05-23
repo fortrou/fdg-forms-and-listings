@@ -16,6 +16,7 @@ $posts = new WP_Query([
 <head>
     <meta charset="UTF-8">
     <style>
+        <?php echo file_get_contents(FDG_FORMS_LISTINGS_PLUGIN_PATH . '/assets/build/css/style-pack-1.css'); ?>
         .configurations-container {
             height: 100vh;
         }
@@ -29,14 +30,21 @@ $posts = new WP_Query([
             <?php if ($configs['enableFilters']): ?>
             <div class="filters-side">
                 <div class="filters-container">
-                    <?php if (!empty($filters)): ?>
-                        <?php foreach ($filters as $filter): ?>
-                        <?php
-                            $filtersHolder = new Fal_Filter_Templatter($filters);
-                            $filtersHolder->displayFilters();
-                        ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                    <div class="filters-wrapper">
+                        <?php if (!empty($filters)): ?>
+                            <?php foreach ($filters as $filter): ?>
+                            <?php
+                                $filtersHolder = new Fal_Filter_Templatter($filters);
+                                $filtersHolder->displayFilters();
+                            ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                        <?php if ($configs['enableButton']): ?>
+                        <div class="filter-button">
+                            <button class="submit-filters" type="button" href="#"><?php echo $configs['filtersButtonText'] ?></button>
+                        </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
             <?php endif; ?>

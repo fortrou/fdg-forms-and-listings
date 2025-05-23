@@ -69,7 +69,6 @@ export default function ListingConfigurator() {
         if (!sourceSection || !targetSection) return;
 
         if (sourceSection === targetSection) {
-            console.log(222)
             const oldIndex = assignedFields.current[sourceSection].findIndex(f => f.key === activeId);
             const newIndex = assignedFields.current[targetSection].findIndex(f => f.key === overId);
 
@@ -80,7 +79,6 @@ export default function ListingConfigurator() {
             updateOption(sourceSection, reordered)
 
         } else {
-            console.log(333)
             updateOption(sourceSection, assignedFields.current[sourceSection].filter(f => f.key !== activeId))
             updateOption(targetSection, [movedField, ...assignedFields.current[targetSection]])
         }

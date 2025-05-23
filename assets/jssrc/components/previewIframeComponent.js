@@ -34,6 +34,8 @@ export default function PreviewIframeComponent()
         perPage: styles.current.shared.perPage,
         assignedFields: assignedFields.current,
         enableFilters: filters.current.shared.enable,
+        enableButton: filters.current.shared.enableButton,
+        filtersButtonText: filters.current.shared.buttonText
     };
 
 

@@ -6,7 +6,7 @@
   "license": "GPL-2.0-or-later",
   "main": "build/index.js",
   "scripts": {
-    "compilecss": "node-sass -w --include-path scss assets/css/index.scss assets/build/css/index.css --watch --output-style compressed",
+    "compilecss": "sass --watch assets/css:assets/build/css --style=compressed",
     "build": "wp-scripts build --watch assets/jssrc/index.js --output-path=assets/build/js --output-filename=bundle.js",
     "compileall": "wp-scripts build --watch && node-sass -w --include-path scss assets/css/index.scss assets/build/css/index.css --watch --output-style compressed",
     "format": "wp-scripts format --watch",
@@ -35,7 +35,7 @@
     "@wordpress/scripts": "^30.15.0",
     "babel-loader": "^10.0.0",
     "css-loader": "^7.1.2",
-    "sass": "^1.87.0",
+    "sass": "^1.89.0",
     "sass-loader": "^16.0.5",
     "style-loader": "^4.0.0",
     "webpack": "^5.99.6",

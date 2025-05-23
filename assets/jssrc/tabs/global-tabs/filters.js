@@ -89,15 +89,16 @@ export default function FiltersTab({usedTab}) {
         }
     };
 
+    const [expandedTab, setExpandedTab] = useState('tab1');
 
     return (
         <div className="filters-configurations" style={{display: (usedTab == 'filters') ? 'flex' : 'none'}}>
             <div className="filters-settings">
                 <div className="tab-item">
-                    <div className="tab-heading">
+                    <div className="tab-heading" onClick={(e) => setExpandedTab(expandedTab == 'tab1' ? '' : 'tab1')}>
                         Filters global
                     </div>
-                    <div className="tab-content">
+                    <div className="tab-content" style={{display: (expandedTab == 'tab1') ? 'block' : 'none'}} >
                         <div className="setting-item">
                             <div className="setting-title">
                                 Enable filters
@@ -144,10 +145,10 @@ export default function FiltersTab({usedTab}) {
                 </div>
 
                 <div className="tab-item" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
-                    <div className="tab-heading">
+                    <div className="tab-heading" onClick={(e) => setExpandedTab(expandedTab == 'tab2' ? '' : 'tab2')}>
                         Filters set
                     </div>
-                    <div className="tab-content">
+                    <div className="tab-content" style={{display: (expandedTab == 'tab2') ? 'block' : 'none'}} >
                         <div className="setting-item">
                             <div className="setting-title">
                                 Filter field
@@ -187,10 +188,10 @@ export default function FiltersTab({usedTab}) {
                     </div>
                 </div>
                 <div className="tab-item" style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
-                    <div className="tab-heading">
+                    <div className="tab-heading" onClick={(e) => setExpandedTab(expandedTab == 'tab3' ? '' : 'tab3')}>
                         Filters styles
                     </div>
-                    <div className="tab-content">
+                    <div className="tab-content" style={{display: (expandedTab == 'tab3') ? 'block' : 'none'}} >
                         <div className="settings-line">
                             <div className="grid grid-2">
                                 <ColorSelectorComponent label={"Filters background"}
@@ -209,6 +210,27 @@ export default function FiltersTab({usedTab}) {
                                                         value: filters.current.responsive[frame].filterWidth.measure
                                                     }}
                                 />
+                                {filters.current.responsive[frame].sidebarPosition == 'top' && (
+                                    <ChooseImageComponent path={`responsive.${frame}.filtersBlockPosition`} defaultPath={`responsive.desktop.filtersBlockPosition`}
+                                                          values={[
+                                                              {
+                                                                  key: 'flex-start',
+                                                                  icon: DefaultIcons.flexStart
+                                                              },
+                                                              {
+                                                                  key: 'center',
+                                                                  icon: DefaultIcons.justifyCenter,
+                                                              },
+                                                              {
+                                                                  key: 'flex-end',
+                                                                  icon: DefaultIcons.flexEnd
+                                                              },
+                                                          ]}
+                                                          method={setFilter}
+                                                          object={filters.current}
+                                                          label={'Filter section align'}
+                                    />
+                                )}
 
                                 <TextFieldComponent value={filters.current.responsive[frame].borderRadius.value}
                                                     path={`responsive.${frame}.borderRadius.value`}
@@ -350,10 +372,10 @@ export default function FiltersTab({usedTab}) {
                 </div>
                 <div className="tab-item"
                      style={{'display': filters.current.shared.enable ? 'block' : 'none'}}>
-                    <div className="tab-heading">
+                    <div className="tab-heading" onClick={(e) => setExpandedTab(expandedTab == 'tab4' ? '' : 'tab4')}>
                         Single filter styles
                     </div>
-                    <div className="tab-content">
+                    <div className="tab-content" style={{display: (expandedTab == 'tab4') ? 'block' : 'none'}} >
                         <div className="settings-line">
                             <div className="grid grid-2">
 
@@ -361,6 +383,7 @@ export default function FiltersTab({usedTab}) {
                                                          path={`responsive.${frame}.filtersSpacing`}
                                                          label={"Filters spacing"}
                                                          method={setFilter}
+                                                         limit={-1}
                                 />
 
                                 <NumericSettingComponent value={filters.current.responsive[frame].titleSpacing}
@@ -381,22 +404,18 @@ export default function FiltersTab({usedTab}) {
                                         />
                                     </div>
                                 </div>
-                                <ConfigurationSet method={setFilter} set={filters.current.responsive[frame].button} object={filters.current} label={"Button settings"} />
-                                <SelectSettingComponent label={'Button position'}
-                                                        value={filters.current.responsive[frame].buttonPosition}
-                                                        listSet={[
-                                                            {
-                                                                key: 'inline',
-                                                                label: 'In line'
-                                                            },
-                                                            {
-                                                                key: 'below',
-                                                                label: 'Below'
-                                                            }
-                                                        ]}
-                                                        method={setFilter}
-                                                        path={`responsive.${frame}.buttonPosition`}
-                                />
+                                {filters.current.shared.enableButton && (
+                                        <TextFieldComponent value={filters.current.shared.buttonText}
+                                                            path={`shared.buttonText`}
+                                                            label={"Button text"}
+                                                            method={setFilter}
+                                        />
+                                )}
+                            </div>
+                            <div className="grid">
+                                {filters.current.shared.enableButton && (
+                                    <ConfigurationSet method={setFilter} basicSelector={`responsive.${frame}.button`} set={filters.current.responsive[frame].button} object={filters.current} label={"Button settings"} />
+                                )}
                             </div>
                         </div>
                     </div>

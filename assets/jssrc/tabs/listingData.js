@@ -6,7 +6,7 @@ import {useFieldsContext} from "../useFieldContext";
 import TabSwitcher from "../switcher";
 import {DefaultIcons} from "../components/iconsComponent";
 
-export default function ListingData() {
+export default function ListingData({tab, setTab}) {
     const {
         availableFields,
         setAvailableFields,
@@ -24,10 +24,10 @@ export default function ListingData() {
     } = useFieldsContext();
     return (
         <div className="tab-item">
-            <div className="tab-heading">
+            <div className="tab-heading" onClick={(e) => setTab(tab == 'tab1' ? '' : 'tab1')}>
                 Listing style
             </div>
-            <div className="tab-content grid-tab">
+            <div className="tab-content grid-tab" style={{display: (tab == 'tab1') ? 'block' : 'none'}} >
                 <div className="tab-side">
                     <div className="setting-holder">
                         <div className="setting-title">

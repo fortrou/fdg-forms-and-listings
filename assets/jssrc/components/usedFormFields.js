@@ -19,7 +19,15 @@ import {
 import {CSS} from '@dnd-kit/utilities';
 
 import { DefaultIcons } from './iconsComponent';
-import {PaddingComponent, MarginComponent, HeightComponent, WidthComponent, FontSizeComponent, FontWeightComponent} from "./optionsComponent";
+import {
+    PaddingComponent,
+    MarginComponent,
+    HeightComponent,
+    WidthComponent,
+    FontSizeComponent,
+    FontWeightComponent,
+    SimpleTextComponent
+} from "./optionsComponent";
 import ImageComponent from "./imageComponent";
 import {useFieldsContext} from "../useFieldContext";
 
@@ -65,6 +73,11 @@ const DraggableItem = ({ id, field, index, section }) => {
             <FontWeightComponent index={index} field={field} values={data} section={section} />
         ),
     };
+    const DetectProperty = {
+        text: ({field, data}) => (
+            <SimpleTextComponent field={field} index={index} values={data} section={section} />
+        )
+    };
 
     const scrapeOptions = (index, field) => {
         return Object.keys(field.options).map((key) => {
@@ -74,6 +87,16 @@ const DraggableItem = ({ id, field, index, section }) => {
             ) : null;
         });
     };
+
+    const scrapeProperties = (index, field) => {
+        return Object.keys(field.options).map((key) => {
+            const Component = DetectProperty[key];
+            return Component ? (
+                <Component key={key} index={index} field={field.key} data={field.options[key]} />
+            ) : null;
+        });
+    };
+
 
     return (
         <div
@@ -104,6 +127,8 @@ const DraggableItem = ({ id, field, index, section }) => {
             {expanded && (
                 <div className="field-details">
                     {field.options ? scrapeOptions(index, field) : null}
+
+                    {field.properties ? scrapeProperties(index, field) : null}
                 </div>
             )}
         </div>

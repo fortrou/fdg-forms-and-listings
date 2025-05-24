@@ -1,14 +1,17 @@
 export const availableFields = [
     {
-        key: 'thumbnail',
+        key: '124cds23',
+        type: 'thumbnail',
         name: 'thumbnail'
     },
     {
-        key: 'post_title',
+        key: '42v1ci14',
+        type: 'post_title',
         name: 'post title'
     },
     {
-        key: 'post_excerpt',
+        key: '67v81j7s',
+        type: 'post_excerpt',
         name: 'post excerpt'
     }
 ];

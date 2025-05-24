@@ -23,7 +23,7 @@ export default function PreviewContent() {
         postTypes
     } = useFieldsContext();
 
-    const [usedTab, setUsedTab] = useState('filters');
+    const [usedTab, setUsedTab] = useState('configurations');
     const [showOptions, setShowOptions] = useState(false);
 
     return (

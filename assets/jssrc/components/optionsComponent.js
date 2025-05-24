@@ -318,6 +318,45 @@ export const FontSizeComponent = ({ field, values, index, section}) => {
     );
 };
 
+export const SimpleTextComponent = ({field, values, index, section}) => {
+    const [localValue, setLocalValue] = useState(values.value ?? '');
+    const timeoutRef = useRef(null);
+
+    const {
+        updateOption,
+    } = useFieldsContext();
+
+    const handleKeyUp = (e) => {
+        const newValue = e.target.value;
+        setLocalValue(newValue);
+
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
+            updateOption(`${section}[${index}].options.fontSize.value`, newValue);
+        }, 700);
+    };
+    return (
+        <div className="property-holder">
+            <div className="setting-title">
+                Font size
+            </div>
+            <div className="setting-content">
+                <div className="grid grid-1">
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            value={localValue}
+                            onChange={(e) => setLocalValue(e.target.value)}
+                            onKeyUp={handleKeyUp}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 export const FontWeightComponent = ({field, values, index, section}) => {
 
@@ -333,7 +372,8 @@ export const FontWeightComponent = ({field, values, index, section}) => {
             <div className="setting-content">
                 <div className="grid grid-2">
                     <div className="input-container">
-                        <select value={values.value} onChange={(e) => updateOption(`${section}[${index}].options.fontWeight.value`, e.target.value)}>
+                        <select value={values.value}
+                                onChange={(e) => updateOption(`${section}[${index}].options.fontWeight.value`, e.target.value)}>
                             <option value="400">400</option>
                             <option value="500">500</option>
                             <option value="600">600</option>

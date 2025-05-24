@@ -57,19 +57,22 @@ class Fal_Actions
             'thumbnail' => [
                 'properties' => [],
                 'options' => [],
-                'key' => 'thumbnail',
+                'key' => base_convert(microtime(true) * 1000, 10, 36) . substr(str_shuffle(base_convert(mt_rand(), 10, 36)), 0, 5),
+                'preType' => 'thumbnail',
                 'type' => 'image',
             ],
             'post_title' => [
                 'properties' => [],
                 'options' => [],
-                'key' => 'post_title',
+                'key' => base_convert(microtime(true) * 1000, 10, 36) . substr(str_shuffle(base_convert(mt_rand(), 10, 36)), 0, 5),
+                'preType' => 'post_title',
                 'type' => 'text',
             ],
-            'post_exerpt' => [
+            'post_excerpt' => [
                 'properties' => [],
                 'options' => [],
-                'key' => 'post_excerpt',
+                'key' => base_convert(microtime(true) * 1000, 10, 36) . substr(str_shuffle(base_convert(mt_rand(), 10, 36)), 0, 5),
+                'preType' => 'post_excerpt',
                 'type' => 'short_text',
             ],
             'button' => [
@@ -78,7 +81,8 @@ class Fal_Actions
                     'url_format' => '{{permalink}}'
                 ],
                 'options' => [],
-                'key' => 'button',
+                'key' => base_convert(microtime(true) * 1000, 10, 36) . substr(str_shuffle(base_convert(mt_rand(), 10, 36)), 0, 5),
+                'preType' => 'button',
                 'type' => 'button',
             ],
             'author_date' => [
@@ -86,7 +90,8 @@ class Fal_Actions
                     'text' => '{{author}} | {{date=Y-m-d}}',
                 ],
                 'options' => [],
-                'key' => 'author_date',
+                'key' => base_convert(microtime(true) * 1000, 10, 36) . substr(str_shuffle(base_convert(mt_rand(), 10, 36)), 0, 5),
+                'preType' => 'author_date',
                 'type' => 'formatted_text',
             ],
         ];
@@ -114,7 +119,7 @@ class Fal_Actions
                 $value['options']['lineHeight'] = $basicOptionsSet['lineHeight'];
                 $value['options']['textColor'] = $basicOptionsSet['textColor'];
             }
-            if (in_array($key, ['thumbnail', 'post_title', 'post_excerpt', 'button', 'author_date'])) {
+            if (in_array($key, ['thumbnail', 'post_title', 'post_excerpt', 'button'])) {
                 $defaultKeys[$key] = $value;
             }
         }

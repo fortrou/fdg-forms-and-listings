@@ -124,7 +124,12 @@ export function useFieldsLogic() {
         const field = availableFields.find(field => field.key === param);
 
         if (!field) return;
-        updateOption(section, [...assignedFields.current[section], field])
+
+        const uniqueKey = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+
+        const newField = { ...field, key: uniqueKey };
+
+        updateOption(section, [...assignedFields.current[section], newField]);
     };
 
     const removeField = (key, section) => {

@@ -17,6 +17,7 @@ export const availableFields = [
 ];
 
 export const resolutions = {
+    desktop: 1300,
     tablet: 1100,
     mobile: 767
 }

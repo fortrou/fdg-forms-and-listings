@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { useFieldsLogic } from './functions';
 import {useEffect} from "@wordpress/element";
-import {filters} from "./exportableconstants";
+import {filters, resolutions} from "./exportableconstants";
 
 export const FieldsContext = createContext(null);
 
@@ -112,7 +112,7 @@ export function FieldsProvider({ children }) {
                 ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + getter(styles.current, `responsive.mobile.alignItems`, styles.current.responsive['desktop'].alignItems) + ';' : ''}
             }
         }
-    ` + buildPostBlockStyles(assignedFields) + buildFiltersBlockStyle(filters.current);
+    ` + buildPostBlockStyles(assignedFields, resolutions) + buildFiltersBlockStyle(filters.current);
 
 
 

@@ -48,51 +48,60 @@ const DraggableItem = ({ id, field, index, section }) => {
     };
 
     const {
-        removeField
+        removeField,
+        frame
     } = useFieldsContext()
 
     const [expanded, setExpanded] = useState(false);
 
     const DetectComponent = {
-        padding: ({ field, data }) => (
-            <PaddingComponent index={index} field={field} values={data} section={section} />
-        ),
-        margin: ({ field, data }) => (
-            <MarginComponent index={index} field={field} values={data} section={section} />
-        ),
-        height: ({ field, data }) => (
-            <HeightComponent index={index} field={field} values={data} section={section} />
-        ),
-        width: ({ field, data }) => (
-            <WidthComponent index={index} field={field} values={data} section={section} />
-        ),
-        fontSize: ({ field, data }) => (
-            <FontSizeComponent index={index} field={field} values={data} section={section} />
-        ),
-        fontWeight: ({ field, data }) => (
-            <FontWeightComponent index={index} field={field} values={data} section={section} />
-        ),
-    };
-    const DetectProperty = {
-        text: ({field, data}) => (
-            <SimpleTextComponent field={field} index={index} values={data} section={section} />
-        )
+        padding: PaddingComponent,
+        margin: MarginComponent,
+        height: HeightComponent,
+        width: WidthComponent,
+        fontSize: FontSizeComponent,
+        fontWeight: FontWeightComponent,
+        borderRadius: SimpleTextComponent,
     };
 
     const scrapeOptions = (index, field) => {
+        console.log(field)
         return Object.keys(field.options).map((key) => {
             const Component = DetectComponent[key];
+
             return Component ? (
-                <Component key={key} index={index} field={field.key} data={field.options[key]} />
+                <Component
+                    key={key}
+                    index={index}
+                    section={section}
+                    field={field}
+                    values={field.options[key].responsive ? field.options[key].values[frame] : field.options[key].value}
+                    label={field.options[key]?.label}
+                />
             ) : null;
         });
     };
 
+
+
+    const DetectProperty = {
+        text: SimpleTextComponent,
+    };
+
     const scrapeProperties = (index, field) => {
-        return Object.keys(field.options).map((key) => {
-            const Component = DetectProperty[key];
+        return Object.keys(field.properties).map((key) => {
+            const fieldData = field.properties[key];
+            const Component = DetectProperty[fieldData.type];
+
             return Component ? (
-                <Component key={key} index={index} field={field.key} data={field.options[key]} />
+                <Component
+                    key={key}
+                    index={index}
+                    section={section}
+                    field={fieldData}
+                    values={fieldData.content}
+                    label={fieldData.label}
+                />
             ) : null;
         });
     };

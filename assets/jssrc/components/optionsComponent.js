@@ -5,11 +5,12 @@ import {useFieldsContext} from "../useFieldContext";
 
 
 export const PaddingComponent = ({field, values, index, section}) => {
+    console.log(values)
     const [localState, setLocalState] = useState({
-        top: values.value.top,
-        right: values.value.right,
-        bottom: values.value.bottom,
-        left: values.value.left,
+        top: values.top,
+        right: values.right,
+        bottom: values.bottom,
+        left: values.left,
     });
 
     const {
@@ -43,7 +44,7 @@ export const PaddingComponent = ({field, values, index, section}) => {
                 <div className="grid grid-4">
                     <div className="input-container">
                         <label>Top</label>
-                        <input type="text" value={values.value.top}
+                        <input type="text" value={values.top}
                            onChange={(e) => {
                                const value = e.target.value;
                                setLocalState(prev => ({
@@ -56,7 +57,7 @@ export const PaddingComponent = ({field, values, index, section}) => {
                     </div>
                     <div className="input-container">
                         <label>Right</label>
-                        <input type="text" value={values.value.right}
+                        <input type="text" value={values.right}
                                onChange={(e) => {
                                    const value = e.target.value;
                                    setLocalState(prev => ({
@@ -69,7 +70,7 @@ export const PaddingComponent = ({field, values, index, section}) => {
                     </div>
                     <div className="input-container">
                         <label>Bottom</label>
-                        <input type="text" value={values.value.bottom}
+                        <input type="text" value={values.bottom}
                                onChange={(e) => {
                                    const value = e.target.value;
                                    setLocalState(prev => ({
@@ -82,7 +83,7 @@ export const PaddingComponent = ({field, values, index, section}) => {
                     </div>
                     <div className="input-container">
                         <label>Left</label>
-                        <input type="text" value={values.value.left}
+                        <input type="text" value={values.left}
                                onChange={(e) => {
                                    const value = e.target.value;
                                    setLocalState(prev => ({
@@ -104,10 +105,10 @@ export const PaddingComponent = ({field, values, index, section}) => {
 
 export const MarginComponent = ({field, values, index, section}) => {
     const [localState, setLocalState] = useState({
-        top: values.value.top,
-        right: values.value.right,
-        bottom: values.value.bottom,
-        left: values.value.left,
+        top: values.top,
+        right: values.right,
+        bottom: values.bottom,
+        left: values.left,
     });
 
     const {
@@ -318,8 +319,9 @@ export const FontSizeComponent = ({ field, values, index, section}) => {
     );
 };
 
-export const SimpleTextComponent = ({field, values, index, section}) => {
-    const [localValue, setLocalValue] = useState(values.value ?? '');
+export const SimpleTextComponent = ({field, values, index, section, label = 'Font size'}) => {
+    console.log(values)
+    const [localValue, setLocalValue] = useState(values ?? '');
     const timeoutRef = useRef(null);
 
     const {
@@ -340,7 +342,7 @@ export const SimpleTextComponent = ({field, values, index, section}) => {
     return (
         <div className="property-holder">
             <div className="setting-title">
-                Font size
+                {label}
             </div>
             <div className="setting-content">
                 <div className="grid grid-1">

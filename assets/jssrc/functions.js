@@ -435,60 +435,64 @@ export function useFieldsLogic() {
         }
     }
 
-    const buildPostBlockStyles = (assignedFields) => {
+    const buildPostBlockStyles = (assignedFields, resolutions) => {
         const fields = [...assignedFields.current.fsection, ...assignedFields.current.lsection];
-
         let styles = '';
+
+        console.log(resolutions)
+        let responsiveGlobal = {
+            desktop: "",
+            tablet: "",
+            mobile: ""
+        };
 
         fields.forEach(field => {
             if (!field.options) return;
             const selector = `.preview-container .${field.key}-proto`;
+            let responsiveSelector = {
+                desktop: "",
+                tablet: "",
+                mobile: ""
+            };
+            Object.keys(field.options).map((key) => {
+                if (field.options[key].responsive) {
+                    Object.keys(resolutions).map((key) => {
+                        for (const [frame, value] of Object.entries(field.options[key].values)) {
+                            if (key == 'padding' || key == 'margin') {
+                                let { top, right, bottom, left } = field.options[key].values[frame];
+                                responsiveSelector[frame] += `${field.options[key].param}: ${top}${field.options[key].measure} ${right}${field.options[key].measure} ${bottom}${field.options[key].measure} ${left}${field.options[key].measure};`;
+                            } else {
+                                if (field.options[key].measure) {
+                                    responsiveSelector[frame] += `${field.options[key].param}: ${value}${field.options[key].measure};`;
+                                } else {
+                                    responsiveSelector[frame] += `${field.options[key].param}: ${value};`;
+                                }
+                            }
+                        }
 
-            let fieldStyles = '';
-
-            if (field.options.fontSize) {
-                const { measure, value } = field.options.fontSize;
-                fieldStyles += `font-size: ${value}${measure};`;
-            }
-
-            if (field.options.width) {
-                const { measure, value } = field.options.width;
-                fieldStyles += `width: ${value}${ measure == 'custom' ? '' : measure};`;
-            }
-
-            if (field.options.height) {
-                const { measure, value } = field.options.height;
-                fieldStyles += `height: ${value}${ measure == 'custom' ? '' : measure};`;
-            }
-
-            if (field.options.fontWeight) {
-                fieldStyles += `font-weight: ${field.options.fontWeight.value};`;
-            }
-
-            if (field.options.lineHeight) {
-                const { measure, value } = field.options.lineHeight;
-                fieldStyles += `line-height: ${value}${measure};`;
-            }
-
-            if (field.options.margin) {
-                const { top, right, bottom, left } = field.options.margin.value;
-                fieldStyles += `margin: ${top}px ${right}px ${bottom}px ${left}px;`;
-            }
-
-            if (field.options.padding) {
-                const { measure, value } = field.options.padding;
-                fieldStyles += `padding: ${value.top}${measure} ${value.right}${measure} ${value.bottom}${measure} ${value.left}${measure};`;
-            }
-
-            if (fieldStyles) {
-                styles += `
-                ${selector} {
-                    ${fieldStyles}
+                    })
+                } else {
+                    responsiveSelector.desktop += `${field.options[key].param}:${field.options[key].value};`
                 }
-            `;
+            })
+
+            for (const [frame, value] of Object.entries(responsiveSelector)) {
+                if (value) {
+                    responsiveGlobal[frame] += `
+                        ${frame != 'desktop' ? `@media screen and (max-width: ${resolutions[frame]})` : ''}
+                        ${selector} {
+                            ${value}
+                        }
+                        ${frame != desktop ? `}` : ''}
+                    `
+                }
             }
 
         })
+
+        for (const [frame, value] of Object.entries(responsiveGlobal)) {
+            styles += value;
+        }
 
         return styles;
     }

@@ -77,18 +77,32 @@ class Fal_Actions
             ],
             'button' => [
                 'properties' => [
-                    'text' => 'Read more',
-                    'url_format' => '{{permalink}}'
+                    'text' => [
+                        'label' => 'Button text',
+                        'type' => 'text',
+                        'content' => 'Read more'
+                    ],
+                    'url_format' => [
+                        'label' => 'Button URL',
+                        'type' => 'text',
+                        'content' => '{{permalink}}'
+                    ]
                 ],
+                'label' => 'button',
                 'options' => [],
                 'key' => base_convert(microtime(true) * 1000, 10, 36) . substr(str_shuffle(base_convert(mt_rand(), 10, 36)), 0, 5),
                 'preType' => 'button',
                 'type' => 'button',
             ],
-            'author_date' => [
+            'meta' => [
                 'properties' => [
-                    'text' => '{{author}} | {{date=Y-m-d}}',
+                    'text' => [
+                        'label' => 'format',
+                        'type' => 'text',
+                        'content' => '{{author}} | {{date=Y-m-d}}',
+                    ]
                 ],
+                'label' => 'Meta',
                 'options' => [],
                 'key' => base_convert(microtime(true) * 1000, 10, 36) . substr(str_shuffle(base_convert(mt_rand(), 10, 36)), 0, 5),
                 'preType' => 'author_date',
@@ -203,49 +217,167 @@ class Fal_Actions
         return [
             'width' => [
                 'measure' => '%',
-                'value' => '100'
+                'responsive' => true,
+                'param' => 'width',
+                'values' => [
+                    'desktop' => [
+                        'value' => 100
+                    ],
+                    'tablet' => [
+                        'value' => 100
+                    ],
+                    'mobile' => [
+                        'value' => 100
+                    ],
+                ],
+                'label' => 'Width'
             ],
             'height' => [
                 'measure' => 'custom',
-                'value' => 'auto'
+                'responsive' => true,
+                'param' => 'height',
+                'values' => [
+                    'desktop' => [
+                        'value' => 'auto'
+                    ],
+                    'tablet' => [
+                        'value' => 'auto'
+                    ],
+                    'mobile' => [
+                        'value' => 'auto'
+                    ],
+                ],
+                'label' => 'Height'
             ],
             'borderRadius' => [
                 'measure' => 'px',
-                'value' => '0'
+                'responsive' => true,
+                'param' => 'border-radius',
+                'values' => [
+                    'desktop' => [
+                        'value' => 0
+                    ],
+                    'tablet' => [
+                        'value' => 0
+                    ],
+                    'mobile' => [
+                        'value' => 0
+                    ],
+                ],
+                'label' => 'Border radius'
             ],
             'fontSize' => [
                 'measure' => 'px',
-                'value' => 16
+                'responsive' => true,
+                'param' => 'font-size',
+                'values' => [
+                    'desktop' => [
+                        'value' => 16
+                    ],
+                    'tablet' => [
+                        'value' => 16
+                    ],
+                    'mobile' => [
+                        'value' => 16
+                    ],
+                ],
+                'label' => 'Font size'
             ],
             'fontWeight' => [
-                'value' => 400
+                'values' => [
+                    'desktop' => [
+                        'value' => 400
+                    ],
+                    'tablet' => [
+                        'value' => 400
+                    ],
+                    'mobile' => [
+                        'value' => 400
+                    ],
+                ],
+                'param' => 'font-weight',
+                'responsive' => true,
+                'label' => 'Font weight'
             ],
             'lineHeight' => [
                 'measure' => 'em',
-                'value' => 1.5
+                'responsive' => true,
+                'param' => 'line-height',
+                'values' => [
+                    'desktop' => [
+                        'value' => 1.5
+                    ],
+                    'tablet' => [
+                        'value' => 1.5
+                    ],
+                    'mobile' => [
+                        'value' => 1.5
+                    ],
+                ],
+                'label' => 'Line height'
             ],
             'background' => [
-                'value' => '#fff'
+                'value' => '#ffffff',
+                'responsive' => false,
+                'param' => 'background',
+                'label' => 'Background color'
             ],
             'textColor' => [
-                'value' => '#000'
+                'value' => '#000000',
+                'responsive' => false,
+                'param' => 'text-color',
+                'label' => 'Text color'
             ],
             'padding' => [
                 'measure' => 'px',
-                'value' => [
-                    'top' => 0,
-                    'right' => 0,
-                    'bottom' => 0,
-                    'left' => 0,
+                'responsive' => true,
+                'param' => 'padding',
+                'label' => 'Padding',
+                'values' => [
+                    'desktop' => [
+                        'top' => 0,
+                        'right' => 0,
+                        'bottom' => 0,
+                        'left' => 0,
+                    ],
+                    'tablet' => [
+                        'top' => 0,
+                        'right' => 0,
+                        'bottom' => 0,
+                        'left' => 0,
+                    ],
+                    'mobile' => [
+                        'top' => 0,
+                        'right' => 0,
+                        'bottom' => 0,
+                        'left' => 0,
+                    ],
                 ]
             ],
             'margin' => [
                 'measure' => 'px',
-                'value' => [
-                    'top' => 0,
-                    'right' => 0,
-                    'bottom' => 0,
-                    'left' => 0,
+                'responsive' => true,
+                'param' => 'margin',
+                'label' => 'Margin',
+                'values' => [
+                    'desktop' => [
+                        'top' => 0,
+                        'right' => 0,
+                        'bottom' => 0,
+                        'left' => 0,
+                    ],
+                    'tablet' => [
+                        'top' => 0,
+                        'right' => 0,
+                        'bottom' => 0,
+                        'left' => 0,
+                    ],
+                    'mobile' => [
+                        'top' => 0,
+                        'right' => 0,
+                        'bottom' => 0,
+                        'left' => 0,
+                    ],
                 ]
             ],
         ];

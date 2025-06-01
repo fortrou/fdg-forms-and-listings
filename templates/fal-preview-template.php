@@ -61,12 +61,12 @@ $posts = new WP_Query([
                             <div class="left-side">
                                 <?php foreach ($configs['assignedFields']['fsection'] as $field): ?>
                                     <?php if ($field['preType'] == 'thumbnail'): ?>
-                                        <div class="<?php echo $field['preType'] ?>-proto image-wrapper field">
+                                        <div class="<?php echo $field['key'] ?>-proto image-wrapper field">
                                             <img src="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>" alt="" />
                                         </div>
                                     <?php else: ?>
                                         <?php if ($postData[$field['preType']]): ?>
-                                        <div class="<?php echo $field['preType'] ?>-proto field"><?php echo $postData[$field['preType']]; ?></div>
+                                        <div class="<?php echo $field['key'] ?>-proto field"><?php echo $postData[$field['preType']]; ?></div>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
@@ -75,12 +75,12 @@ $posts = new WP_Query([
                                 <div class="content-side">
                                     <?php foreach ($configs['assignedFields']['lsection'] as $field): ?>
                                         <?php if ($field['preType'] == 'thumbnail'): ?>
-                                            <div class="<?php echo $field['preType'] ?>-proto image-wrapper field">
+                                            <div class="<?php echo $field['key'] ?>-proto image-wrapper field">
                                                 <img src="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>" alt="" />
                                             </div>
                                         <?php else: ?>
                                             <?php if ($postData[$field['preType']]): ?>
-                                                <div class="<?php echo $field['preType'] ?>-proto field"><?php echo $postData[$field['preType']]; ?></div>
+                                                <div class="<?php echo $field['key'] ?>-proto field"><?php echo $postData[$field['preType']]; ?></div>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     <?php endforeach; ?>

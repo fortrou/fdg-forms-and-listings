@@ -99,7 +99,6 @@ export function ConfigurationSet({set, method, object, label = '', basicSelector
     const [expanded, setExpanded] = useState(false);
 
     const scrapeOptions = (field) => {
-        console.log(field);
         return Object.keys(field).map((key) => {
             const Component = DetectComponent[key];
             const data = field[key];

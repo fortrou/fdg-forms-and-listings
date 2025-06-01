@@ -32,7 +32,7 @@ import ImageComponent from "./imageComponent";
 import {useFieldsContext} from "../useFieldContext";
 
 
-const DraggableItem = ({ id, field, index, section }) => {
+const DraggableItem = ({ id, field, index, path, section }) => {
     const {
         attributes,
         listeners,
@@ -64,15 +64,14 @@ const DraggableItem = ({ id, field, index, section }) => {
         borderRadius: SimpleTextComponent,
     };
 
-    const scrapeOptions = (index, field) => {
-        console.log(field)
+    const scrapeOptions = (field) => {
         return Object.keys(field.options).map((key) => {
             const Component = DetectComponent[key];
 
             return Component ? (
                 <Component
                     key={key}
-                    index={index}
+                    path={path + `.${key}`}
                     section={section}
                     field={field}
                     values={field.options[key].responsive ? field.options[key].values[frame] : field.options[key].value}
@@ -88,7 +87,7 @@ const DraggableItem = ({ id, field, index, section }) => {
         text: SimpleTextComponent,
     };
 
-    const scrapeProperties = (index, field) => {
+    const scrapeProperties = (field) => {
         return Object.keys(field.properties).map((key) => {
             const fieldData = field.properties[key];
             const Component = DetectProperty[fieldData.type];
@@ -96,8 +95,7 @@ const DraggableItem = ({ id, field, index, section }) => {
             return Component ? (
                 <Component
                     key={key}
-                    index={index}
-                    section={section}
+                    path={path}
                     field={fieldData}
                     values={fieldData.content}
                     label={fieldData.label}
@@ -135,9 +133,9 @@ const DraggableItem = ({ id, field, index, section }) => {
 
             {expanded && (
                 <div className="field-details">
-                    {field.options ? scrapeOptions(index, field) : null}
+                    {field.options ? scrapeOptions(field) : null}
 
-                    {field.properties ? scrapeProperties(index, field) : null}
+                    {field.properties ? scrapeProperties(field) : null}
                 </div>
             )}
         </div>
@@ -155,7 +153,7 @@ export default function UsedFormFields({fields, updateOption, sectionId}) {
     return (
             <div ref={setNodeRef} className="draggable-fields">
                 {fields.map((field, index) => (
-                    <DraggableItem key={field.key} index={index} id={field.key} field={field} section={sectionId} />
+                    <DraggableItem key={field.key} id={field.key} section={sectionId} field={field} path={`${sectionId}[${index}].options`}/>
                 ))}
             </div>
     );

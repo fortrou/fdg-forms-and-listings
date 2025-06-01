@@ -105,7 +105,6 @@ export default function ListingConfigurator() {
                     </button>
                 </div>
                 <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                    {/* Секция A */}
                     <SortableContext
                         items={[
                             ...assignedFields.current.fsection.map(f => f.key),

@@ -4,8 +4,7 @@ import {useFieldsContext} from "../useFieldContext";
 
 
 
-export const PaddingComponent = ({field, values, index, section}) => {
-    console.log(values)
+export const PaddingComponent = ({field, values, path}) => {
     const [localState, setLocalState] = useState({
         top: values.top,
         right: values.right,
@@ -15,6 +14,7 @@ export const PaddingComponent = ({field, values, index, section}) => {
 
     const {
         updateOption,
+        frame
     } = useFieldsContext();
 
     const [localProperty, setLocalProperty] = useState('');
@@ -31,7 +31,7 @@ export const PaddingComponent = ({field, values, index, section}) => {
         }
 
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${section}[${index}].options.padding.value.${property}`, value);
+            updateOption(`${path}.values.${frame}.${property}`, value);
         }, 500);
     };
 
@@ -95,7 +95,7 @@ export const PaddingComponent = ({field, values, index, section}) => {
                         />
                     </div>
                     <MeasuringSwitcher
-                        param={`${section}[${index}].options.padding.measure`}
+                        param={`${path}.measure`}
                         current={values.measure} />
                 </div>
             </div>
@@ -103,7 +103,7 @@ export const PaddingComponent = ({field, values, index, section}) => {
     )
 }
 
-export const MarginComponent = ({field, values, index, section}) => {
+export const MarginComponent = ({field, values, path}) => {
     const [localState, setLocalState] = useState({
         top: values.top,
         right: values.right,
@@ -113,6 +113,7 @@ export const MarginComponent = ({field, values, index, section}) => {
 
     const {
         updateOption,
+        frame
     } = useFieldsContext();
 
     const [localProperty, setLocalProperty] = useState('');
@@ -129,7 +130,7 @@ export const MarginComponent = ({field, values, index, section}) => {
         }
 
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${section}[${index}].options.margin.value.${property}`, value);
+            updateOption(`${path}.values.${frame}.${property}`, value);
         }, 500);
     };
 
@@ -190,7 +191,7 @@ export const MarginComponent = ({field, values, index, section}) => {
                                onKeyUp={(e) => handleKeyUp(e.target.value, 'left')}/>
                     </div>
                     <MeasuringSwitcher
-                        param={`${section}[${index}].options.margin.measure`}
+                        param={`${path}.measure`}
                         current={values.measure} />
                 </div>
             </div>
@@ -198,12 +199,13 @@ export const MarginComponent = ({field, values, index, section}) => {
     )
 }
 
-export const HeightComponent = ({field, values, index, section}) => {
+export const HeightComponent = ({field, values, path}) => {
     const [localValue, setLocalValue] = useState(values.value ?? '');
     const timeoutRef = useRef(null);
 
     const {
         updateOption,
+        frame
     } = useFieldsContext();
 
     const handleKeyUp = (e) => {
@@ -214,7 +216,7 @@ export const HeightComponent = ({field, values, index, section}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${section}[${index}].options.height.value`, newValue);
+            updateOption(`${path}.values.${frame}`, newValue);
         }, 700);
     };
     return (
@@ -230,19 +232,20 @@ export const HeightComponent = ({field, values, index, section}) => {
                                onKeyUp={handleKeyUp}
                         />
                     </div>
-                    <MeasuringSwitcher param={`${section}[${index}].options.height.measure`} current={values.measure} />
+                    <MeasuringSwitcher param={`${path}.measure`} current={values.measure} />
                 </div>
             </div>
         </div>
     )
 }
 
-export const WidthComponent = ({field, values, index, section}) => {
+export const WidthComponent = ({field, values, path}) => {
     const [localValue, setLocalValue] = useState(values.value ?? '');
     const timeoutRef = useRef(null);
 
     const {
         updateOption,
+        frame
     } = useFieldsContext();
 
     const handleKeyUp = (e) => {
@@ -253,7 +256,7 @@ export const WidthComponent = ({field, values, index, section}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${section}[${index}].options.width.value`, newValue);
+            updateOption(`${path}.values.${frame}`, newValue);
         }, 700);
     };
     return (
@@ -268,7 +271,7 @@ export const WidthComponent = ({field, values, index, section}) => {
                                onChange={(e) => setLocalValue(e.target.value)}
                                onKeyUp={handleKeyUp}/>
                     </div>
-                    <MeasuringSwitcher param={`${section}[${index}].options.width.measure`} current={values.measure} />
+                    <MeasuringSwitcher param={`${path}.measure`} current={values.measure} />
 
                 </div>
             </div>
@@ -276,12 +279,13 @@ export const WidthComponent = ({field, values, index, section}) => {
     )
 }
 
-export const FontSizeComponent = ({ field, values, index, section}) => {
+export const FontSizeComponent = ({ field, values, path}) => {
     const [localValue, setLocalValue] = useState(values.value ?? '');
     const timeoutRef = useRef(null);
 
     const {
         updateOption,
+        frame
     } = useFieldsContext();
 
     const handleKeyUp = (e) => {
@@ -292,7 +296,7 @@ export const FontSizeComponent = ({ field, values, index, section}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${section}[${index}].options.fontSize.value`, newValue);
+            updateOption(`${path}.values.${frame}`, newValue);
         }, 700);
     };
 
@@ -312,20 +316,20 @@ export const FontSizeComponent = ({ field, values, index, section}) => {
                             onKeyUp={handleKeyUp}
                         />
                     </div>
-                    <MeasuringSwitcher param={`${section}[${index}].options.fontSize.measure`} current={values.measure} />
+                    <MeasuringSwitcher param={`${path}.measure`} current={values.measure} />
                 </div>
             </div>
         </div>
     );
 };
 
-export const SimpleTextComponent = ({field, values, index, section, label = 'Font size'}) => {
-    console.log(values)
+export const SimpleTextComponent = ({field, values, path, label = 'Font size'}) => {
     const [localValue, setLocalValue] = useState(values ?? '');
     const timeoutRef = useRef(null);
 
     const {
         updateOption,
+        frame
     } = useFieldsContext();
 
     const handleKeyUp = (e) => {
@@ -336,7 +340,7 @@ export const SimpleTextComponent = ({field, values, index, section, label = 'Fon
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${section}[${index}].options.fontSize.value`, newValue);
+            updateOption(`${path}.value`, newValue);
         }, 700);
     };
     return (
@@ -360,10 +364,11 @@ export const SimpleTextComponent = ({field, values, index, section, label = 'Fon
     )
 }
 
-export const FontWeightComponent = ({field, values, index, section}) => {
+export const FontWeightComponent = ({field, values, path}) => {
 
     const {
         updateOption,
+        frame
     } = useFieldsContext();
 
     return (
@@ -375,7 +380,7 @@ export const FontWeightComponent = ({field, values, index, section}) => {
                 <div className="grid grid-2">
                     <div className="input-container">
                         <select value={values.value}
-                                onChange={(e) => updateOption(`${section}[${index}].options.fontWeight.value`, e.target.value)}>
+                                onChange={(e) => updateOption(`${path}.value`, e.target.value)}>
                             <option value="400">400</option>
                             <option value="500">500</option>
                             <option value="600">600</option>

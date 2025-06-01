@@ -436,66 +436,68 @@ export function useFieldsLogic() {
     }
 
     const buildPostBlockStyles = (assignedFields, resolutions) => {
-        const fields = [...assignedFields.current.fsection, ...assignedFields.current.lsection];
+        const fields = [
+            ...assignedFields.current.fsection,
+            ...assignedFields.current.lsection
+        ];
         let styles = '';
 
-        console.log(resolutions)
         let responsiveGlobal = {
-            desktop: "",
-            tablet: "",
-            mobile: ""
+            desktop: '',
+            tablet: '',
+            mobile: ''
         };
 
         fields.forEach(field => {
             if (!field.options) return;
+
             const selector = `.preview-container .${field.key}-proto`;
             let responsiveSelector = {
-                desktop: "",
-                tablet: "",
-                mobile: ""
+                desktop: '',
+                tablet: '',
+                mobile: ''
             };
-            Object.keys(field.options).map((key) => {
-                if (field.options[key].responsive) {
-                    Object.keys(resolutions).map((key) => {
-                        for (const [frame, value] of Object.entries(field.options[key].values)) {
-                            if (key == 'padding' || key == 'margin') {
-                                let { top, right, bottom, left } = field.options[key].values[frame];
-                                responsiveSelector[frame] += `${field.options[key].param}: ${top}${field.options[key].measure} ${right}${field.options[key].measure} ${bottom}${field.options[key].measure} ${left}${field.options[key].measure};`;
-                            } else {
-                                if (field.options[key].measure) {
-                                    responsiveSelector[frame] += `${field.options[key].param}: ${value}${field.options[key].measure};`;
-                                } else {
-                                    responsiveSelector[frame] += `${field.options[key].param}: ${value};`;
-                                }
-                            }
-                        }
 
-                    })
+            Object.keys(field.options).forEach(optionKey => {
+                const option = field.options[optionKey];
+
+                if (option.responsive) {
+                    Object.keys(resolutions).forEach(frame => {
+                        const values = option.values?.[frame];
+                        if (!values) return;
+
+                        if (optionKey === 'padding' || optionKey === 'margin') {
+                            const { top, right, bottom, left } = values;
+                            responsiveSelector[frame] += `${option.param}: ${top}${option.measure} ${right}${option.measure} ${bottom}${option.measure} ${left}${option.measure}; `;
+                        } else {
+                            responsiveSelector[frame] += `${option.param}: ${values}${option.measure || ''}; `;
+                        }
+                    });
                 } else {
-                    responsiveSelector.desktop += `${field.options[key].param}:${field.options[key].value};`
+                    responsiveSelector.desktop += `${option.param}: ${option.value}${option.measure || ''}; `;
                 }
-            })
+            });
 
-            for (const [frame, value] of Object.entries(responsiveSelector)) {
-                if (value) {
-                    responsiveGlobal[frame] += `
-                        ${frame != 'desktop' ? `@media screen and (max-width: ${resolutions[frame]})` : ''}
-                        ${selector} {
-                            ${value}
-                        }
-                        ${frame != desktop ? `}` : ''}
-                    `
+            Object.entries(responsiveSelector).forEach(([frame, value]) => {
+                if (!value) return;
+
+                if (frame !== 'desktop') {
+                    responsiveGlobal[frame] += `@media screen and (max-width: ${resolutions[frame]}) {\n${selector} { ${value} }\n}\n`;
+                } else {
+                    responsiveGlobal.desktop += `${selector} { ${value} }\n`;
                 }
-            }
+            });
+        });
 
-        })
+        // Собираем весь стиль
+        Object.values(responsiveGlobal).forEach(cssBlock => {
+            styles += cssBlock;
+        });
 
-        for (const [frame, value] of Object.entries(responsiveGlobal)) {
-            styles += value;
-        }
-
+        console.log(styles);
         return styles;
-    }
+    };
+
 
     return {
         getter,

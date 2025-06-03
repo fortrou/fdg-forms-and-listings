@@ -25,6 +25,7 @@ export default function PreviewContent() {
 
     const [usedTab, setUsedTab] = useState('configurations');
     const [showOptions, setShowOptions] = useState(false);
+    const [saveStatus, setSaveStatus] = useState('');
 
     return (
         <div className="listing-global-container">
@@ -34,11 +35,8 @@ export default function PreviewContent() {
                     <div className={`tab-item listing-filters ${(usedTab == 'filters') ? 'active' : ''}`} onClick={(e) => setUsedTab('filters')}>Filters setup</div>
                     <div className={`tab-item listing-settings ${(usedTab == 'settings') ? 'active' : ''}`} onClick={(e) => setUsedTab('settings')}>Settings</div>
                 </div>
+                <h1>Configuring Listing</h1>
                 <div className="settings-trigger">
-                    <button className={`trigger-settings-window ${(usedTab == 'configurations') ? 'active' : ''}`}
-                            onClick={(e) => setShowOptions(!showOptions)}>
-                        <img src={DefaultIcons.settings} alt=""/>
-                    </button>
                     <div className="frame-selector">
                         <button className={`trigger-settings ${(frame == 'desktop') ? 'active' : ''}`}
                                 onClick={(e) => setFrame('desktop')}>
@@ -53,6 +51,8 @@ export default function PreviewContent() {
                             <img src={DefaultIcons.frameMobile} alt=""/>
                         </button>
                     </div>
+
+                    <button className={`save-listing ${saveStatus}`}>Update listing</button>
 
                 </div>
             </div>

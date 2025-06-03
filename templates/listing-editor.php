@@ -1,9 +1,18 @@
 <style>
+    html, body {
+        overflow: hidden;
+    }
     #wpcontent {
         background: #fff;
         min-height: 100vh;
         margin-left: 0px !important;
-        padding-right: 20px;
+        padding: 0;
+    }
+    #wpbody-content {
+        padding: 0 !important;
+    }
+    #wpfooter {
+        display: none !important;
     }
     #adminmenuback, #adminmenuwrap {
         display: none;
@@ -16,7 +25,6 @@
 <style id="fil-listing-styles">
 
 </style>
-<h1>Configuring Listing</h1>
 <div id="fil-single-listing-container">
 
 </div>

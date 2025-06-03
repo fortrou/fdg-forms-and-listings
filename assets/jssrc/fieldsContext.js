@@ -53,13 +53,10 @@ export function FieldsProvider({ children }) {
             ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + getter(styles.current, `responsive.desktop.flexDirection`, styles.current.responsive['desktop'].flexDirection) + ';' : ''}
             ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + getter(styles.current, `responsive.desktop.alignItems`, styles.current.responsive['desktop'].alignItems) + ';' : ''}
         }
-        
-        .preview-container .post-item .left-side img {
-            width: 100%;
-            height: 100%;
+        .preview-container .post-item img {
+            max-width: 100%;
             object-fit: cover;
             object-position: center;
-            border-radius: ${styles.current.shared.imageBorderRadius};
         }
         .preview-container .post-item .left-side {
             width: ${styles.imageWidth};

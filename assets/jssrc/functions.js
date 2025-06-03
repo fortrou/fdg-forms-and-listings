@@ -125,7 +125,7 @@ export function useFieldsLogic() {
 
         if (!field) return;
 
-        const uniqueKey = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        const uniqueKey = 'fdl_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 
         const newField = { ...field, key: uniqueKey };
 
@@ -470,11 +470,11 @@ export function useFieldsLogic() {
                             const { top, right, bottom, left } = values;
                             responsiveSelector[frame] += `${option.param}: ${top}${option.measure} ${right}${option.measure} ${bottom}${option.measure} ${left}${option.measure}; `;
                         } else {
-                            responsiveSelector[frame] += `${option.param}: ${values}${option.measure || ''}; `;
+                            responsiveSelector[frame] += `${option.param}: ${values.value}${option.measure && option.measure != 'custom' ? option.measure : ''}; `;
                         }
                     });
                 } else {
-                    responsiveSelector.desktop += `${option.param}: ${option.value}${option.measure || ''}; `;
+                    responsiveSelector.desktop += `${option.param}: ${option.value}${option.measure && option.measure != 'custom' ? option.measure : ''}; `;
                 }
             });
 
@@ -482,19 +482,25 @@ export function useFieldsLogic() {
                 if (!value) return;
 
                 if (frame !== 'desktop') {
-                    responsiveGlobal[frame] += `@media screen and (max-width: ${resolutions[frame]}) {\n${selector} { ${value} }\n}\n`;
+                    responsiveGlobal[frame] += `
+                    ${selector} { ${value} overflow: hidden; }
+                    `;
                 } else {
-                    responsiveGlobal.desktop += `${selector} { ${value} }\n`;
+                    responsiveGlobal.desktop += `${selector} { ${value} overflow: hidden; }\n`;
                 }
             });
         });
 
         // Собираем весь стиль
-        Object.values(responsiveGlobal).forEach(cssBlock => {
-            styles += cssBlock;
+        Object.keys(responsiveGlobal).forEach(cssBlock => {
+            if (cssBlock != 'desktop') {
+                styles += `@media screen and (max-width: ${resolutions[cssBlock]}px) {${responsiveGlobal[cssBlock]}}`;
+            } else {
+                styles += responsiveGlobal[cssBlock]
+            }
         });
 
-        console.log(styles);
+        //console.log(styles);
         return styles;
     };
 

@@ -1,16 +1,25 @@
-import {useState, useRef} from "@wordpress/element";
+import {useState, useRef, useEffect} from "@wordpress/element";
 import MeasuringSwitcher from './MeasuringSwitcher';
 import {useFieldsContext} from "../useFieldContext";
 
 
 
-export const PaddingComponent = ({field, values, path}) => {
+export const PaddingComponent = ({field, values, path, measure = ''}) => {
     const [localState, setLocalState] = useState({
         top: values.top,
         right: values.right,
         bottom: values.bottom,
         left: values.left,
     });
+
+    useEffect(() => {
+        setLocalState({
+            top: values.top,
+            right: values.right,
+            bottom: values.bottom,
+            left: values.left,
+        });
+    }, [values]);
 
     const {
         updateOption,
@@ -96,20 +105,28 @@ export const PaddingComponent = ({field, values, path}) => {
                     </div>
                     <MeasuringSwitcher
                         param={`${path}.measure`}
-                        current={values.measure} />
+                        current={measure} />
                 </div>
             </div>
         </div>
     )
 }
 
-export const MarginComponent = ({field, values, path}) => {
+export const MarginComponent = ({field, values, path, measure = ''}) => {
     const [localState, setLocalState] = useState({
         top: values.top,
         right: values.right,
         bottom: values.bottom,
         left: values.left,
     });
+    useEffect(() => {
+        setLocalState({
+            top: values.top,
+            right: values.right,
+            bottom: values.bottom,
+            left: values.left,
+        });
+    }, [values]);
 
     const {
         updateOption,
@@ -192,21 +209,26 @@ export const MarginComponent = ({field, values, path}) => {
                     </div>
                     <MeasuringSwitcher
                         param={`${path}.measure`}
-                        current={values.measure} />
+                        current={measure} />
                 </div>
             </div>
         </div>
     )
 }
 
-export const HeightComponent = ({field, values, path}) => {
-    const [localValue, setLocalValue] = useState(values.value ?? '');
-    const timeoutRef = useRef(null);
-
+export const HeightComponent = ({field, values, path, measure = ''}) => {
     const {
         updateOption,
         frame
     } = useFieldsContext();
+
+    const [localValue, setLocalValue] = useState(values.value ?? '');
+    const [localFrame, setLocalFrame] = useState(frame);
+    if (frame != localFrame) {
+        setLocalFrame(frame);
+        setLocalValue(values.value ?? '')
+    }
+    const timeoutRef = useRef(null);
 
     const handleKeyUp = (e) => {
         const newValue = e.target.value;
@@ -216,7 +238,7 @@ export const HeightComponent = ({field, values, path}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${path}.values.${frame}`, newValue);
+            updateOption(`${path}.values.${frame}.value`, newValue);
         }, 700);
     };
     return (
@@ -232,21 +254,26 @@ export const HeightComponent = ({field, values, path}) => {
                                onKeyUp={handleKeyUp}
                         />
                     </div>
-                    <MeasuringSwitcher param={`${path}.measure`} current={values.measure} />
+                    <MeasuringSwitcher param={`${path}.measure`} current={measure} />
                 </div>
             </div>
         </div>
     )
 }
 
-export const WidthComponent = ({field, values, path}) => {
-    const [localValue, setLocalValue] = useState(values.value ?? '');
-    const timeoutRef = useRef(null);
-
+export const WidthComponent = ({field, values, path, measure = ''}) => {
     const {
         updateOption,
         frame
     } = useFieldsContext();
+
+    const [localValue, setLocalValue] = useState(values.value ?? '');
+    const [localFrame, setLocalFrame] = useState(frame);
+    if (frame != localFrame) {
+        setLocalFrame(frame);
+        setLocalValue(values.value ?? '')
+    }
+    const timeoutRef = useRef(null);
 
     const handleKeyUp = (e) => {
         const newValue = e.target.value;
@@ -256,7 +283,7 @@ export const WidthComponent = ({field, values, path}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${path}.values.${frame}`, newValue);
+            updateOption(`${path}.values.${frame}.value`, newValue);
         }, 700);
     };
     return (
@@ -271,7 +298,7 @@ export const WidthComponent = ({field, values, path}) => {
                                onChange={(e) => setLocalValue(e.target.value)}
                                onKeyUp={handleKeyUp}/>
                     </div>
-                    <MeasuringSwitcher param={`${path}.measure`} current={values.measure} />
+                    <MeasuringSwitcher param={`${path}.measure`} current={measure} />
 
                 </div>
             </div>
@@ -279,14 +306,19 @@ export const WidthComponent = ({field, values, path}) => {
     )
 }
 
-export const FontSizeComponent = ({ field, values, path}) => {
-    const [localValue, setLocalValue] = useState(values.value ?? '');
-    const timeoutRef = useRef(null);
-
+export const FontSizeComponent = ({ field, values, path, measure = ''}) => {
     const {
         updateOption,
         frame
     } = useFieldsContext();
+
+    const [localValue, setLocalValue] = useState(values.value ?? '');
+    const [localFrame, setLocalFrame] = useState(frame);
+    if (frame != localFrame) {
+        setLocalFrame(frame);
+        setLocalValue(values.value ?? '')
+    }
+    const timeoutRef = useRef(null);
 
     const handleKeyUp = (e) => {
         const newValue = e.target.value;
@@ -296,7 +328,7 @@ export const FontSizeComponent = ({ field, values, path}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${path}.values.${frame}`, newValue);
+            updateOption(`${path}.values.${frame}.value`, newValue);
         }, 700);
     };
 
@@ -316,21 +348,28 @@ export const FontSizeComponent = ({ field, values, path}) => {
                             onKeyUp={handleKeyUp}
                         />
                     </div>
-                    <MeasuringSwitcher param={`${path}.measure`} current={values.measure} />
+                    <MeasuringSwitcher param={`${path}.measure`} current={measure} available={['px', 'em', 'rem']} />
                 </div>
             </div>
         </div>
     );
 };
 
-export const SimpleTextComponent = ({field, values, path, label = 'Font size'}) => {
-    const [localValue, setLocalValue] = useState(values ?? '');
-    const timeoutRef = useRef(null);
-
+export const SimpleTextComponent = ({field, values, path, label = 'Font size', measure = '', responsive = true}) => {
     const {
         updateOption,
         frame
     } = useFieldsContext();
+
+    const [localValue, setLocalValue] = useState(values.value ? values.value : (values ? values : ''));
+    const [localFrame, setLocalFrame] = useState(frame);
+    if (responsive) {
+        if (frame != localFrame) {
+            setLocalFrame(frame);
+            setLocalValue(values.value ? values.value : (values ? values : ''))
+        }
+    }
+    const timeoutRef = useRef(null);
 
     const handleKeyUp = (e) => {
         const newValue = e.target.value;
@@ -340,7 +379,11 @@ export const SimpleTextComponent = ({field, values, path, label = 'Font size'}) 
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${path}.value`, newValue);
+            if (responsive) {
+                updateOption(`${path}.values.${frame}.value`, newValue);
+            } else {
+                updateOption(`${path}`, newValue);
+            }
         }, 700);
     };
     return (
@@ -358,6 +401,9 @@ export const SimpleTextComponent = ({field, values, path, label = 'Font size'}) 
                             onKeyUp={handleKeyUp}
                         />
                     </div>
+                    {measure != '' &&
+                        <MeasuringSwitcher param={`${path}.measure`} current={measure} />
+                    }
                 </div>
             </div>
         </div>

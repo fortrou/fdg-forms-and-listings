@@ -1,6 +1,7 @@
 import {useState, useRef, useEffect} from "@wordpress/element";
 import MeasuringSwitcher from './MeasuringSwitcher';
 import {useFieldsContext} from "../useFieldContext";
+import { RgbaColorPicker } from "react-colorful";
 
 
 
@@ -440,4 +441,65 @@ export const FontWeightComponent = ({field, values, path}) => {
             </div>
         </div>
     )
+}
+
+export function ColorSelectorComponent({ value = "#ffffff", path, method, label }) {
+    console.log(path)
+    const [colorPickerEnabled, setColorPickerEnabled] = useState(false);
+    const timeoutRef = useRef(null);
+    const {
+        updateOption,
+        frame
+    } = useFieldsContext();
+    const hexToRgba = (hex) => {
+        hex = hex.replace("#", "");
+        const r = parseInt(hex.slice(0, 2), 16);
+        const g = parseInt(hex.slice(2, 4), 16);
+        const b = parseInt(hex.slice(4, 6), 16);
+        const a = hex.length === 8 ? parseInt(hex.slice(6, 8), 16) / 255 : 1;
+        return { r, g, b, a };
+    };
+
+    const rgbaToHex = ({ r, g, b, a }) => {
+        const toHex = (v) => v.toString(16).padStart(2, "0");
+        const alpha = Math.round(a * 255);
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}${toHex(alpha)}`;
+    };
+
+    const [color, setColor] = useState(hexToRgba(value));
+
+    const handleChange = (newColor) => {
+        setColor(newColor);
+
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
+            updateOption(path + '.value', rgbaToHex(newColor));
+        }, 700);
+    };
+
+    return (
+        <div className="input-container color-picker-component">
+            <label>{label}</label>
+            <div className="input-holder">
+                <div className="color-preview" onClick={() => setColorPickerEnabled(!colorPickerEnabled)}>
+                    <div
+                        className="internal-block"
+                        style={{
+                            backgroundColor: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`,
+                        }}
+                    />
+                </div>
+                {colorPickerEnabled && (
+                    <div className="color-picker-wrapper">
+                        <div className="color-input-manual">
+                            <input type="text" value={rgbaToHex(color)} onChange={(e) => handleChange(hexToRgba(e.target.value))}/>
+                        </div>
+                        <RgbaColorPicker color={color} onChange={handleChange} />
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 }

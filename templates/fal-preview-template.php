@@ -24,6 +24,9 @@ $posts = new WP_Query([
     </style>
 </head>
 <body>
+<?php
+$falFilterTemplatter = new Fal_Filter_Templatter($filters);
+?>
 <div class="configurations-container <?php echo esc_attr($configs['display'] ?? ''); ?>">
     <div class="configurations-container">
         <div class="listing-container">
@@ -34,8 +37,8 @@ $posts = new WP_Query([
                         <?php if (!empty($filters)): ?>
                             <?php foreach ($filters as $filter): ?>
                             <?php
-                                $filtersHolder = new Fal_Filter_Templatter($filters);
-                                $filtersHolder->displayFilters();
+                                $falFilterTemplatter->setFilters($filters);
+                                $falFilterTemplatter->displayFilters();
                             ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -59,31 +62,15 @@ $posts = new WP_Query([
                     ?>
                         <div class="post-item">
                             <div class="left-side">
-                                <?php foreach ($configs['assignedFields']['fsection'] as $field): ?>
-                                    <?php if ($field['preType'] == 'thumbnail'): ?>
-                                        <div class="<?php echo $field['key'] ?>-proto image-wrapper field">
-                                            <img src="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>" alt="" />
-                                        </div>
-                                    <?php else: ?>
-                                        <?php if ($postData[$field['preType']]): ?>
-                                        <div class="<?php echo $field['key'] ?>-proto field"><?php echo $postData[$field['preType']]; ?></div>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
+                                <?php
+                                    $falFilterTemplatter->process_fields($configs['assignedFields']['fsection'], $postData);
+                                ?>
                             </div>
                             <?php if ($configs['blockLayout']): ?>
                                 <div class="content-side">
-                                    <?php foreach ($configs['assignedFields']['lsection'] as $field): ?>
-                                        <?php if ($field['preType'] == 'thumbnail'): ?>
-                                            <div class="<?php echo $field['key'] ?>-proto image-wrapper field">
-                                                <img src="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>" alt="" />
-                                            </div>
-                                        <?php else: ?>
-                                            <?php if ($postData[$field['preType']]): ?>
-                                                <div class="<?php echo $field['key'] ?>-proto field"><?php echo $postData[$field['preType']]; ?></div>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
+                                    <?php
+                                    $falFilterTemplatter->process_fields($configs['assignedFields']['lsection'], $postData);
+                                    ?>
                                 </div>
                             <?php endif; ?>
                         </div>

@@ -124,6 +124,9 @@ class Fal_Actions
                 $value['options']['borderRadius'] = $basicOptionsSet['borderRadius'];
 
             } else if ($value['type'] == 'button') {
+                $value['options']['fontSize'] = $basicOptionsSet['fontSize'];
+                $value['options']['fontWeight'] = $basicOptionsSet['fontWeight'];
+                $value['options']['lineHeight'] = $basicOptionsSet['lineHeight'];
                 $value['options']['borderRadius'] = $basicOptionsSet['borderRadius'];
                 $value['options']['background'] = $basicOptionsSet['background'];
                 $value['options']['textColor'] = $basicOptionsSet['textColor'];
@@ -325,7 +328,7 @@ class Fal_Actions
             'textColor' => [
                 'value' => '#000000',
                 'responsive' => false,
-                'param' => 'text-color',
+                'param' => 'color',
                 'label' => 'Text color'
             ],
             'padding' => [

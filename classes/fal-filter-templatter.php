@@ -3,9 +3,12 @@ class Fal_Filter_Templatter
 {
 
     private $filterData = [];
-    public function __construct($params)
+    public function __construct()
     {
-        $this->filterData = $params;
+    }
+
+    public function setFilters($filters) {
+        $this->filterData = $filters;
     }
 
     public function displayFilters()
@@ -38,4 +41,44 @@ class Fal_Filter_Templatter
 
         return array_values(array_unique($results));
     }
+
+    public function process_fields($fields, $postData) {
+        foreach ($fields as $field) {
+            if ($field['preType'] && method_exists($this, 'post_' . $field['preType'] . '_field')) {
+                call_user_func([$this, 'post_' . $field['preType'] . '_field'], $field, $postData);
+            }
+        }
+    }
+
+    public function post_thumbnail_field($field, $postData) {
+    ?>
+            <div class="<?php echo $field['key'] ?>-proto image-wrapper field">
+                <img src="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>" alt="" />
+            </div>
+    <?php
+
+    }
+    public function post_post_title_field($field, $postData) {
+        ?>
+        <div class="<?php echo $field['key'] ?>-proto field"><?php echo $postData[$field['preType']]; ?></div>
+        <?php
+
+    }
+    public function post_post_excerpt_field($field, $postData) {
+        ?>
+        <div class="<?php echo $field['key'] ?>-proto field"><?php echo $postData[$field['preType']]; ?></div>
+        <?php
+    }
+
+    public function post_button_field($field, $postData) {
+        $link = str_replace('{{permalink}}', get_permalink($postData->ID), $field['properties']['url_format']['content']);
+        ?>
+        <div class="link-field field">
+            <a class="<?php echo $field['key'] ?>-proto" href="<?php echo $link; ?>"><?php echo $field['properties']['text']['content']; ?></a>
+            <?php echo $postData[$field['preType']]; ?>
+        </div>
+        <?php
+    }
+
+
 }

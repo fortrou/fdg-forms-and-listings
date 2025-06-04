@@ -26,7 +26,7 @@ import {
     WidthComponent,
     FontSizeComponent,
     FontWeightComponent,
-    SimpleTextComponent
+    SimpleTextComponent, ColorSelectorComponent
 } from "./optionsComponent";
 import ImageComponent from "./imageComponent";
 import {useFieldsContext} from "../useFieldContext";
@@ -62,6 +62,8 @@ const DraggableItem = ({ id, field, index, path, section }) => {
         fontSize: FontSizeComponent,
         fontWeight: FontWeightComponent,
         borderRadius: SimpleTextComponent,
+        background: ColorSelectorComponent,
+        textColor: ColorSelectorComponent,
     };
 
     const scrapeOptions = (field, frame) => {

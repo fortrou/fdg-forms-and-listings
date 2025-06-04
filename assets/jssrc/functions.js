@@ -483,10 +483,10 @@ export function useFieldsLogic() {
 
                 if (frame !== 'desktop') {
                     responsiveGlobal[frame] += `
-                    ${selector} { ${value} overflow: hidden; }
+                    ${selector} { ${value} display: flex; overflow: hidden; }
                     `;
                 } else {
-                    responsiveGlobal.desktop += `${selector} { ${value} overflow: hidden; }\n`;
+                    responsiveGlobal.desktop += `${selector} { ${value} display: flex; overflow: hidden; }`;
                 }
             });
         });

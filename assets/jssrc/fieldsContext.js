@@ -53,6 +53,9 @@ export function FieldsProvider({ children }) {
             ${styles.current.shared.postDisplay == 'flex' ? 'flex-direction: ' + getter(styles.current, `responsive.desktop.flexDirection`, styles.current.responsive['desktop'].flexDirection) + ';' : ''}
             ${styles.current.shared.postDisplay == 'flex' ? 'align-items: ' + getter(styles.current, `responsive.desktop.alignItems`, styles.current.responsive['desktop'].alignItems) + ';' : ''}
         }
+        .preview-container .post-item .link-field a {
+            text-decoration: none;
+        }
         .preview-container .post-item img {
             max-width: 100%;
             object-fit: cover;

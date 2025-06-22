@@ -472,6 +472,13 @@
         letter-spacing: .7px;
         text-transform: capitalize;
         outline: none;
+        transition: .3s;
+
+        &.saving {
+          opacity: .3;
+          box-shadow: inset 0 0 5px rgba(0, 0, 0, .3);
+          background: #012c7c;
+        }
       }
 
       .frame-selector {

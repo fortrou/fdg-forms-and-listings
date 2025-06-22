@@ -75,9 +75,13 @@ export function useFieldsLogic() {
     }, [submitPending]);
 
     const setStyles = (path, value) => {
-        setter(styles.current, path, value);
-        forceUpdate();
-        setSubmitPending(true);
+        if (path == "") {
+            styles.current = value;
+        } else {
+            setter(styles.current, path, value);
+            forceUpdate();
+            setSubmitPending(true);
+        }
     }
 
     const setEnabledFilter = (values) => {
@@ -89,7 +93,8 @@ export function useFieldsLogic() {
     const setFilter = (path, value) => {
         if (path == 'enabledFilters') {
             filters.current.shared.enabledFilters[value.field] = value;
-
+        } else if (path == "") {
+            filters.current = value;
         } else {
             setter(filters.current, path, value);
         }
@@ -114,7 +119,12 @@ export function useFieldsLogic() {
     }
 
     const updateOption = (path, value) => {
-        setter(assignedFields.current, path, value);
+
+        if (path == "") {
+            assignedFields.current = value;
+        } else {
+            setter(assignedFields.current, path, value);
+        }
         forceUpdate();
         setSubmitPending(true);
     };

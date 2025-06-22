@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { useFieldsLogic } from './functions';
 import {useEffect} from "@wordpress/element";
-import {filters, resolutions} from "./exportableconstants";
+import {assignedFields, availableFilterFields, filters, resolutions} from "./exportableconstants";
 
 export const FieldsContext = createContext(null);
 
@@ -115,6 +115,41 @@ export function FieldsProvider({ children }) {
     ` + buildPostBlockStyles(assignedFields, resolutions) + buildFiltersBlockStyle(filters.current);
 
 
+    const storeListing = async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        const config= {
+            styles: styles.current,
+            filters: filters.current,
+            fields: assignedFields.current,
+        };
+
+
+
+        const formData = new FormData();
+        formData.append('action', 'fdg_fil_store_listing');
+        formData.append('listing_id', id);
+        formData.append('styles', stylesString);
+        formData.append('config', JSON.stringify(config));
+        formData.append('enabledFilters', JSON.stringify({ ...filters.current.shared.enabledFilters }))
+
+        try {
+            const res = await fetch(fdgsyncajax.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                body: formData,
+            });
+
+            const text = await res.text();
+            console.log('Response:', text);
+
+            return true;
+        } catch (error) {
+            console.error('Ошибка при отправке:', error);
+            return false;
+        }
+    }
 
 
     const [posts, setPosts] = useState([]);
@@ -127,8 +162,15 @@ export function FieldsProvider({ children }) {
             .then(res => res.json())
             .then(data => {
                 setAvailableFields(Object.values(data.data.availableFields));
-                updateOption('fsection', Array.isArray(data.data.defaultKeys.fsection) ? data.data.defaultKeys.fsection : Object.values(data.data.defaultKeys.fsection));
-                updateOption('lsection', Array.isArray(data.data.defaultKeys.lsection) ? data.data.defaultKeys.lsection : Object.values(data.data.defaultKeys.lsection));
+                if (data.data.listingData.fields) {
+                    console.log(data.data.listingData.filters);
+                    setStyles('', data.data.listingData.styles);
+                    setFilter('', data.data.listingData.filters);
+                    updateOption('', data.data.listingData.fields)
+                } else {
+                    updateOption('fsection', Array.isArray(data.data.defaultKeys.fsection) ? data.data.defaultKeys.fsection : Object.values(data.data.defaultKeys.fsection));
+                    updateOption('lsection', Array.isArray(data.data.defaultKeys.lsection) ? data.data.defaultKeys.lsection : Object.values(data.data.defaultKeys.lsection));
+                }
                 setAvailableFilterFields(data.data.filterFields);
             });
     }, []);
@@ -175,6 +217,7 @@ export function FieldsProvider({ children }) {
             addOptionToImageArea,
             setEnabledFilter,
             buildPostBlockStyles,
+            storeListing,
             getter
         }}>
 

@@ -20,7 +20,8 @@ export default function PreviewContent() {
         buildPostBlockStyles,
         frame,
         posts,
-        postTypes
+        postTypes,
+        storeListing
     } = useFieldsContext();
 
     const [usedTab, setUsedTab] = useState('configurations');
@@ -52,7 +53,17 @@ export default function PreviewContent() {
                         </button>
                     </div>
 
-                    <button className={`save-listing ${saveStatus}`}>Update listing</button>
+                    <button className={`save-listing ${saveStatus}`} onClick={async (e) => {
+                        setSaveStatus('saving');
+
+                        const result = await storeListing();
+
+                        if (result) {
+                            setSaveStatus('');
+                        } else {
+                            setSaveStatus('error');
+                        }
+                    }}>Update listing</button>
 
                 </div>
             </div>

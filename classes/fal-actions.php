@@ -12,9 +12,37 @@ class Fal_Actions
         add_action('wp_ajax_add_listing_post', [$this, 'add_listing_post']);
         add_action('wp_ajax_get_fil_demo_posts_listing', [$this, 'get_demo_posts_listing']);
         add_action('wp_ajax_get_fil_fetchable_posttypes', [$this, 'get_fil_fetchable_posttypes']);
+        add_action('wp_ajax_fdg_fil_store_listing', [$this, 'fdg_fil_store_listing']);
+
         add_action('admin_post_fal_preview', [$this, 'fal_render_preview_page']);
 
         add_filter('fdg_fil_default_keys_editor', [$this, 'get_current_fields'], 10, 3);
+    }
+
+    public function fdg_fil_store_listing()
+    {
+        $styles = str_replace([ ' ;', '; '], ';', str_replace([': ', ' :'], ':', str_replace(["\n", "\r", '  '], '', $_POST['styles'])));
+        $listing_id = $_POST['listing_id'];
+
+        $config_raw = stripslashes($_POST['config']);
+        $config = json_decode($config_raw, true);
+        $filters_raw = stripslashes($_POST['enabledFilters']);
+        $filters = json_decode($filters_raw, true);
+        $config['filters']['shared']['enabledFilters'] = $filters;
+
+        update_post_meta($listing_id, 'stylesheet_content', $styles);
+        update_post_meta($listing_id, 'config_styles', $config['styles']);
+        update_post_meta($listing_id, 'config_filters', $config['filters']);
+        update_post_meta($listing_id, 'config_fields', $config['fields']);
+    }
+
+    public function get_listing_configs($listing_id)
+    {
+        return [
+            'styles' => get_post_meta($listing_id, 'config_styles', true),
+            'filters' => get_post_meta($listing_id, 'config_filters', true),
+            'fields' => get_post_meta($listing_id, 'config_fields', true),
+        ];
     }
 
     public function get_current_fields($state, $id, $type)
@@ -146,6 +174,7 @@ class Fal_Actions
             'keys'  => $resortedKeys,
             'filterFields' => $this->get_all_custom_meta_keys_for_post_type($_REQUEST['post_type']),
             'defaultKeys' => apply_filters('fdg_fil_default_keys_editor', ['fsection' => $defaultKeys, 'lsection' => []], $listingId, 'post'),
+            'listingData' => $this->get_listing_configs($listingId)
         ]);
     }
 

@@ -1,5 +1,6 @@
 <?php
 require_once FDG_FORMS_LISTINGS_PLUGIN_PATH . '/classes/fal-filter-templatter.php';
+
 class Fal_Actions
 {
     public function __construct()

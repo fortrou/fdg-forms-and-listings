@@ -1,9 +1,11 @@
 <?php
 require_once FDG_FORMS_LISTINGS_PLUGIN_PATH . '/classes/fal-actions.php';
+require_once FDG_FORMS_LISTINGS_PLUGIN_PATH . 'classes/fal-front-actions.php';
 class Fal_App
 {
 
     private $asyncActions;
+    private $frontActions;
 
     public function __construct() {
         $this->init();
@@ -12,6 +14,7 @@ class Fal_App
 
     public function init()
     {
+        $this->frontActions = new FAL_Front_Actions();
         $this->asyncActions = new Fal_Actions();
     }
 

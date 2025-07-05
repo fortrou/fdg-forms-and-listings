@@ -8,18 +8,13 @@
 <div class="configurations-container <?php echo esc_attr($configs['display'] ?? ''); ?>">
     <div class="configurations-container">
         <div class="listing-container">
-            <?php if ($configs['enableFilters']): ?>
+            <?php if ($configs['enableFilters'] && $filters): ?>
                 <div class="filters-side">
                     <div class="filters-container">
                         <div class="filters-wrapper">
-                            <?php if (!empty($filters)): ?>
-                                <?php foreach ($filters as $filter): ?>
-                                    <?php
-                                    $falFilterTemplatter->setFilters($filters);
-                                    $falFilterTemplatter->displayFilters();
-                                    ?>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
+                            <?php
+                                do_action('fdg_fal_listing_filters', $filters);
+                            ?>
                             <?php if ($configs['enableButton']): ?>
                                 <div class="filter-button">
                                     <button class="submit-filters" type="button" href="#"><?php echo $configs['filtersButtonText'] ?></button>
@@ -30,6 +25,9 @@
                 </div>
             <?php endif; ?>
             <div class="preview-container grid">
+                <?php
+                    var_dump($configs);die;
+                ?>
                 <?php if ( $posts->have_posts() ): ?>
                     <?php while ( $posts->have_posts() ):
                         $posts->the_post();
@@ -37,21 +35,8 @@
                             'post_title' => get_the_title(),
                             'post_excerpt' => get_the_excerpt(),
                         ];
+                        do_action('fdg_fal_listing_posts', $configs);
                         ?>
-                        <div class="post-item">
-                            <div class="left-side">
-                                <?php
-                                $falFilterTemplatter->process_fields($configs['assignedFields']['fsection'], $postData);
-                                ?>
-                            </div>
-                            <?php if ($configs['blockLayout']): ?>
-                                <div class="content-side">
-                                    <?php
-                                    $falFilterTemplatter->process_fields($configs['assignedFields']['lsection'], $postData);
-                                    ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
                     <?php endwhile; ?>
                 <?php endif; ?>
             </div>

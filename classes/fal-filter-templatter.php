@@ -7,13 +7,20 @@ class Fal_Filter_Templatter
     {
     }
 
-    public function setFilters($filters) {
-        $this->filterData = $filters;
+    public function setFilterData($filterData)
+    {
+        $this->filterData = $filterData;
+    }
+
+    public function renderPost($postData = [], $fields = [], $is_block = false)
+    {
+        require_once FDG_FORMS_LISTINGS_PLUGIN_PATH . '/templates/template-parts/post-render.php';
     }
 
     public function displayFilters()
     {
         $filters = $this->filterData;
+
         require_once FDG_FORMS_LISTINGS_PLUGIN_PATH . '/templates/template-parts/filter-items.php';
     }
 

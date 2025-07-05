@@ -10,7 +10,7 @@ class Fal_Actions
     public function run_async_actions()
     {
         add_action('wp_ajax_add_listing_post', [$this, 'add_listing_post']);
-        add_action('wp_ajax_get_fil_demo_posts_listing', [$this, 'get_demo_posts_listing']);
+        add_action('wp_ajax_get_fil_demo_posts_listing', [$this, 'get_post_listing_data']);
         add_action('wp_ajax_get_fil_fetchable_posttypes', [$this, 'get_fil_fetchable_posttypes']);
         add_action('wp_ajax_fdg_fil_store_listing', [$this, 'fdg_fil_store_listing']);
 
@@ -69,15 +69,17 @@ class Fal_Actions
 
         $post_types[] = 'post';
         $post_types[] = 'page';
+        $post_types[] = 'users';
 
         wp_send_json_success([
             'post_types' => $post_types,
         ]);
     }
 
-    public function get_demo_posts_listing()
+    public function get_post_listing_data()
     {
         $listingId = $_REQUEST['listing_id'];
+        $post_type = $_REQUEST['post_type'];
 
         $basicOptionsSet = apply_filters('modify_options_set', $this->getPropertiesSet());
 
@@ -172,7 +174,7 @@ class Fal_Actions
         wp_send_json_success([
             'availableFields' => $fieldsList,
             'keys'  => $resortedKeys,
-            'filterFields' => $this->get_all_custom_meta_keys_for_post_type($_REQUEST['post_type']),
+            'filterFields' => $this->get_all_custom_meta_keys_for_post_type($post_type),
             'defaultKeys' => apply_filters('fdg_fil_default_keys_editor', ['fsection' => $defaultKeys, 'lsection' => []], $listingId, 'post'),
             'listingData' => $this->get_listing_configs($listingId)
         ]);
@@ -182,33 +184,63 @@ class Fal_Actions
         global $wpdb;
 
         $meta_keys = [];
-        $db_keys = $wpdb->get_col(
-            $wpdb->prepare("
-            SELECT DISTINCT pm.meta_key
-            FROM {$wpdb->postmeta} pm
-            INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-            WHERE p.post_type = %s
-              AND pm.meta_key NOT LIKE %s
-        ", $post_type, '\_%')
-        );
-        $meta_keys = array_merge($meta_keys, $db_keys);
 
-        if (function_exists('get_registered_meta_keys')) {
-            $registered_meta = get_registered_meta_keys('post', $post_type);
-            $meta_keys = array_merge($meta_keys, array_keys($registered_meta));
-        }
+        if ($post_type === 'users') {
+            $db_keys = $wpdb->get_col("
+            SELECT DISTINCT meta_key
+            FROM {$wpdb->usermeta}
+            WHERE meta_key NOT LIKE '\_%'
+        ");
+            $meta_keys = array_merge($meta_keys, $db_keys);
 
-        if (function_exists('acf_get_field_groups')) {
-            $acf_groups = acf_get_field_groups(['post_type' => $post_type]);
-            foreach ($acf_groups as $group) {
-                $fields = acf_get_fields($group['key']);
-                foreach ($fields as $field) {
-                    // Исключаем repeater и flexible_content
-                    if (in_array($field['type'], ['repeater', 'flexible_content', 'group'])) {
-                        continue;
+            if (function_exists('get_registered_meta_keys')) {
+                $registered_meta = get_registered_meta_keys('user', '');
+                $meta_keys = array_merge($meta_keys, array_keys($registered_meta));
+            }
+
+            if (function_exists('acf_get_field_groups')) {
+                $acf_groups = acf_get_field_groups(['user_form' => 'all']);
+                foreach ($acf_groups as $group) {
+                    $fields = acf_get_fields($group['key']);
+                    foreach ($fields as $field) {
+                        if (in_array($field['type'], ['repeater', 'flexible_content', 'group'])) {
+                            continue;
+                        }
+                        if (!empty($field['name'])) {
+                            $meta_keys[] = $field['name'];
+                        }
                     }
-                    if (!empty($field['name'])) {
-                        $meta_keys[] = $field['name'];
+                }
+            }
+
+        } else {
+            $db_keys = $wpdb->get_col(
+                $wpdb->prepare("
+                SELECT DISTINCT pm.meta_key
+                FROM {$wpdb->postmeta} pm
+                INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+                WHERE p.post_type = %s
+                  AND pm.meta_key NOT LIKE %s
+            ", $post_type, '\_%')
+            );
+            $meta_keys = array_merge($meta_keys, $db_keys);
+
+            if (function_exists('get_registered_meta_keys')) {
+                $registered_meta = get_registered_meta_keys('post', $post_type);
+                $meta_keys = array_merge($meta_keys, array_keys($registered_meta));
+            }
+
+            if (function_exists('acf_get_field_groups')) {
+                $acf_groups = acf_get_field_groups(['post_type' => $post_type]);
+                foreach ($acf_groups as $group) {
+                    $fields = acf_get_fields($group['key']);
+                    foreach ($fields as $field) {
+                        if (in_array($field['type'], ['repeater', 'flexible_content', 'group'])) {
+                            continue;
+                        }
+                        if (!empty($field['name'])) {
+                            $meta_keys[] = $field['name'];
+                        }
                     }
                 }
             }
@@ -219,6 +251,7 @@ class Fal_Actions
 
         return $meta_keys;
     }
+
 
 
     public function add_listing_post()

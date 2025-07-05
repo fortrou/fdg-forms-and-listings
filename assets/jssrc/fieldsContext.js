@@ -58,12 +58,14 @@ export function FieldsProvider({ children }) {
         }
         .preview-container .post-item img {
             max-width: 100%;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             object-position: center;
         }
         .preview-container .post-item .left-side {
-            width: ${styles.imageWidth};
-            height: ${styles.imageHeight};
+            width: 100%;
+            height: auto;
             margin: ${styles.imageMarginTop + 'px ' + styles.imageMarginRight + 'px ' + styles.imageMarginBottom + 'px ' + styles.imageMarginLeft + 'px '};
         }
         .preview-container .post-item .content-side {

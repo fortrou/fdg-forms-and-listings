@@ -20,10 +20,11 @@ export default function ListingData({tab, setTab}) {
         posts,
         getter,
         frame,
-        postTypes
+        postTypes,
+        configurationsEditor
     } = useFieldsContext();
     return (
-        <div className="tab-item">
+        <div className="tab-item" style={{display: (configurationsEditor) ? 'none' : 'block'}} >
             <div className="tab-heading" onClick={(e) => setTab(tab == 'tab1' ? '' : 'tab1')}>
                 Listing style
             </div>

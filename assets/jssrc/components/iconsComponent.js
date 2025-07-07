@@ -1,6 +1,7 @@
 // system
 import settingsIcon from '../../images/settings-ico.svg';
 import trashIcon from '../../images/trash.svg';
+import crossClose from '../../images/cross-close.svg'
 
 // arrows
 import arrowUp from '../../images/arrow-up.svg';
@@ -30,6 +31,7 @@ export const DefaultIcons = {
 // system
     trashIcon: trashIcon,
     settings: settingsIcon,
+    crossClose: crossClose,
 // arrows
     arrowUp: arrowUp,
     arrowDown: arrowDown,

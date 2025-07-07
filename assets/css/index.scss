@@ -939,6 +939,95 @@
     width: 300px;
     height: 100%;
     overflow-y: auto;
+    position: relative;
+
+    .editor-panel {
+      width: calc(100% - 24px);
+      height: calc(100vh - 180px);
+      z-index: 3;
+      background: #fff;
+      border-radius: 6px;
+      border: .6px solid #548dff;
+      padding: 20px 15px;
+      box-shadow: 0px 4px 5px rgba(0, 0, 0, .3);
+
+      .block-tabs-line {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 5px;
+        margin-bottom: 20px;
+
+        .tab-title {
+          padding: 0px 3px;
+          font-size: 12px;
+          line-height: 26px;
+          border-radius: 4px;
+          text-align: center;
+          background: #dfdfdf66;
+          cursor: pointer;
+          &.active {
+            background: #bde7ff;
+            font-weight: 600;
+          }
+        }
+      }
+
+      .block-title-line {
+        position: relative;
+        margin-bottom: 20px;
+
+        h3 {
+          font-size: 20px;
+          margin-top: 0;
+          margin-bottom: 10px;
+        }
+
+        .block-title {
+          font-size: 16px;
+          font-weight: 600;
+        }
+
+        img {
+          width: 12px;
+          height: 12px;
+          position: absolute;
+          top: 5px;
+          cursor: pointer;
+          right: 0;
+        }
+      }
+
+      .setting-holder, .property-holder {
+        margin-bottom: 12px;
+
+        .setting-title {
+          font-weight: 600;
+          margin-bottom: 6px;
+        }
+      }
+
+      .setting-holder {
+        position: relative;
+
+        .switcher-holder {
+          bottom: unset;
+          top: 0;
+        }
+      }
+
+      .grid {
+        width: 100%;
+        position: relative;
+
+        .input-container {
+          width: 100%;
+
+          input {
+            width: 100%;
+          }
+        }
+      }
+    }
   }
 
   .preview-side {

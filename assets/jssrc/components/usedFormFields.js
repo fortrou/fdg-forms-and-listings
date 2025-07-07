@@ -49,7 +49,10 @@ const DraggableItem = ({ id, field, index, path, section }) => {
 
     const {
         removeField,
-        frame
+        frame,
+        setActiveConfigurationField,
+        setConfigurationsEditor,
+        setEditablePath
     } = useFieldsContext()
 
     const [expanded, setExpanded] = useState(false);
@@ -128,19 +131,16 @@ const DraggableItem = ({ id, field, index, path, section }) => {
 
                 <div
                     className="draggable-item-settings"
-                    onClick={() => setExpanded(prev => !prev)}
+                    onClick={() => {
+                        setActiveConfigurationField(field);
+                        setConfigurationsEditor(true);
+                        setEditablePath(path)
+                    }}
                 >
                     <img src={DefaultIcons.settings} alt="" />
                 </div>
             </div>
 
-            {expanded && (
-                <div className="field-details">
-                    {field.options ? scrapeOptions(field, frame) : null}
-
-                    {field.properties ? scrapeProperties(field) : null}
-                </div>
-            )}
         </div>
     );
 };

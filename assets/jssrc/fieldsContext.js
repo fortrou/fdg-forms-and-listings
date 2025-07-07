@@ -6,7 +6,6 @@ import {assignedFields, availableFilterFields, filters, resolutions} from "./exp
 export const FieldsContext = createContext(null);
 
 export function FieldsProvider({ children }) {
-
     const {
         getter,
         availableFields,
@@ -194,33 +193,50 @@ export function FieldsProvider({ children }) {
         tag.innerHTML = stylesString;
     }, [stylesString]);
 
+
+    const [configurationsEditor, setConfigurationsEditor] = useState(false);
+    const [activeConfigurationField, setActiveConfigurationField] = useState(false)
+    const [editablePath, setEditablePath] = useState(false)
+
     return (
         <FieldsContext.Provider value={{
+            // fields
             availableFields,
             setAvailableFields,
             styles,
             frame,
             filters,
+            configurationsEditor,
             frameMeasures,
             stylesString,
-            setStyles,
-            setFilter,
             assignedFields,
             availableFilterFields,
             posts,
             postTypes,
-            setFrame,
             formRef,
+            activeConfigurationField,
+            editablePath,
+
+            // setters
+            setConfigurationsEditor,
+            setStyles,
+            setFilter,
+            setEnabledFilter,
+            setFrame,
+            setActiveConfigurationField,
+            setEditablePath,
+
+            // methods
             removeField,
             removeFilter,
             submitPreviewForm,
             updatePostType,
             updateOption,
             addOptionToImageArea,
-            setEnabledFilter,
             buildPostBlockStyles,
             storeListing,
-            getter
+            getter,
+
         }}>
 
             {children}

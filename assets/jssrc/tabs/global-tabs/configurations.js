@@ -7,23 +7,16 @@ import {closestCenter, DndContext} from "@dnd-kit/core";
 import {SortableContext, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import SimpleFIlterComponent from "../../components/simpleFIlterComponent";
 import PreviewIframeComponent from "../../components/previewIframeComponent";
+import EditorPanel from "../../components/editorPanelComponent";
 
 export default function ConfigurationsTab({usedTab, showOptions}) {
     const {
-        availableFields,
-        setAvailableFields,
         styles,
-        setStyles,
-        setFrame,
         filters,
-        assignedFields,
-        updatePostType,
-        updateOption,
-        addOptionToImageArea,
-        buildPostBlockStyles,
+        setStyles,
         frame,
-        posts,
-        postTypes
+        setConfigurationsEditor,
+        configurationsEditor
     } = useFieldsContext();
 
     const filterList = Object.values(filters.current.shared.enabledFilters);
@@ -32,10 +25,11 @@ export default function ConfigurationsTab({usedTab, showOptions}) {
     return (
         <div className="configurations-container" style={{display: (usedTab == 'configurations') ? 'grid' : 'none'}}>
             <div className="configurations-side">
+                <EditorPanel />
 
                 <ListingData tab={expandedTab} setTab={setExpandedTab} />
 
-                <div className="grid-post-data">
+                <div className="grid-post-data" style={{display: (configurationsEditor) ? 'none' : 'block'}}>
                     <GridStyles tab={expandedTab} setTab={setExpandedTab} />
 
                     <div className="tab-item">

@@ -104,16 +104,16 @@ export const PaddingComponent = ({field, values, path, measure = ''}) => {
                                onKeyUp={(e) => handleKeyUp(e.target.value, 'left')}
                         />
                     </div>
-                    <MeasuringSwitcher
-                        param={`${path}.measure`}
-                        current={measure} />
                 </div>
             </div>
+            <MeasuringSwitcher
+                param={`${path}.measure`}
+                current={measure} />
         </div>
     )
 }
 
-export const MarginComponent = ({field, values, path, measure = ''}) => {
+export const MarginComponent = ({label = '', field, values, path, measure = ''}) => {
     const [localState, setLocalState] = useState({
         top: values.top,
         right: values.right,
@@ -155,7 +155,7 @@ export const MarginComponent = ({field, values, path, measure = ''}) => {
     return (
         <div className="setting-holder">
             <div className="setting-title">
-                Margin
+                {label}
             </div>
             <div className="setting-content">
                 <div className="grid grid-4">
@@ -208,11 +208,11 @@ export const MarginComponent = ({field, values, path, measure = ''}) => {
                                }}
                                onKeyUp={(e) => handleKeyUp(e.target.value, 'left')}/>
                     </div>
-                    <MeasuringSwitcher
-                        param={`${path}.measure`}
-                        current={measure} />
                 </div>
             </div>
+            <MeasuringSwitcher
+                param={`${path}.measure`}
+                current={measure} />
         </div>
     )
 }
@@ -255,9 +255,9 @@ export const HeightComponent = ({field, values, path, measure = ''}) => {
                                onKeyUp={handleKeyUp}
                         />
                     </div>
-                    <MeasuringSwitcher param={`${path}.measure`} current={measure} />
                 </div>
             </div>
+            <MeasuringSwitcher param={`${path}.measure`} current={measure} />
         </div>
     )
 }
@@ -299,10 +299,10 @@ export const WidthComponent = ({field, values, path, measure = ''}) => {
                                onChange={(e) => setLocalValue(e.target.value)}
                                onKeyUp={handleKeyUp}/>
                     </div>
-                    <MeasuringSwitcher param={`${path}.measure`} current={measure} />
 
                 </div>
             </div>
+            <MeasuringSwitcher param={`${path}.measure`} current={measure} />
         </div>
     )
 }
@@ -349,9 +349,9 @@ export const FontSizeComponent = ({ field, values, path, measure = ''}) => {
                             onKeyUp={handleKeyUp}
                         />
                     </div>
-                    <MeasuringSwitcher param={`${path}.measure`} current={measure} available={['px', 'em', 'rem']} />
                 </div>
             </div>
+            <MeasuringSwitcher param={`${path}.measure`} current={measure} available={['px', 'em', 'rem']} />
         </div>
     );
 };
@@ -402,9 +402,36 @@ export const SimpleTextComponent = ({field, values, path, label = 'Font size', m
                             onKeyUp={handleKeyUp}
                         />
                     </div>
-                    {measure != '' &&
-                        <MeasuringSwitcher param={`${path}.measure`} current={measure} />
-                    }
+                </div>
+            </div>
+            {measure != '' &&
+                <MeasuringSwitcher param={`${path}.measure`} current={measure} />
+            }
+        </div>
+    )
+}
+
+export const SimpleSelectComponent = ({field, values, path, label = ""}) => {
+    const {
+        updateOption,
+        frame
+    } = useFieldsContext();
+
+    return (
+        <div className="setting-holder">
+            <div className="setting-title">
+                {label}
+            </div>
+            <div className="setting-content">
+                <div className="grid grid-2">
+                    <div className="input-container">
+                        <select name="" id="">
+                        {field.options.map(tag => (
+                            <option key={tag} value={tag}>{tag}</option>
+                        ))}
+                        </select>
+                    </div>
+
                 </div>
             </div>
         </div>

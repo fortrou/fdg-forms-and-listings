@@ -85,21 +85,32 @@ class Fal_Actions
         $basicOptionsSet = apply_filters('modify_options_set', $this->getPropertiesSet());
 
         $fieldsList = [
-            'thumbnail' => [
+            'image' => [
+                'associatedMeta' => '',
                 'properties' => [],
                 'options' => [],
                 'key' => 'fdl_' . base_convert(microtime(true) * 1000, 10, 36) . substr(str_shuffle(base_convert(mt_rand(), 10, 36)), 0, 5),
                 'preType' => 'thumbnail',
                 'type' => 'image',
             ],
-            'post_title' => [
-                'properties' => [],
+            'title' => [
+                'associatedMeta' => '',
+                'properties' => [
+                    "tag" => [
+                        'label' => 'HTML tag',
+                        'type' => 'select',
+                        'options' => [
+                            'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span'
+                        ]
+                    ]
+                ],
                 'options' => [],
                 'key' => 'fdl_' . base_convert(microtime(true) * 1000, 10, 36) . substr(str_shuffle(base_convert(mt_rand(), 10, 36)), 0, 5),
                 'preType' => 'post_title',
                 'type' => 'text',
             ],
-            'post_excerpt' => [
+            'content' => [
+                'associatedMeta' => '',
                 'properties' => [],
                 'options' => [],
                 'key' => 'fdl_' . base_convert(microtime(true) * 1000, 10, 36) . substr(str_shuffle(base_convert(mt_rand(), 10, 36)), 0, 5),

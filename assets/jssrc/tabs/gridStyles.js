@@ -9,7 +9,6 @@ export default function GridStyles({tab, setTab}) {
         setStyles,
         setFrame,
         assignedFields,
-        updatePostType,
         updateOption,
         addOptionToImageArea,
         buildPostBlockStyles,

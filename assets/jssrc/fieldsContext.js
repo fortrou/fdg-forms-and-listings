@@ -21,7 +21,6 @@ export function FieldsProvider({ children }) {
         setStyles,
         setFilter,
         assignedFields,
-        updatePostType,
         formRef,
         submitPreviewForm,
         setFrame,
@@ -155,6 +154,7 @@ export function FieldsProvider({ children }) {
 
     const [posts, setPosts] = useState([]);
     const [postTypes, setPostTypes] = useState([]);
+    const [postTypeFields, setPostTypeFields] = useState([])
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -172,14 +172,17 @@ export function FieldsProvider({ children }) {
                     updateOption('fsection', Array.isArray(data.data.defaultKeys.fsection) ? data.data.defaultKeys.fsection : Object.values(data.data.defaultKeys.fsection));
                     updateOption('lsection', Array.isArray(data.data.defaultKeys.lsection) ? data.data.defaultKeys.lsection : Object.values(data.data.defaultKeys.lsection));
                 }
-                setAvailableFilterFields(data.data.filterFields);
             });
     }, []);
 
     useEffect(() => {
         fetch(fdgsyncajax.ajax_url + '?action=get_fil_fetchable_posttypes')
             .then(res => res.json())
-            .then(data => setPostTypes(data.data.post_types));
+            .then(data => {
+                setPostTypes(data.data.post_types);
+                setPostTypeFields(data.data.filter_fields);
+                setAvailableFilterFields(data.data.filter_fields[styles.current.shared.postType]);
+            });
     }, []);
 
     useEffect(() => {
@@ -197,6 +200,13 @@ export function FieldsProvider({ children }) {
     const [configurationsEditor, setConfigurationsEditor] = useState(false);
     const [activeConfigurationField, setActiveConfigurationField] = useState(false)
     const [editablePath, setEditablePath] = useState(false)
+
+    const updatePostTypeData = (postType) => {
+        let fields = postTypeFields[postType];
+        setAvailableFilterFields(fields);
+        updateOption('fsection', []);
+        updateOption('lsection', []);
+    }
 
     return (
         <FieldsContext.Provider value={{
@@ -230,11 +240,11 @@ export function FieldsProvider({ children }) {
             removeField,
             removeFilter,
             submitPreviewForm,
-            updatePostType,
             updateOption,
             addOptionToImageArea,
             buildPostBlockStyles,
             storeListing,
+            updatePostTypeData,
             getter,
 
         }}>

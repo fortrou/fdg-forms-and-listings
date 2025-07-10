@@ -72,8 +72,15 @@ class Fal_Actions
         $post_types[] = 'page';
         $post_types[] = 'users';
 
+        $post_types_fields = [];
+
+        foreach ($post_types as $pt) {
+            $post_types_fields[$pt] = $this->get_all_custom_meta_keys_for_post_type($pt);
+        }
+
         wp_send_json_success([
             'post_types' => $post_types,
+            'filter_fields' => $post_types_fields
         ]);
     }
 
@@ -205,24 +212,35 @@ class Fal_Actions
                 'falu|mf|user_nicename',
                 'falu|mf|display_name',
                 'falu|sf|full_name',
+                'falu|sf|avatar',
             ];
 
-            // Кастомные поля из базы
             $db_keys = $wpdb->get_col("
             SELECT DISTINCT meta_key
             FROM {$wpdb->usermeta}
             WHERE meta_key NOT LIKE '\_%'
         ");
             foreach ($db_keys as $key) {
+                if (in_array($key, [
+                    'rich_editing',
+                    'syntax_highlighting',
+                    'comment_shortcuts',
+                    'admin_color',
+                    'use_ssl',
+                    'show_admin_bar_front',
+                    'locale',
+                    'wp_capabilities',
+                    'wp_user_level',
+                    'dismissed_wp_pointers',
+                    'show_welcome_panel',
+                    'session_tokens',
+                    'wp_dashboard_quick_press_last_post_id',
+                    'community-events-location',
+                    'wp_persisted_preferences',
+                    'wp_user-settings',
+                    'wp_user-settings-time'
+                ])) continue;
                 $meta_keys[] = 'falu|cf|' . $key;
-            }
-
-            // Зарегистрированные
-            if (function_exists('get_registered_meta_keys')) {
-                $registered_meta = get_registered_meta_keys('user', '');
-                foreach (array_keys($registered_meta) as $key) {
-                    $meta_keys[] = 'falu|cf|' . $key;
-                }
             }
 
             // ACF поля

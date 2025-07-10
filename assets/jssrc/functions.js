@@ -102,22 +102,6 @@ export function useFieldsLogic() {
         setSubmitPending(true);
     }
 
-    const updatePostType = (value) => {
-        setStyles(current => ({
-            ...current,
-            ['postType']: value
-        }))
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
-        fetch(fdgsyncajax.ajax_url + `?action=get_fil_demo_posts_listing&post_type=${value}&listing_id=${id}`)
-            .then(res => res.json())
-            .then(data => {
-                setAvailableFields(Object.values(data.data.availableFields));
-                setAvailableFilterFields(data.data.filterFields);
-                setSubmitPending(formRef)
-            });
-    }
-
     const updateOption = (path, value) => {
 
         if (path == "") {
@@ -534,7 +518,6 @@ export function useFieldsLogic() {
         removeField,
         frameMeasures,
         submitPreviewForm,
-        updatePostType,
         updateOption,
         addOptionToImageArea,
         buildFiltersBlockStyle,

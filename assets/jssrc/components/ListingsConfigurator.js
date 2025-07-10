@@ -12,7 +12,6 @@ export default function ListingConfigurator() {
         styles,
         setStyles,
         assignedFields,
-        updatePostType,
         updateOption,
         addOptionToImageArea,
         buildPostBlockStyles,

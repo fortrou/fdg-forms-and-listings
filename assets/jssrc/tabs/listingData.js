@@ -8,20 +8,14 @@ import {DefaultIcons} from "../components/iconsComponent";
 
 export default function ListingData({tab, setTab}) {
     const {
-        availableFields,
-        setAvailableFields,
         styles,
         setStyles,
-        assignedFields,
-        updatePostType,
-        updateOption,
-        addOptionToImageArea,
-        buildPostBlockStyles,
-        posts,
-        getter,
         frame,
         postTypes,
-        configurationsEditor
+        configurationsEditor,
+        getter,
+        updateOption,
+        updatePostTypeData
     } = useFieldsContext();
     return (
         <div className="tab-item" style={{display: (configurationsEditor) ? 'none' : 'block'}} >
@@ -36,7 +30,10 @@ export default function ListingData({tab, setTab}) {
                         </div>
                         <div className="setting-content">
                             <select value={styles.current.shared.postType}
-                                    onChange={(e) => updatePostType(e.target.value)}>
+                                    onChange={(e) => {
+                                        setStyles('shared.postType', e.target.value)
+                                        updatePostTypeData(e.target.value)
+                                    }}>
                                 {postTypes.map(postType => (
                                     <option key={postType} value={postType}>{postType}</option>
                                 ))}

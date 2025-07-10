@@ -5,11 +5,23 @@ $configs = json_decode(stripslashes($_POST['config'] ?? '[]'), true);
 
 $stylesheet = urldecode($_POST['stylesheet']) ?? '';
 
-$posts = new WP_Query([
-    'post_type' => $configs['post_type'],
-    'post_status' => 'publish',
-    'posts_per_page' => $configs['perPage'],
-]);
+if ($configs['post_type'] === 'users') {
+    $paged = max(1, get_query_var('paged', 1));
+    $users = get_users([
+        'number' => $configs['perPage'],
+        'offset' => ($paged - 1) * $configs['perPage'],
+        'orderby' => 'registered',
+        'order' => 'DESC',
+        'fields' => 'all',
+    ]);
+} else {
+    $posts = new WP_Query([
+        'post_type' => $configs['post_type'],
+        'post_status' => 'publish',
+        'posts_per_page' => $configs['perPage'],
+        'paged' => get_query_var('paged', 1),
+    ]);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,15 +56,19 @@ $posts = new WP_Query([
                 </div>
             <?php endif; ?>
             <div class="preview-container grid">
-                <?php
-                //var_dump($configs);die;
-                ?>
-                <?php if ( $posts->have_posts() ): ?>
-                    <?php while ( $posts->have_posts() ):
-                        $posts->the_post();
-                        do_action('fdg_fal_listing_posts', $configs, get_the_ID());
-                        ?>
-                    <?php endwhile; ?>
+                <?php if ($configs['post_type'] === 'users'): ?>
+                    <?php if (!empty($users)): ?>
+                        <?php foreach ($users as $user): ?>
+                            <?php do_action('fdg_fal_listing_posts', $configs, $user->ID); ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <?php if ($posts->have_posts()): ?>
+                        <?php while ($posts->have_posts()): $posts->the_post(); ?>
+                            <?php do_action('fdg_fal_listing_posts', $configs, get_the_ID()); ?>
+                        <?php endwhile; ?>
+                        <?php wp_reset_postdata(); ?>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>

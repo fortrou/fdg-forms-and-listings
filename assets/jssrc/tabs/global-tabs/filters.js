@@ -39,7 +39,6 @@ export default function FiltersTab({usedTab}) {
         setFilter,
         setEnabledFilter,
         assignedFields,
-        updatePostType,
         updateOption,
         addOptionToImageArea,
         buildPostBlockStyles,

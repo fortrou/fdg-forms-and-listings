@@ -32,8 +32,10 @@ export default function EditorPanel() {
         activeConfigurationField,
         configurationsEditor,
         editablePath,
+        availableFilterFields,
         setConfigurationsEditor,
         setActiveConfigurationField,
+        updateOption
     } = useFieldsContext()
 
     const scrapeOptions = (field, frame) => {
@@ -101,10 +103,30 @@ export default function EditorPanel() {
                     onClick={e => {setActiveBlockTab("configurations")}}>configurations</div>
             </div>
             <div className="block-tabs">
-                <div className="block-tab-item options-tab" style={{display: activeBlockTab == "styles" ? "block" : "none" }} >
+                <div className="block-tab-item options-tab"
+                     style={{display: activeBlockTab == "styles" ? "block" : "none"}}>
+                    <div className="setting-holder">
+                        <div className="setting-title">Select field to show</div>
+                        <div className="setting-content">
+                            <select value={activeConfigurationField.associatedMeta} onChange={(e) => {
+                                updateOption(`${editablePath}.associatedMeta`, e.target.value)
+                            }}>
+                                <option value="">Choose field</option>
+                                {availableFilterFields.map(field => {
+                                    let fieldContext = field.split('|');
+                                    let fieldName = fieldContext[2].replace('_', ' ');
+                                    return (
+                                        <option value={`${field}`}>{fieldName}</option>
+                                    )
+                                })}
+                            </select>
+                        </div>
+                    </div>
+
                     {activeConfigurationField.options ? scrapeOptions(activeConfigurationField, frame) : null}
                 </div>
-                <div className="block-tab-item properties-tab" style={{display: activeBlockTab == "configurations" ? "block" : "none" }} >
+                <div className="block-tab-item properties-tab"
+                     style={{display: activeBlockTab == "configurations" ? "block" : "none"}}>
                     {activeConfigurationField.properties ? scrapeProperties(activeConfigurationField) : null}
                 </div>
             </div>

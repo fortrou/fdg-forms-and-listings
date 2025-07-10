@@ -101,7 +101,8 @@ class Fal_Actions
                         'type' => 'select',
                         'options' => [
                             'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span'
-                        ]
+                        ],
+                        'content' => 'div'
                     ]
                 ],
                 'options' => [],
@@ -198,34 +199,57 @@ class Fal_Actions
         $meta_keys = [];
 
         if ($post_type === 'users') {
+            // Основные поля пользователя
+            $meta_keys = [
+                'falu|mf|user_email',
+                'falu|mf|user_nicename',
+                'falu|mf|display_name',
+                'falu|sf|full_name',
+            ];
+
+            // Кастомные поля из базы
             $db_keys = $wpdb->get_col("
             SELECT DISTINCT meta_key
             FROM {$wpdb->usermeta}
             WHERE meta_key NOT LIKE '\_%'
         ");
-            $meta_keys = array_merge($meta_keys, $db_keys);
-
-            if (function_exists('get_registered_meta_keys')) {
-                $registered_meta = get_registered_meta_keys('user', '');
-                $meta_keys = array_merge($meta_keys, array_keys($registered_meta));
+            foreach ($db_keys as $key) {
+                $meta_keys[] = 'falu|cf|' . $key;
             }
 
+            // Зарегистрированные
+            if (function_exists('get_registered_meta_keys')) {
+                $registered_meta = get_registered_meta_keys('user', '');
+                foreach (array_keys($registered_meta) as $key) {
+                    $meta_keys[] = 'falu|cf|' . $key;
+                }
+            }
+
+            // ACF поля
             if (function_exists('acf_get_field_groups')) {
                 $acf_groups = acf_get_field_groups(['user_form' => 'all']);
                 foreach ($acf_groups as $group) {
                     $fields = acf_get_fields($group['key']);
                     foreach ($fields as $field) {
-                        if (in_array($field['type'], ['repeater', 'flexible_content', 'group'])) {
-                            continue;
-                        }
+                        if (in_array($field['type'], ['repeater', 'flexible_content', 'group'])) continue;
                         if (!empty($field['name'])) {
-                            $meta_keys[] = $field['name'];
+                            $meta_keys[] = 'falu|cf|' . $field['name'];
                         }
                     }
                 }
             }
 
         } else {
+            $meta_keys = [
+                'falp|mf|post_title',
+                'falp|mf|post_excerpt',
+                'falp|sf|post_author',
+                'falp|sf|post_date',
+                'falp|sf|post_modified',
+                'falp|mf|post_status',
+                'falp|sf|post_thumbnail',
+            ];
+
             $db_keys = $wpdb->get_col(
                 $wpdb->prepare("
                 SELECT DISTINCT pm.meta_key
@@ -235,23 +259,27 @@ class Fal_Actions
                   AND pm.meta_key NOT LIKE %s
             ", $post_type, '\_%')
             );
-            $meta_keys = array_merge($meta_keys, $db_keys);
-
-            if (function_exists('get_registered_meta_keys')) {
-                $registered_meta = get_registered_meta_keys('post', $post_type);
-                $meta_keys = array_merge($meta_keys, array_keys($registered_meta));
+            foreach ($db_keys as $key) {
+                $meta_keys[] = 'falp|cf|' . $key;
             }
 
+            // Зарегистрированные
+            if (function_exists('get_registered_meta_keys')) {
+                $registered_meta = get_registered_meta_keys('post', $post_type);
+                foreach (array_keys($registered_meta) as $key) {
+                    $meta_keys[] = 'falp|cf|' . $key;
+                }
+            }
+
+            // ACF поля
             if (function_exists('acf_get_field_groups')) {
                 $acf_groups = acf_get_field_groups(['post_type' => $post_type]);
                 foreach ($acf_groups as $group) {
                     $fields = acf_get_fields($group['key']);
                     foreach ($fields as $field) {
-                        if (in_array($field['type'], ['repeater', 'flexible_content', 'group'])) {
-                            continue;
-                        }
+                        if (in_array($field['type'], ['repeater', 'flexible_content', 'group'])) continue;
                         if (!empty($field['name'])) {
-                            $meta_keys[] = $field['name'];
+                            $meta_keys[] = 'falp|cf|' . $field['name'];
                         }
                     }
                 }
@@ -259,10 +287,11 @@ class Fal_Actions
         }
 
         $meta_keys = array_unique($meta_keys);
-        sort($meta_keys);
+
 
         return $meta_keys;
     }
+
 
 
 

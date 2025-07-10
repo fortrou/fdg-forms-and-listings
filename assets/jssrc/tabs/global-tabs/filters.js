@@ -160,8 +160,10 @@ export default function FiltersTab({usedTab}) {
                                         }}>
                                     <option value="">Choose field</option>
                                     {availableFilterFields.map(field => {
+                                        let fieldContext = field.split('|');
+                                        let fieldName = fieldContext[2].replace('_', ' ');
                                         return (
-                                            <option value={`${field}`}>{field}</option>
+                                            <option value={`${field}`}>{fieldName}</option>
                                         )
                                     })}
                                 </select>

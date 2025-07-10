@@ -461,7 +461,7 @@ export function useFieldsLogic() {
         fields.forEach(field => {
             if (!field.options) return;
 
-            const selector = `.preview-container .${field.key}-proto`;
+            const selector = `.preview-container .proto-${field.key}`;
             let responsiveSelector = {
                 desktop: '',
                 tablet: '',

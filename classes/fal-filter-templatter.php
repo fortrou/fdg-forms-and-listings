@@ -12,9 +12,9 @@ class Fal_Filter_Templatter
         $this->filterData = $filterData;
     }
 
-    public function renderPost($postData = [], $fields = [], $is_block = false)
+    public function renderPost($fields = [], $assignedFields = [], $is_block = false)
     {
-        require_once FDG_FORMS_LISTINGS_PLUGIN_PATH . '/templates/template-parts/post-render.php';
+        require FDG_FORMS_LISTINGS_PLUGIN_PATH . '/templates/template-parts/post-render.php';
     }
 
     public function displayFilters()

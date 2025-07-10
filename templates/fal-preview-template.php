@@ -50,11 +50,7 @@ $posts = new WP_Query([
                 <?php if ( $posts->have_posts() ): ?>
                     <?php while ( $posts->have_posts() ):
                         $posts->the_post();
-                        $postData = [
-                            'post_title' => get_the_title(),
-                            'post_excerpt' => get_the_excerpt(),
-                        ];
-                        do_action('fdg_fal_listing_posts', $configs);
+                        do_action('fdg_fal_listing_posts', $configs, get_the_ID());
                         ?>
                     <?php endwhile; ?>
                 <?php endif; ?>

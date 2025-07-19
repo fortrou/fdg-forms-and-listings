@@ -22,6 +22,7 @@ class FAL_Front_Actions
         add_action('fdg_fal_render_field_button', [$this, 'render_button_field'], 10, 2);
 
         add_filter('fdg_fal_post_fields', [$this, 'get_post_data_fields'], 10, 2);
+        add_filter('fdg_fal_users_fields', [$this, 'get_users_data_fields'], 10, 2);
     }
 
     public function render_listing_filters($filters)
@@ -170,6 +171,7 @@ class FAL_Front_Actions
                 $value['value'] = '';
             }
         }
+        return $fields;
     }
 
     public function get_categories_data_fields()

@@ -46,9 +46,10 @@ export default function EditorPanel() {
                     key={key}
                     path={editablePath + `.options.${key}`}
                     field={field}
-                    values={field.options[key].responsive ? field.options[key].values[frame] : field.options[key].value}
+                    frames={field.options[key].responsive ? field.options[key].values : []}
+                    values={field.options[key].responsive ? field.options[key].values[frame].set : field.options[key].value}
                     label={field.options[key]?.label}
-                    measure={field.options[key].measure ? field.options[key].measure : ''}
+                    measure={field.options[key].responsive && field.options[key]?.values[frame]?.measure ? field.options[key].values[frame].measure : ''}
                     responsive={field.options[key].responsive}
                 />
             ) : null;

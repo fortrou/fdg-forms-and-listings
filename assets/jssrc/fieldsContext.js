@@ -154,7 +154,8 @@ export function FieldsProvider({ children }) {
 
     const [posts, setPosts] = useState([]);
     const [postTypes, setPostTypes] = useState([]);
-    const [postTypeFields, setPostTypeFields] = useState([])
+    const [postTypeFields, setPostTypeFields] = useState([]);
+    const [userRoles, setUserRoles] = useState([]);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -163,8 +164,8 @@ export function FieldsProvider({ children }) {
             .then(res => res.json())
             .then(data => {
                 setAvailableFields(Object.values(data.data.availableFields));
+                setUserRoles(data.data.userRoles);
                 if (data.data.listingData.fields) {
-                    console.log(data.data.listingData.filters);
                     setStyles('', data.data.listingData.styles);
                     setFilter('', data.data.listingData.filters);
                     updateOption('', data.data.listingData.fields)
@@ -172,16 +173,14 @@ export function FieldsProvider({ children }) {
                     updateOption('fsection', Array.isArray(data.data.defaultKeys.fsection) ? data.data.defaultKeys.fsection : Object.values(data.data.defaultKeys.fsection));
                     updateOption('lsection', Array.isArray(data.data.defaultKeys.lsection) ? data.data.defaultKeys.lsection : Object.values(data.data.defaultKeys.lsection));
                 }
-            });
-    }, []);
 
-    useEffect(() => {
-        fetch(fdgsyncajax.ajax_url + '?action=get_fil_fetchable_posttypes')
-            .then(res => res.json())
-            .then(data => {
-                setPostTypes(data.data.post_types);
-                setPostTypeFields(data.data.filter_fields);
-                setAvailableFilterFields(data.data.filter_fields[styles.current.shared.postType]);
+                fetch(fdgsyncajax.ajax_url + '?action=get_fil_fetchable_posttypes')
+                    .then(res => res.json())
+                    .then(data => {
+                        setPostTypes(data.data.post_types);
+                        setPostTypeFields(data.data.filter_fields);
+                        setAvailableFilterFields(data.data.filter_fields[styles.current.shared.postType]);
+                    });
             });
     }, []);
 

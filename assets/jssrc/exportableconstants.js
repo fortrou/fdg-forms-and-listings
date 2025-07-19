@@ -1,20 +1,4 @@
-export const availableFields = [
-    {
-        key: '124cds23',
-        type: 'thumbnail',
-        name: 'thumbnail'
-    },
-    {
-        key: '42v1ci14',
-        type: 'post_title',
-        name: 'post title'
-    },
-    {
-        key: '67v81j7s',
-        type: 'post_excerpt',
-        name: 'post excerpt'
-    }
-];
+export const availableFields = [];
 
 export const resolutions = {
     desktop: 1300,

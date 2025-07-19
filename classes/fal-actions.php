@@ -17,7 +17,7 @@ class Fal_Actions
 
         add_action('admin_post_fal_preview', [$this, 'fal_render_preview_page']);
 
-        add_filter('fdg_fil_default_keys_editor', [$this, 'get_current_fields'], 10, 3);
+        add_filter('fdg_fil_default_keys_editor', [$this, 'get_current_fields'], 10, 2);
     }
 
     public function fdg_fil_store_listing()
@@ -46,12 +46,10 @@ class Fal_Actions
         ];
     }
 
-    public function get_current_fields($state, $id, $type)
+    public function get_current_fields($state, $id)
     {
-        if ($type == 'posts') {
-            if (get_post_meta($id, 'assigned_fields', true)) {
-                return get_post_meta($id, 'assigned_fields', true);
-            }
+        if (get_post_meta($id, 'assigned_fields', true)) {
+            return get_post_meta($id, 'assigned_fields', true);
         }
         return $state;
     }
@@ -78,9 +76,72 @@ class Fal_Actions
             $post_types_fields[$pt] = $this->get_all_custom_meta_keys_for_post_type($pt);
         }
 
+        $filters = [];
+
+        foreach ($post_types as $pt) {
+            $filters[$pt] = [];
+
+            if ($pt === 'users') {
+                global $wp_roles;
+                $roles = $wp_roles->roles;
+
+                $filters[$pt][] = [
+                    'type' => 'select',
+                    'label' => 'User role',
+                    'field' => 'role',
+                    'source' => 'role',
+                    'options' => array_map(function ($key, $data) {
+                        return [
+                            'value' => $key,
+                            'label' => translate_user_role($data['name']),
+                        ];
+                    }, array_keys($roles), $roles),
+                ];
+
+            } else {
+                // Авторы
+                $authors = get_users(['who' => 'authors']);
+                $filters[$pt][] = [
+                    'type' => 'select',
+                    'label' => 'Author',
+                    'field' => 'author',
+                    'source' => 'core',
+                    'options' => array_map(function ($user) {
+                        return [
+                            'value' => $user->ID,
+                            'label' => $user->display_name
+                        ];
+                    }, $authors),
+                ];
+
+                // Таксономии
+                $taxonomies = get_object_taxonomies($pt, 'objects');
+                foreach ($taxonomies as $tax) {
+                    $terms = get_terms([
+                        'taxonomy' => $tax->name,
+                        'hide_empty' => false
+                    ]);
+
+                    $filters[$pt][] = [
+                        'type' => 'multi-select',
+                        'label' => $tax->label,
+                        'field' => $tax->name,
+                        'source' => 'taxonomy',
+                        'options' => array_map(function ($term) {
+                            return [
+                                'value' => $term->term_id,
+                                'label' => $term->name
+                            ];
+                        }, $terms)
+                    ];
+                }
+            }
+        }
+
         wp_send_json_success([
             'post_types' => $post_types,
-            'filter_fields' => $post_types_fields
+            'filter_fields' => $post_types_fields,
+            'query_params' => $filters,
         ]);
     }
 
@@ -160,7 +221,6 @@ class Fal_Actions
             ],
         ];
 
-        $resortedKeys = [];
         $defaultKeys = [];
 
         foreach ($fieldsList as $key => &$value) {
@@ -193,10 +253,10 @@ class Fal_Actions
 
         wp_send_json_success([
             'availableFields' => $fieldsList,
-            'keys'  => $resortedKeys,
             'filterFields' => $this->get_all_custom_meta_keys_for_post_type($post_type),
-            'defaultKeys' => apply_filters('fdg_fil_default_keys_editor', ['fsection' => $defaultKeys, 'lsection' => []], $listingId, 'post'),
-            'listingData' => $this->get_listing_configs($listingId)
+            'defaultKeys' => apply_filters('fdg_fil_default_keys_editor', ['fsection' => $defaultKeys, 'lsection' => []], $listingId),
+            'listingData' => $this->get_listing_configs($listingId),
+            'userRoles' => $this->getUserRoles()
         ]);
     }
 
@@ -337,72 +397,126 @@ class Fal_Actions
         }
     }
 
+    public function getUserRoles()
+    {
+        $editable_roles = get_editable_roles();
+        foreach ($editable_roles as $role => $details) {
+            if ($role == 'administrator') {
+                continue;
+            }
+            $sub['role'] = esc_attr($role);
+            $sub['name'] = translate_user_role($details['name']);
+            $roles[] = $sub;
+        }
+        return $roles;
+    }
+
     public function getPropertiesSet() {
         return [
             'width' => [
-                'measure' => '%',
                 'responsive' => true,
                 'param' => 'width',
                 'values' => [
                     'desktop' => [
-                        'value' => 100
+                        'measure' => '%',
+                        'set' => [
+                            'value' => 100
+                        ]
                     ],
                     'tablet' => [
-                        'value' => 100
+                        'measure' => '%',
+                        'lock' => true,
+                        'set' => [
+                            'value' => 100
+                        ]
                     ],
                     'mobile' => [
-                        'value' => 100
+                        'measure' => '%',
+                        'lock' => true,
+                        'set' => [
+                            'value' => 100
+                        ]
                     ],
                 ],
                 'label' => 'Width'
             ],
             'height' => [
-                'measure' => 'custom',
                 'responsive' => true,
                 'param' => 'height',
                 'values' => [
                     'desktop' => [
-                        'value' => 'auto'
+                        'measure' => 'custom',
+                        'set' => [
+                            'value' => 'auto'
+                        ]
                     ],
                     'tablet' => [
-                        'value' => 'auto'
+                        'measure' => 'custom',
+                        'lock' => true,
+                        'set' => [
+                            'value' => 'auto'
+                        ]
                     ],
                     'mobile' => [
-                        'value' => 'auto'
+                        'measure' => 'custom',
+                        'lock' => true,
+                        'set' => [
+                            'value' => 'auto'
+                        ]
                     ],
                 ],
                 'label' => 'Height'
             ],
             'borderRadius' => [
-                'measure' => 'px',
                 'responsive' => true,
                 'param' => 'border-radius',
                 'values' => [
                     'desktop' => [
-                        'value' => 0
+                        'measure' => 'px',
+                        'set' => [
+                            'value' => 0
+                        ]
                     ],
                     'tablet' => [
-                        'value' => 0
+                        'measure' => 'px',
+                        'lock' => true,
+                        'set' => [
+                            'value' => 0
+                        ]
                     ],
                     'mobile' => [
-                        'value' => 0
+                        'measure' => 'px',
+                        'lock' => true,
+                        'set' => [
+                            'value' => 0
+                        ]
                     ],
                 ],
                 'label' => 'Border radius'
             ],
             'fontSize' => [
-                'measure' => 'px',
                 'responsive' => true,
                 'param' => 'font-size',
                 'values' => [
                     'desktop' => [
-                        'value' => 16
+                        'measure' => 'px',
+                        'set' => [
+                            'value' => 16
+                        ]
                     ],
                     'tablet' => [
-                        'value' => 16
+                        'measure' => 'px',
+                        'lock' => true,
+                        'set' => [
+                            'value' => 16
+                        ]
                     ],
                     'mobile' => [
-                        'value' => 16
+                        'measure' => 'px',
+                        'lock' => true,
+                        'set' => [
+                            'value' => 16
+                        ]
                     ],
                 ],
                 'label' => 'Font size'
@@ -410,13 +524,21 @@ class Fal_Actions
             'fontWeight' => [
                 'values' => [
                     'desktop' => [
-                        'value' => 400
+                        'set' => [
+                            'value' => 400
+                        ]
                     ],
                     'tablet' => [
-                        'value' => 400
+                        'lock' => true,
+                        'set' => [
+                            'value' => 400
+                        ]
                     ],
                     'mobile' => [
-                        'value' => 400
+                        'lock' => true,
+                        'set' => [
+                            'value' => 400
+                        ]
                     ],
                 ],
                 'param' => 'font-weight',
@@ -429,13 +551,24 @@ class Fal_Actions
                 'param' => 'line-height',
                 'values' => [
                     'desktop' => [
-                        'value' => 1.5
+                        'measure' => 'em',
+                        'set' => [
+                            'value' => 1.5
+                        ]
                     ],
                     'tablet' => [
-                        'value' => 1.5
+                        'measure' => 'em',
+                        'lock' => true,
+                        'set' => [
+                            'value' => 1.5
+                        ]
                     ],
                     'mobile' => [
-                        'value' => 1.5
+                        'measure' => 'em',
+                        'lock' => true,
+                        'set' => [
+                            'value' => 1.5
+                        ]
                     ],
                 ],
                 'label' => 'Line height'
@@ -453,54 +586,74 @@ class Fal_Actions
                 'label' => 'Text color'
             ],
             'padding' => [
-                'measure' => 'px',
                 'responsive' => true,
                 'param' => 'padding',
                 'label' => 'Padding',
                 'values' => [
                     'desktop' => [
-                        'top' => 0,
-                        'right' => 0,
-                        'bottom' => 0,
-                        'left' => 0,
+                        'measure' => 'px',
+                        'set' => [
+                            'top' => 0,
+                            'right' => 0,
+                            'bottom' => 0,
+                            'left' => 0,
+                        ]
                     ],
                     'tablet' => [
-                        'top' => 0,
-                        'right' => 0,
-                        'bottom' => 0,
-                        'left' => 0,
+                        'measure' => 'px',
+                        'lock' => true,
+                        'set' => [
+                            'top' => 0,
+                            'right' => 0,
+                            'bottom' => 0,
+                            'left' => 0,
+                        ]
                     ],
                     'mobile' => [
-                        'top' => 0,
-                        'right' => 0,
-                        'bottom' => 0,
-                        'left' => 0,
+                        'measure' => 'px',
+                        'lock' => true,
+                        'set' => [
+                            'top' => 0,
+                            'right' => 0,
+                            'bottom' => 0,
+                            'left' => 0,
+                        ]
                     ],
                 ]
             ],
             'margin' => [
-                'measure' => 'px',
                 'responsive' => true,
                 'param' => 'margin',
                 'label' => 'Margin',
                 'values' => [
                     'desktop' => [
-                        'top' => 0,
-                        'right' => 0,
-                        'bottom' => 0,
-                        'left' => 0,
+                        'measure' => 'px',
+                        'set' => [
+                            'top' => 0,
+                            'right' => 0,
+                            'bottom' => 0,
+                            'left' => 0,
+                        ]
                     ],
                     'tablet' => [
-                        'top' => 0,
-                        'right' => 0,
-                        'bottom' => 0,
-                        'left' => 0,
+                        'measure' => 'px',
+                        'lock' => true,
+                        'set' => [
+                            'top' => 0,
+                            'right' => 0,
+                            'bottom' => 0,
+                            'left' => 0,
+                        ]
                     ],
                     'mobile' => [
-                        'top' => 0,
-                        'right' => 0,
-                        'bottom' => 0,
-                        'left' => 0,
+                        'measure' => 'px',
+                        'lock' => true,
+                        'set' => [
+                            'top' => 0,
+                            'right' => 0,
+                            'bottom' => 0,
+                            'left' => 0,
+                        ]
                     ],
                 ]
             ],

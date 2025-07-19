@@ -5,7 +5,8 @@ import { RgbaColorPicker } from "react-colorful";
 
 
 
-export const PaddingComponent = ({field, values, path, measure = ''}) => {
+export const PaddingComponent = ({field, values, path, measure = '', frames = []}) => {
+    console.log(frames)
     const [localState, setLocalState] = useState({
         top: values.top,
         right: values.right,
@@ -107,13 +108,14 @@ export const PaddingComponent = ({field, values, path, measure = ''}) => {
                 </div>
             </div>
             <MeasuringSwitcher
-                param={`${path}.measure`}
+                param={`${path}.values.${frame}.measure`}
                 current={measure} />
         </div>
     )
 }
 
-export const MarginComponent = ({label = '', field, values, path, measure = ''}) => {
+export const MarginComponent = ({label = '', field, values, path, measure = '', frames = []}) => {
+
     const [localState, setLocalState] = useState({
         top: values.top,
         right: values.right,
@@ -133,6 +135,8 @@ export const MarginComponent = ({label = '', field, values, path, measure = ''})
         updateOption,
         frame
     } = useFieldsContext();
+    let currentFrame = frames[frame];
+    console.log(currentFrame)
 
     const [localProperty, setLocalProperty] = useState('');
     const timeoutRef = useRef(null);
@@ -211,7 +215,7 @@ export const MarginComponent = ({label = '', field, values, path, measure = ''})
                 </div>
             </div>
             <MeasuringSwitcher
-                param={`${path}.measure`}
+                param={`${path}.values.${frame}.measure`}
                 current={measure} />
         </div>
     )
@@ -239,7 +243,7 @@ export const HeightComponent = ({field, values, path, measure = ''}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${path}.values.${frame}.value`, newValue);
+            updateOption(`${path}.values.${frame}.set.value`, newValue);
         }, 700);
     };
     return (
@@ -257,7 +261,10 @@ export const HeightComponent = ({field, values, path, measure = ''}) => {
                     </div>
                 </div>
             </div>
-            <MeasuringSwitcher param={`${path}.measure`} current={measure} />
+
+            <MeasuringSwitcher
+                param={`${path}.values.${frame}.measure`}
+                current={measure} />
         </div>
     )
 }
@@ -284,7 +291,7 @@ export const WidthComponent = ({field, values, path, measure = ''}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${path}.values.${frame}.value`, newValue);
+            updateOption(`${path}.values.${frame}.set.value`, newValue);
         }, 700);
     };
     return (
@@ -302,7 +309,10 @@ export const WidthComponent = ({field, values, path, measure = ''}) => {
 
                 </div>
             </div>
-            <MeasuringSwitcher param={`${path}.measure`} current={measure} />
+
+            <MeasuringSwitcher
+                param={`${path}.values.${frame}.measure`}
+                current={measure} />
         </div>
     )
 }
@@ -329,7 +339,7 @@ export const FontSizeComponent = ({ field, values, path, measure = ''}) => {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            updateOption(`${path}.values.${frame}.value`, newValue);
+            updateOption(`${path}.values.${frame}.set.value`, newValue);
         }, 700);
     };
 
@@ -351,7 +361,12 @@ export const FontSizeComponent = ({ field, values, path, measure = ''}) => {
                     </div>
                 </div>
             </div>
-            <MeasuringSwitcher param={`${path}.measure`} current={measure} available={['px', 'em', 'rem']} />
+
+            <MeasuringSwitcher
+                param={`${path}.values.${frame}.measure`}
+                current={measure}
+                available={['px', 'em', 'rem']}
+            />
         </div>
     );
 };
@@ -370,6 +385,7 @@ export const SimpleTextComponent = ({field, values, path, label = 'Font size', m
             setLocalValue(values.value ? values.value : (values ? values : ''))
         }
     }
+    console.log(localValue)
     const timeoutRef = useRef(null);
 
     const handleKeyUp = (e) => {
@@ -381,7 +397,7 @@ export const SimpleTextComponent = ({field, values, path, label = 'Font size', m
         }
         timeoutRef.current = setTimeout(() => {
             if (responsive) {
-                updateOption(`${path}.values.${frame}.value`, newValue);
+                updateOption(`${path}.values.${frame}.set.value`, newValue);
             } else {
                 updateOption(`${path}`, newValue);
             }
@@ -404,8 +420,11 @@ export const SimpleTextComponent = ({field, values, path, label = 'Font size', m
                     </div>
                 </div>
             </div>
-            {measure != '' &&
-                <MeasuringSwitcher param={`${path}.measure`} current={measure} />
+            {field.measure != '' &&
+                <MeasuringSwitcher
+                    param={`${path}.values.${frame}.measure`}
+                    current={measure}
+                />
             }
         </div>
     )
@@ -454,7 +473,7 @@ export const FontWeightComponent = ({field, values, path}) => {
                 <div className="grid grid-2">
                     <div className="input-container">
                         <select value={values.value}
-                                onChange={(e) => updateOption(`${path}.value`, e.target.value)}>
+                                onChange={(e) => updateOption(`${path}.values.${frame}.set.value`, e.target.value)}>
                             <option value="400">400</option>
                             <option value="500">500</option>
                             <option value="600">600</option>
@@ -470,8 +489,7 @@ export const FontWeightComponent = ({field, values, path}) => {
     )
 }
 
-export function ColorSelectorComponent({ value = "#ffffff", path, method, label }) {
-    console.log(path)
+export function ColorSelectorComponent({ values = "#ffffff", path, method, label }) {
     const [colorPickerEnabled, setColorPickerEnabled] = useState(false);
     const timeoutRef = useRef(null);
     const {
@@ -493,7 +511,7 @@ export function ColorSelectorComponent({ value = "#ffffff", path, method, label 
         return `#${toHex(r)}${toHex(g)}${toHex(b)}${toHex(alpha)}`;
     };
 
-    const [color, setColor] = useState(hexToRgba(value));
+    const [color, setColor] = useState(hexToRgba(values));
 
     const handleChange = (newColor) => {
         setColor(newColor);
